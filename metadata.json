@@ -1,0 +1,12 @@
+{
+    "uuid": "clipman@popov895.ukr.net",
+    "name": "Clipman",
+    "description": "Simple clipboard manager.",
+    "version": 1,
+    "shell-version": [
+        "40",
+        "41",
+        "42"
+    ],
+    "url": "https://github.com/popov895/Clipman"
+}
