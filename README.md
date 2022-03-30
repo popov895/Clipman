@@ -4,7 +4,7 @@ The main goal of developing the Clipman was to create a simple clipboard manager
 
 ### Installation
 
-Currently, this extension is not yet available for installation from the GNOME Shell Extensions website.
+The extension is available for installation on the [GNOME Shell Extensions website](https://extensions.gnome.org/extension/4958/clipman/).
 
 To install manually follow the steps below:
 
