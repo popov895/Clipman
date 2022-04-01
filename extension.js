@@ -71,25 +71,47 @@ const ClipboardManager = GObject.registerClass({
     }
 });
 
-const PopupSearchMenuItem = GObject.registerClass(
-class PopupSearchMenuItem extends PopupMenu.PopupBaseMenuItem {
+const PlaceholderMenuItem = GObject.registerClass(
+class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
     _init() {
         super._init({
             reactive: false,
         });
+
+        const icon = new St.Icon({
+            icon_name: 'gtk-copy',
+            x_align: Clutter.ActorAlign.CENTER,
+        });
+
+        const label = new St.Label({
+            text: _('History is Empty'),
+            x_align: Clutter.ActorAlign.CENTER,
+        });
+
+        const boxLayout = new St.BoxLayout({
+            vertical: true,
+            x_expand: true,
+        });
+        boxLayout.add(icon);
+        boxLayout.add(label);
+        this.add(boxLayout);
+    }
+});
+
+const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
+    constructor() {
+        super();
 
         this.entry = new St.Entry({
             hint_text: _('Type to search...'),
             style_class: 'clipman-popupsearchmenuitem',
             x_expand: true,
         });
-        this.add(this.entry);
-    }
-});
-
-const PopupHistoryMenuSection = class extends PopupMenu.PopupMenuSection {
-    constructor() {
-        super();
+        const menuItem = new PopupMenu.PopupBaseMenuItem({
+            reactive: false,
+        });
+        menuItem.add(this.entry);
+        this.addMenuItem(menuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
         this.scrollView = new St.ScrollView({
@@ -97,7 +119,9 @@ const PopupHistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             style_class: 'clipman-popuphistorymenusection',
         });
         this.scrollView.add_actor(this.section.actor);
-        this.actor.add_actor(this.scrollView);
+        const menuSection = new PopupMenu.PopupMenuSection();
+        menuSection.actor.add_actor(this.scrollView);
+        this.addMenuItem(menuSection);
     }
 }
 
@@ -144,17 +168,19 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _buildMenu() {
-        this._searchMenuItem = new PopupSearchMenuItem();
-        this._searchMenuItem.entry.clutter_text.connect('text-changed', () => {
-            const text = this._searchMenuItem.entry.text.toLowerCase();
+        this._placeholderMenuItem = new PlaceholderMenuItem();
+        this.menu.addMenuItem(this._placeholderMenuItem);
+
+        this._historyMenuSection = new HistoryMenuSection();
+        this._historyMenuSection.entry.clutter_text.connect('text-changed', () => {
+            const text = this._historyMenuSection.entry.text.toLowerCase();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             menuItems.forEach((menuItem) => {
                 menuItem.actor.visible = menuItem.text.toLowerCase().includes(text);
             });
         });
-        this.menu.addMenuItem(this._searchMenuItem);
-
-        this._historyMenuSection = new PopupHistoryMenuSection();
+        this._historyMenuSection.section.box.connect('actor-added', this._updateMenu.bind(this));
+        this._historyMenuSection.section.box.connect('actor-removed', this._updateMenu.bind(this));
         this.menu.addMenuItem(this._historyMenuSection);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -164,8 +190,8 @@ class PanelIndicator extends PanelMenu.Button {
         });
         this.menu.addMenuItem(this._trackChangesMenuItem);
 
-        const clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
-        clearMenuItem.connect('activate', () => {
+        this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
+        this._clearMenuItem.connect('activate', () => {
             this.menu.close();
             this._historyMenuSection.section.removeAll();
             if (this._currentMenuItem) {
@@ -173,7 +199,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._clipboard.clear();
             }
         });
-        this.menu.addMenuItem(clearMenuItem);
+        this.menu.addMenuItem(this._clearMenuItem);
 
         const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'));
         settingsMenuItem.connect('activate', () => {
@@ -184,13 +210,15 @@ class PanelIndicator extends PanelMenu.Button {
         this.menu.connect('open-state-changed', (...[, open]) => {
             if (open) {
                 this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
-                this._searchMenuItem.entry.text = '';
+                this._historyMenuSection.entry.text = '';
                 this._searchMenuItemFocusCallbackId = Mainloop.timeout_add(1, () => {
-                    global.stage.set_key_focus(this._searchMenuItem.entry);
+                    global.stage.set_key_focus(this._historyMenuSection.entry);
                     this._searchMenuItemFocusCallbackId = null;
                 });
             }
         });
+
+        this._updateMenu();
     }
 
     _createMenuItem(text) {
@@ -233,6 +261,13 @@ class PanelIndicator extends PanelMenu.Button {
             this._clipboard.clear();
         }
         menuItem.destroy();
+    }
+
+    _updateMenu() {
+        const menuItemsCount = this._historyMenuSection.section._getMenuItems().length;
+        this._placeholderMenuItem.actor.visible = menuItemsCount === 0;
+        this._historyMenuSection.actor.visible = menuItemsCount > 0;
+        this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
 
     _addKeybindings() {
