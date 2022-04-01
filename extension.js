@@ -252,18 +252,21 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _onClipboardTextChanged(text) {
-        const menuItems = this._historyMenuSection.section._getMenuItems();
-        let matchedMenuItem = menuItems.find((menuItem) => {
-            return menuItem.text === text;
-        });
-        if (matchedMenuItem) {
-            this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
-        } else if (text && text !== '' && this._trackChangesMenuItem.state) {
-            if (menuItems.length === this._settings.historySize) {
-                this._destroyMenuItem(menuItems.pop());
+        let matchedMenuItem;
+        if (text && text !== '') {
+            const menuItems = this._historyMenuSection.section._getMenuItems();
+            matchedMenuItem = menuItems.find((menuItem) => {
+                return menuItem.text === text;
+            });
+            if (matchedMenuItem) {
+                this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
+            } else if (this._trackChangesMenuItem.state) {
+                if (menuItems.length === this._settings.historySize) {
+                    this._destroyMenuItem(menuItems.pop());
+                }
+                matchedMenuItem = this._createMenuItem(text);
+                this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
             }
-            matchedMenuItem = this._createMenuItem(text);
-            this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
         }
 
         if (this._currentMenuItem !== matchedMenuItem) {
