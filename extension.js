@@ -159,12 +159,12 @@ class PanelIndicator extends PanelMenu.Button {
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._trackChangesMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Track changes'), true, {
+        this._trackChangesMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Track Changes'), true, {
             reactive: true,
         });
         this.menu.addMenuItem(this._trackChangesMenuItem);
 
-        const clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear history'));
+        const clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
         clearMenuItem.connect('activate', () => {
             this.menu.close();
             this._historyMenuSection.section.removeAll();

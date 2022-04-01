@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-30 01:54+0300\n"
+"POT-Creation-Date: 2022-04-01 17:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgid "Type to search..."
 msgstr ""
 
 #: extension.js:162
-msgid "Track changes"
+msgid "Track Changes"
 msgstr ""
 
 #: extension.js:167
-msgid "Clear history"
+msgid "Clear History"
 msgstr ""
 
 #: extension.js:178
