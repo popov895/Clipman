@@ -173,10 +173,10 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._historyMenuSection = new HistoryMenuSection();
         this._historyMenuSection.entry.clutter_text.connect('text-changed', () => {
-            const text = this._historyMenuSection.entry.text.toLowerCase();
+            const searchText = this._historyMenuSection.entry.text.toLowerCase();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             menuItems.forEach((menuItem) => {
-                menuItem.actor.visible = menuItem.text.toLowerCase().includes(text);
+                menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
             });
         });
         this._historyMenuSection.section.box.connect('actor-added', this._updateMenu.bind(this));
@@ -299,7 +299,9 @@ class PanelIndicator extends PanelMenu.Button {
                 if (menuItems.length === this._settings.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
+                const searchText = this._historyMenuSection.entry.text.toLowerCase();
                 matchedMenuItem = this._createMenuItem(text);
+                matchedMenuItem.actor.visible = text.toLowerCase().includes(searchText);
                 this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
             }
         }
