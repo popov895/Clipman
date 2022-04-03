@@ -1,0 +1,63 @@
+# German translation file for Clipman.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Clipman package.
+# Onno Giesmann <nutzer3105@gmail.com>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-03 16:02+0300\n"
+"PO-Revision-Date: 2022-04-03 15:54+0200\n"
+"Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: extension.js:90
+msgid "History is Empty"
+msgstr "Verlauf ist leer"
+
+#: extension.js:109
+msgid "Type to search..."
+msgstr "Tippen, um zu suchen…"
+
+#: extension.js:121
+msgid "No Matches"
+msgstr "Keine Übereinstimmungen"
+
+#: extension.js:248
+msgid "Track Changes"
+msgstr "Änderungen überwachen"
+
+#: extension.js:253
+msgid "Clear History"
+msgstr "Verlauf löschen"
+
+#: extension.js:265
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: prefs.js:100
+msgid "Enter the new shortcut"
+msgstr "Neues Kürzel eingeben"
+
+#: prefs.js:102
+msgid "Change"
+msgstr "Ändern"
+
+#: prefs.js:120
+msgid "History size"
+msgstr "Verlaufsgröße"
+
+#: prefs.js:141
+msgid "Shortcut to toggle menu"
+msgstr "Kürzel zum Umschalten des Menüs"
+
+#: prefs.js:146
+msgid "Disabled"
+msgstr "Deaktiviert"
