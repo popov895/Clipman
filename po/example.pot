@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-02 11:52+0300\n"
+"POT-Creation-Date: 2022-04-03 16:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:87
+#: extension.js:90
 msgid "History is Empty"
 msgstr ""
 
-#: extension.js:106
+#: extension.js:109
 msgid "Type to search..."
 msgstr ""
 
-#: extension.js:188
+#: extension.js:121
+msgid "No Matches"
+msgstr ""
+
+#: extension.js:248
 msgid "Track Changes"
 msgstr ""
 
-#: extension.js:193
+#: extension.js:253
 msgid "Clear History"
 msgstr ""
 
-#: extension.js:204
+#: extension.js:265
 msgid "Settings"
 msgstr ""
 

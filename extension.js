@@ -111,14 +111,31 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             x_expand: true,
         });
         this.entry.clutter_text.connect('text-changed', this._onEntryTextChanged.bind(this));
-        const menuItem = new PopupMenu.PopupBaseMenuItem({
+        const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
         });
-        menuItem.add(this.entry);
-        this.addMenuItem(menuItem);
+        searchMenuItem.add(this.entry);
+        this.addMenuItem(searchMenuItem);
+
+        const placeholderLabel = new St.Label({
+            text: _('No Matches'),
+            x_align: Clutter.ActorAlign.CENTER,
+        });
+        const placeholderBoxLayout = new St.BoxLayout({
+            vertical: true,
+            x_expand: true,
+        });
+        placeholderBoxLayout.add(placeholderLabel);
+        this._placeholderMenuItem = new PopupMenu.PopupBaseMenuItem({
+            reactive: false,
+        });
+        this._placeholderMenuItem.actor.visible = false;
+        this._placeholderMenuItem.add(placeholderBoxLayout);
+        this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
         this.section.box.connect('actor-added', this._onMenuItemAdded.bind(this));
+        this.section.box.connect('actor-removed', this._onMenuItemRemoved.bind(this));
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
             style_class: 'clipman-popuphistorymenusection',
@@ -135,11 +152,36 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         menuItems.forEach((menuItem) => {
             menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
         });
+
+        if (searchText.length === 0) {
+            this._placeholderMenuItem.actor.visible = false;
+        } else {
+            const hasVisibleMenuItems = menuItems.some((menuItem) => {
+                return menuItem.actor.visible;
+            });
+            this._placeholderMenuItem.actor.visible = !hasVisibleMenuItems;
+        }
     }
 
     _onMenuItemAdded(_, menuItem) {
         const searchText = this.entry.text.toLowerCase();
-        menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
+        if (searchText.length > 0) {
+            menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
+            if (menuItem.actor.visible) {
+                this._placeholderMenuItem.actor.visible = false;
+            }
+        }
+    }
+
+    _onMenuItemRemoved() {
+        const searchText = this.entry.text.toLowerCase();
+        if (searchText.length > 0) {
+            const menuItems = this.section._getMenuItems();
+            const hasVisibleMenuItems = menuItems.some((menuItem) => {
+                return menuItem.actor.visible;
+            });
+            this._placeholderMenuItem.actor.visible = !hasVisibleMenuItems;
+        }
     }
 }
 
