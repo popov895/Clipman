@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-02 11:52+0300\n"
-"PO-Revision-Date: 2022-04-02 20:33+0200\n"
+"POT-Creation-Date: 2022-04-03 16:02+0300\n"
+"PO-Revision-Date: 2022-04-03 15:54+0200\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -18,23 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: extension.js:87
+#: extension.js:90
 msgid "History is Empty"
 msgstr "Verlauf ist leer"
 
-#: extension.js:106
+#: extension.js:109
 msgid "Type to search..."
 msgstr "Tippen, um zu suchen…"
 
-#: extension.js:188
+#: extension.js:121
+msgid "No Matches"
+msgstr "Keine Übereinstimmungen"
+
+#: extension.js:248
 msgid "Track Changes"
 msgstr "Änderungen überwachen"
 
-#: extension.js:193
+#: extension.js:253
 msgid "Clear History"
 msgstr "Verlauf löschen"
 
-#: extension.js:204
+#: extension.js:265
 msgid "Settings"
 msgstr "Einstellungen"
 
