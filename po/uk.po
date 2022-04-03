@@ -1,0 +1,63 @@
+# Ukrainian translation file for Clipman.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Clipman package.
+# Eugene Popov <popov895@ukr.net>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-03 16:02+0300\n"
+"PO-Revision-Date: 2022-04-03 20:11+0300\n"
+"Last-Translator: Eugene Popov <popov895@ukr.net>\n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: extension.js:90
+msgid "History is Empty"
+msgstr "Історія Порожня"
+
+#: extension.js:109
+msgid "Type to search..."
+msgstr "Введіть для пошуку..."
+
+#: extension.js:121
+msgid "No Matches"
+msgstr "Немає Збігів"
+
+#: extension.js:248
+msgid "Track Changes"
+msgstr "Відстежувати Зміни"
+
+#: extension.js:253
+msgid "Clear History"
+msgstr "Очистити Історію"
+
+#: extension.js:265
+msgid "Settings"
+msgstr "Налаштування"
+
+#: prefs.js:100
+msgid "Enter the new shortcut"
+msgstr "Введіть нове поєднання клавіш"
+
+#: prefs.js:102
+msgid "Change"
+msgstr "Змінити"
+
+#: prefs.js:120
+msgid "History size"
+msgstr "Розмір історії"
+
+#: prefs.js:141
+msgid "Shortcut to toggle menu"
+msgstr "Поєднання клавіш для переключення меню"
+
+#: prefs.js:146
+msgid "Disabled"
+msgstr "Вимкнено"
