@@ -45,11 +45,14 @@ const ClipboardManager = GObject.registerClass({
 
         this._clipboard = St.Clipboard.get_default();
         this._selection = Shell.Global.get().get_display().get_selection();
-        this._selectionOwnerChangedId = this._selection.connect('owner-changed', (...[, selectionType]) => {
-            if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
-                this.emit('changed');
+        this._selectionOwnerChangedId = this._selection.connect(
+            'owner-changed',
+            (...[, selectionType]) => {
+                if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
+                    this.emit('changed');
+                }
             }
-        });
+        );
     }
 
     destroy() {
@@ -107,6 +110,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             style_class: 'clipman-popupsearchmenuitem',
             x_expand: true,
         });
+        this.entry.clutter_text.connect('text-changed', this._onEntryTextChanged.bind(this));
         const menuItem = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
         });
@@ -114,6 +118,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         this.addMenuItem(menuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
+        this.section.box.connect('actor-added', this._onMenuItemAdded.bind(this));
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
             style_class: 'clipman-popuphistorymenusection',
@@ -122,6 +127,19 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         const menuSection = new PopupMenu.PopupMenuSection();
         menuSection.actor.add_actor(this.scrollView);
         this.addMenuItem(menuSection);
+    }
+
+    _onEntryTextChanged() {
+        const searchText = this.entry.text.toLowerCase();
+        const menuItems = this.section._getMenuItems();
+        menuItems.forEach((menuItem) => {
+            menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
+        });
+    }
+
+    _onMenuItemAdded(_, menuItem) {
+        const searchText = this.entry.text.toLowerCase();
+        menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
     }
 }
 
@@ -172,15 +190,15 @@ class PanelIndicator extends PanelMenu.Button {
         this.menu.addMenuItem(this._placeholderMenuItem);
 
         this._historyMenuSection = new HistoryMenuSection();
-        this._historyMenuSection.entry.clutter_text.connect('text-changed', () => {
-            const searchText = this._historyMenuSection.entry.text.toLowerCase();
-            const menuItems = this._historyMenuSection.section._getMenuItems();
-            menuItems.forEach((menuItem) => {
-                menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
-            });
-        });
-        this._historyMenuSection.section.box.connect('actor-added', this._updateMenu.bind(this));
-        this._historyMenuSection.section.box.connect('actor-removed', this._updateMenu.bind(this));
+        this._historyMenuSection.actor.visible = false;
+        this._historyMenuSection.section.box.connect(
+            'actor-added',
+            this._onHistoryMenuSectionChanged.bind(this)
+        );
+        this._historyMenuSection.section.box.connect(
+            'actor-removed',
+            this._onHistoryMenuSectionChanged.bind(this)
+        );
         this.menu.addMenuItem(this._historyMenuSection);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -191,6 +209,7 @@ class PanelIndicator extends PanelMenu.Button {
         this.menu.addMenuItem(this._trackChangesMenuItem);
 
         this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
+        this._clearMenuItem.actor.visible = false;
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
             this._historyMenuSection.section.removeAll();
@@ -217,8 +236,6 @@ class PanelIndicator extends PanelMenu.Button {
                 });
             }
         });
-
-        this._updateMenu();
     }
 
     _createMenuItem(text) {
@@ -247,7 +264,7 @@ class PanelIndicator extends PanelMenu.Button {
         menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
             this._destroyMenuItem(menuItem);
-            if (this._historyMenuSection.section._getMenuItems().length === 0) {
+            if (this._historyMenuSection.section.numMenuItems === 0) {
                 this.menu.close();
             }
         });
@@ -261,13 +278,6 @@ class PanelIndicator extends PanelMenu.Button {
             this._clipboard.clear();
         }
         menuItem.destroy();
-    }
-
-    _updateMenu() {
-        const menuItemsCount = this._historyMenuSection.section._getMenuItems().length;
-        this._placeholderMenuItem.actor.visible = menuItemsCount === 0;
-        this._historyMenuSection.actor.visible = menuItemsCount > 0;
-        this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
 
     _addKeybindings() {
@@ -288,7 +298,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _onClipboardTextChanged(text) {
         let matchedMenuItem;
-        if (text && text !== '') {
+        if (text && text.length > 0) {
             const menuItems = this._historyMenuSection.section._getMenuItems();
             matchedMenuItem = menuItems.find((menuItem) => {
                 return menuItem.text === text;
@@ -299,9 +309,7 @@ class PanelIndicator extends PanelMenu.Button {
                 if (menuItems.length === this._settings.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
-                const searchText = this._historyMenuSection.entry.text.toLowerCase();
                 matchedMenuItem = this._createMenuItem(text);
-                matchedMenuItem.actor.visible = text.toLowerCase().includes(searchText);
                 this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
             }
         }
@@ -319,6 +327,13 @@ class PanelIndicator extends PanelMenu.Button {
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
+    }
+
+    _onHistoryMenuSectionChanged() {
+        const menuItemsCount = this._historyMenuSection.section.numMenuItems;
+        this._placeholderMenuItem.actor.visible = menuItemsCount === 0;
+        this._historyMenuSection.actor.visible = menuItemsCount > 0;
+        this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
 });
 

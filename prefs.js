@@ -74,7 +74,7 @@ class KeybindingButton extends Gtk.ToggleButton {
                     default:
                         const mask = state & Gtk.accelerator_get_default_mod_mask();
                         const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
-                        if (accelerator !== '') {
+                        if (accelerator.length > 0) {
                             settings.toggleMenuShortcut = accelerator;
                             this.set_active(false);
                             return Gdk.EVENT_STOP;
