@@ -82,7 +82,7 @@ class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
         });
 
         const icon = new St.Icon({
-            icon_name: 'gtk-copy',
+            icon_name: 'edit-copy',
             x_align: Clutter.ActorAlign.CENTER,
         });
 
