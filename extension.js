@@ -245,11 +245,6 @@ class PanelIndicator extends PanelMenu.Button {
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._trackChangesMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Track Changes'), true, {
-            reactive: true,
-        });
-        this.menu.addMenuItem(this._trackChangesMenuItem);
-
         this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
         this._clearMenuItem.actor.visible = false;
         this._clearMenuItem.connect('activate', () => {
@@ -261,6 +256,11 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
         this.menu.addMenuItem(this._clearMenuItem);
+
+        this._trackChangesMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Track Changes'), true, {
+            reactive: true,
+        });
+        this.menu.addMenuItem(this._trackChangesMenuItem);
 
         const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'));
         settingsMenuItem.connect('activate', () => {
