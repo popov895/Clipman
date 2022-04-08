@@ -135,7 +135,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 
         this.section = new PopupMenu.PopupMenuSection();
         this.section.box.connect('actor-added', this._onMenuItemAdded.bind(this));
-        this.section.box.connect('actor-removed', this._onMenuItemRemoved.bind(this));
+        this._sectionActorRemovedId = this.section.box.connect(
+            'actor-removed',
+            this._onMenuItemRemoved.bind(this)
+        );
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
             style_class: 'clipman-popuphistorymenusection',
@@ -144,6 +147,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         const menuSection = new PopupMenu.PopupMenuSection();
         menuSection.actor.add_actor(this.scrollView);
         this.addMenuItem(menuSection);
+    }
+
+    destroy() {
+        this.section.box.disconnect(this._sectionActorRemovedId);
     }
 
     _onEntryTextChanged() {
@@ -196,7 +203,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildMenu();
 
         this._clipboard = new ClipboardManager();
-        this._clipboard.connect('changed', () => {
+        this._clipboardChangedId = this._clipboard.connect('changed', () => {
             this._clipboard.getText((text) => {
                 this._onClipboardTextChanged(text);
             });
@@ -210,6 +217,11 @@ class PanelIndicator extends PanelMenu.Button {
 
     destroy() {
         this._removeKeybindings();
+
+        this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
+        this._historyMenuSection.destroy();
+
+        this._clipboard.disconnect(this._clipboardChangedId);
         this._clipboard.destroy();
 
         if (this._searchMenuItemFocusCallbackId) {
@@ -237,7 +249,7 @@ class PanelIndicator extends PanelMenu.Button {
             'actor-added',
             this._onHistoryMenuSectionChanged.bind(this)
         );
-        this._historyMenuSection.section.box.connect(
+        this._historySectionActorRemovedId = this._historyMenuSection.section.box.connect(
             'actor-removed',
             this._onHistoryMenuSectionChanged.bind(this)
         );
@@ -292,6 +304,12 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
+        menuItem.connect('destroy', () => {
+            if (this._currentMenuItem === menuItem) {
+                this._currentMenuItem = null;
+                this._clipboard.clear();
+            }
+        });
 
         const deleteIcon = new St.Icon({
             icon_name: 'edit-delete-symbolic',
@@ -305,21 +323,13 @@ class PanelIndicator extends PanelMenu.Button {
         });
         menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
-            this._destroyMenuItem(menuItem);
+            menuItem.destroy();
             if (this._historyMenuSection.section.numMenuItems === 0) {
                 this.menu.close();
             }
         });
 
         return menuItem;
-    }
-
-    _destroyMenuItem(menuItem) {
-        if (this._currentMenuItem === menuItem) {
-            this._currentMenuItem = null;
-            this._clipboard.clear();
-        }
-        menuItem.destroy();
     }
 
     _addKeybindings() {
@@ -349,7 +359,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
             } else if (this._trackChangesMenuItem.state) {
                 if (menuItems.length === this._settings.historySize) {
-                    this._destroyMenuItem(menuItems.pop());
+                    menuItems.pop().destroy();
                 }
                 matchedMenuItem = this._createMenuItem(text);
                 this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
@@ -367,7 +377,7 @@ class PanelIndicator extends PanelMenu.Button {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         const menuItemsToRemove = menuItems.slice(this._settings.historySize);
         menuItemsToRemove.forEach((menuItem) => {
-            this._destroyMenuItem(menuItem);
+            menuItem.destroy();
         });
     }
 
