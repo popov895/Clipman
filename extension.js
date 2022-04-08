@@ -82,7 +82,7 @@ class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
         });
 
         const icon = new St.Icon({
-            icon_name: 'edit-copy-symbolic',
+            gicon: new Gio.ThemedIcon({ name: 'edit-copy-symbolic' }),
             x_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -235,7 +235,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _buildIcon() {
         this._icon = new St.Icon({
-            icon_name: 'edit-copy-symbolic',
+            gicon: new Gio.ThemedIcon({ name: 'edit-copy-symbolic' }),
             style_class: 'system-status-icon',
         });
         this.add_child(this._icon);
@@ -314,7 +314,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         const deleteIcon = new St.Icon({
-            icon_name: 'edit-delete-symbolic',
+            gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
             style_class: 'system-status-icon',
         });
         const deleteButton = new St.Button({
