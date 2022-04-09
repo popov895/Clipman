@@ -351,17 +351,20 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _loadState() {
-        panelIndicator.state.history.forEach((text) => {
-            const menuItem = this._createMenuItem(text);
-            this._historyMenuSection.section.addMenuItem(menuItem);
-        });
-        this._clipboard.getText((text) => {
-            const menuItems = this._historyMenuSection.section._getMenuItems();
-            this._currentMenuItem = menuItems.find((menuItem) => {
-                return menuItem.text === text;
+        if (panelIndicator.state.history.length > 0) {
+            panelIndicator.state.history.forEach((text) => {
+                const menuItem = this._createMenuItem(text);
+                this._historyMenuSection.section.addMenuItem(menuItem);
             });
-            this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
-        });
+            this._clipboard.getText((text) => {
+                const menuItems = this._historyMenuSection.section._getMenuItems();
+                this._currentMenuItem = menuItems.find((menuItem) => {
+                    return menuItem.text === text;
+                });
+                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+            });
+        }
+
         this._trackChangesMenuItem.setToggleState(panelIndicator.state.trackChanges);
     }
 
@@ -371,6 +374,7 @@ class PanelIndicator extends PanelMenu.Button {
         menuItems.forEach((menuItem) => {
             panelIndicator.state.history.push(menuItem.text);
         });
+
         panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
     }
 
