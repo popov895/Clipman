@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-03 16:02+0300\n"
+"PO-Revision-Date: 2022-04-09 17:36+0430\n"
+"Last-Translator: MohammadSaleh Kamyab <mskf1383@protonmail.com>\n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: extension.js:90
+msgid "History is Empty"
+msgstr "تاریخچه خالی است"
+
+#: extension.js:109
+msgid "Type to search..."
+msgstr "نوشتن برای جست‌وجو…"
+
+#: extension.js:121
+msgid "No Matches"
+msgstr "بدون نتیجه"
+
+#: extension.js:248
+msgid "Track Changes"
+msgstr "پی‌گیری تغییرات"
+
+#: extension.js:253
+msgid "Clear History"
+msgstr "پاک‌سازی تاریخچه"
+
+#: extension.js:265
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: prefs.js:100
+msgid "Enter the new shortcut"
+msgstr "یک میان‌بر جدید وارد کنید"
+
+#: prefs.js:102
+msgid "Change"
+msgstr "تغییر"
+
+#: prefs.js:120
+msgid "History size"
+msgstr "اندازهٔ تاریخچه"
+
+#: prefs.js:141
+msgid "Shortcut to toggle menu"
+msgstr "میان‌بر برای تغییر حالت فهرست"
+
+#: prefs.js:146
+msgid "Disabled"
+msgstr "از کار افتاده است"
