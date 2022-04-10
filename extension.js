@@ -82,7 +82,7 @@ class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
         });
 
         const icon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'edit-copy-symbolic' }),
+            gicon: new Gio.ThemedIcon({ name: 'edit-copy' }),
             x_align: Clutter.ActorAlign.CENTER,
         });
 
