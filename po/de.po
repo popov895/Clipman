@@ -20,7 +20,7 @@ msgstr ""
 
 #: extension.js:90
 msgid "History is Empty"
-msgstr "Verlauf ist leer"
+msgstr "Chronik ist leer"
 
 #: extension.js:109
 msgid "Type to search..."
@@ -36,7 +36,7 @@ msgstr "Änderungen überwachen"
 
 #: extension.js:253
 msgid "Clear History"
-msgstr "Verlauf löschen"
+msgstr "Chronik löschen"
 
 #: extension.js:265
 msgid "Settings"
@@ -52,11 +52,11 @@ msgstr "Ändern"
 
 #: prefs.js:120
 msgid "History size"
-msgstr "Verlaufsgröße"
+msgstr "Größe der Chronik"
 
 #: prefs.js:141
 msgid "Shortcut to toggle menu"
-msgstr "Kürzel zum Umschalten des Menüs"
+msgstr "Tastenkombination zum Umschalten des Menüs"
 
 #: prefs.js:146
 msgid "Disabled"
