@@ -212,11 +212,18 @@ class PanelIndicator extends PanelMenu.Button {
         this._settings = new Settings();
         this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
 
+        this._sessionModeChangedId = Main.sessionMode.connect(
+            'updated',
+            this._onSessionModeChanged.bind(this)
+        );
+
         this._addKeybindings();
     }
 
     destroy() {
         this._removeKeybindings();
+
+        Main.sessionMode.disconnect(this._sessionModeChangedId);
 
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
         this._historyMenuSection.destroy();
@@ -386,6 +393,14 @@ class PanelIndicator extends PanelMenu.Button {
         this._placeholderMenuItem.actor.visible = menuItemsCount === 0;
         this._historyMenuSection.actor.visible = menuItemsCount > 0;
         this._clearMenuItem.actor.visible = menuItemsCount > 0;
+    }
+
+    _onSessionModeChanged(session) {
+        if (!session.isGreeter && !session.isLocked) {
+            this.container.show();
+        } else {
+            this.container.hide();
+        }
     }
 });
 

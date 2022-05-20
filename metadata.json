@@ -4,9 +4,11 @@
     "description": "Simple clipboard manager.",
     "version": 10,
     "shell-version": [
-        "40",
-        "41",
         "42"
+    ],
+    "session-modes": [
+        "user",
+        "unlock-dialog"
     ],
     "url": "https://github.com/popov895/Clipman"
 }
