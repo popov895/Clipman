@@ -74,12 +74,13 @@ const ClipboardManager = GObject.registerClass({
     }
 });
 
-const PlaceholderMenuItem = GObject.registerClass(
-class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
-    _init() {
-        super._init({
+const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
+    constructor() {
+        super({
             reactive: false,
         });
+
+        this.actor.style_class = 'popup-menu-item';
 
         const icon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-copy' }),
@@ -97,9 +98,9 @@ class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
         });
         boxLayout.add(icon);
         boxLayout.add(label);
-        this.add(boxLayout);
+        this.actor.add(boxLayout);
     }
-});
+}
 
 const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     constructor() {
@@ -126,11 +127,12 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             x_expand: true,
         });
         placeholderBoxLayout.add(placeholderLabel);
-        this._placeholderMenuItem = new PopupMenu.PopupBaseMenuItem({
+        this._placeholderMenuItem = new PopupMenu.PopupMenuSection({
             reactive: false,
         });
+        this._placeholderMenuItem.actor.style_class = 'popup-menu-item';
         this._placeholderMenuItem.actor.visible = false;
-        this._placeholderMenuItem.add(placeholderBoxLayout);
+        this._placeholderMenuItem.actor.add(placeholderBoxLayout);
         this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
