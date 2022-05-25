@@ -1,6 +1,6 @@
 'use strict';
 
-const { Gdk, Gio, GObject, Gtk } = imports.gi;
+const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
@@ -41,8 +41,8 @@ const Settings = GObject.registerClass({
 
 const KeybindingButton = GObject.registerClass(
 class KeybindingButton extends Gtk.ToggleButton {
-    _init(settings) {
-        super._init();
+    _init(settings, params) {
+        super._init(params);
 
         this._updateLabel();
 
@@ -108,25 +108,19 @@ function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
-function buildPrefsWidget() {
+function fillPreferencesWindow(window) {
     const settings = new Settings();
     settings.connect('toggleMenuShortcutChanged', () => {
         keybindingShortcutLabel.accelerator = settings.toggleMenuShortcut;
     });
 
-    const historySizeLabel = new Gtk.Label({
-        halign: Gtk.Align.START,
-        hexpand: true,
-        label: _('History size'),
-    });
-
     const historySizeSpinBox = new Gtk.SpinButton({
-        halign: Gtk.Align.START,
         adjustment: new Gtk.Adjustment({
             lower: 1,
             upper: 500,
             step_increment: 1,
         }),
+        valign: Gtk.Align.CENTER,
     });
     settings.bind(
         'history-size',
@@ -135,34 +129,42 @@ function buildPrefsWidget() {
         Gio.SettingsBindFlags.DEFAULT
     );
 
-    const keybindingLabel = new Gtk.Label({
-        halign: Gtk.Align.START,
-        hexpand: true,
-        label: _('Shortcut to toggle menu'),
+    const historySizeRow = new Adw.ActionRow({
+        title: _('History size'),
     });
+    historySizeRow.add_suffix(historySizeSpinBox);
+    historySizeRow.activatable_widget = historySizeSpinBox;
+
+    const historySizeGroup = new Adw.PreferencesGroup({
+        title: _('General'),
+    });
+    historySizeGroup.add(historySizeRow);
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
         accelerator: settings.toggleMenuShortcut,
         disabled_text: _('Disabled'),
-    });
-
-    const keybindingButton = new KeybindingButton(settings);
-
-    const grid = new Gtk.Grid({
-        column_spacing: 18,
-        halign: Gtk.Align.CENTER,
-        margin_bottom: 10,
-        margin_end: 10,
-        margin_start: 10,
-        margin_top: 10,
-        row_spacing: 12,
         valign: Gtk.Align.CENTER,
     });
-    grid.attach(historySizeLabel, 0, 0, 1, 1);
-    grid.attach(historySizeSpinBox, 1, 0, 2, 1);
-    grid.attach(keybindingLabel, 0, 1, 1, 1);
-    grid.attach(keybindingShortcutLabel, 1, 1, 1, 1);
-    grid.attach(keybindingButton, 2, 1, 1, 1);
 
-    return grid;
+    const keybindingButton = new KeybindingButton(settings, {
+        valign: Gtk.Align.CENTER,
+    });
+
+    const keybindingRow = new Adw.ActionRow({
+        title: _('Toggle menu'),
+    });
+    keybindingRow.add_suffix(keybindingShortcutLabel);
+    keybindingRow.add_suffix(keybindingButton);
+    keybindingRow.activatable_widget = keybindingButton;
+
+    const keybindingGroup = new Adw.PreferencesGroup({
+        title: _('Keyboard Shortcuts'),
+    });
+    keybindingGroup.add(keybindingRow);
+
+    const page = new Adw.PreferencesPage();
+    page.add(historySizeGroup);
+    page.add(keybindingGroup);
+
+    window.add(page);
 }
