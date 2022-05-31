@@ -93,6 +93,13 @@ class KeybindingButton extends Gtk.ToggleButton {
         this.add_controller(focusController);
 
         this.connect('toggled', this._updateLabel.bind(this));
+        this.connect('toggled', () => {
+            if (this.active) {
+                this.root.get_surface().inhibit_system_shortcuts(null);
+            } else {
+                this.root.get_surface().restore_system_shortcuts();
+            }
+        });
     }
 
     _updateLabel() {
