@@ -38,21 +38,34 @@ const Settings = GObject.registerClass({
 const ClipboardManager = GObject.registerClass({
     Signals: {
         'changed': {},
+        'enabled-changed': {},
     },
 }, class ClipboardManager extends GObject.Object {
     _init() {
         super._init();
 
+        this._enabled = true;
         this._clipboard = St.Clipboard.get_default();
         this._selection = Shell.Global.get().get_display().get_selection();
         this._selectionOwnerChangedId = this._selection.connect(
             'owner-changed',
             (...[, selectionType]) => {
-                if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
+                if (this._enabled && selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
                     this.emit('changed');
                 }
             }
         );
+    }
+
+    get enabled() {
+        return this._enabled;
+    }
+
+    set enabled(enabled) {
+        if (this._enabled !== enabled) {
+            this._enabled = enabled;
+            this.emit('enabled-changed');
+        }
     }
 
     destroy() {
@@ -210,6 +223,13 @@ class PanelIndicator extends PanelMenu.Button {
                 this._onClipboardTextChanged(text);
             });
         });
+        this._clipboardEnabledChangedId = this._clipboard.connect('enabled-changed', () => {
+            if (this._clipboard.enabled) {
+                this.container.show();
+            } else {
+                this.container.hide();
+            }
+        });
 
         this._settings = new Settings();
         this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
@@ -230,6 +250,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
         this._historyMenuSection.destroy();
 
+        this._clipboard.disconnect(this._clipboardEnabledChangedId);
         this._clipboard.disconnect(this._clipboardChangedId);
         this._clipboard.destroy();
 
@@ -399,9 +420,9 @@ class PanelIndicator extends PanelMenu.Button {
 
     _onSessionModeChanged(session) {
         if (!session.isGreeter && !session.isLocked) {
-            this.container.show();
+            this._clipboard.enabled = true;
         } else {
-            this.container.hide();
+            this._clipboard.enabled = false;
         }
     }
 });
@@ -418,6 +439,8 @@ function enable() {
 }
 
 function disable() {
+    // This extension uses the 'unlock-dialog' session mode to prevent losing
+    // clipboard history when locking the screen
     panelIndicator.destroy();
     panelIndicator = null;
 }
