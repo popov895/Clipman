@@ -10,6 +10,7 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
+const DataDirPath = GLib.build_filenamev([GLib.get_user_data_dir(), Me.uuid]);
 const _ = Gettext.domain(Me.uuid).gettext;
 
 function isInUserSessionMode() {
@@ -223,11 +224,13 @@ class PanelIndicator extends PanelMenu.Button {
             this._onSessionModeChanged.bind(this)
         );
 
+        this._loadState();
         this._addKeybindings();
     }
 
     destroy() {
         this._removeKeybindings();
+        this._saveState();
 
         Main.sessionMode.disconnect(this._sessionModeChangedId);
 
@@ -361,6 +364,78 @@ class PanelIndicator extends PanelMenu.Button {
 
     _removeKeybindings() {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
+    }
+
+    _loadState() {
+        const dataDir = Gio.File.new_for_path(DataDirPath);
+        if (dataDir.query_exists(null)) {
+            const enumerator = dataDir.enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+            let fileInfo;
+            let files = [];
+            while ((fileInfo = enumerator.next_file(null)) !== null) {
+                if (fileInfo.get_content_type() === 'text/plain') {
+                    files.push(enumerator.get_child(fileInfo));
+                }
+            }
+            enumerator.close(null);
+
+            if (files.length > 0) {
+                files.sort((file1, file2) => {
+                    return file1.get_basename().localeCompare(file2.get_basename());
+                });
+
+                const decoder = new TextDecoder();
+                for (let file of files) {
+                    const [ok, bytes] = file.load_contents(null);
+                    if (ok) {
+                        const text = decoder.decode(bytes);
+                        if (text.length > 0) {
+                            const menuItem = this._createMenuItem(text);
+                            this._historyMenuSection.section.addMenuItem(menuItem);
+                        }
+                    }
+                }
+
+                const menuItems = this._historyMenuSection.section._getMenuItems();
+                if (menuItems.length > 0) {
+                    this._clipboard.getText((text) => {
+                        if (text && text.length > 0) {
+                            this._currentMenuItem = menuItems.find((menuItem) => {
+                                return menuItem.text === text;
+                            });
+                            this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    _saveState() {
+        const dataDir = Gio.File.new_for_path(DataDirPath);
+        if (dataDir.query_exists(null) || dataDir.make_directory(null)) {
+            const enumerator = dataDir.enumerate_children('standard::*', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+            let fileInfo;
+            while ((fileInfo = enumerator.next_file(null)) !== null) {
+                enumerator.get_child(fileInfo).delete(null);
+            }
+            enumerator.close(null);
+
+            const menuItems = this._historyMenuSection.section._getMenuItems();
+            if (menuItems.length > 0) {
+                const encoder = new TextEncoder();
+                for (let i = 0; i < menuItems.length; ++i) {
+                    const file = dataDir.get_child(i.toString());
+                    file.replace_contents(
+                        encoder.encode(menuItems[i].text),
+                        null,
+                        false,
+                        Gio.FileCreateFlags.PRIVATE | Gio.FileCreateFlags.REPLACE_DESTINATION,
+                        null
+                    );
+                }
+            }
+        }
     }
 
     _onClipboardTextChanged(text) {
