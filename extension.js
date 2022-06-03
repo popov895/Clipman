@@ -334,12 +334,6 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
-        menuItem.connect('destroy', () => {
-            if (this._currentMenuItem === menuItem) {
-                this._currentMenuItem = null;
-                this._clipboard.clear();
-            }
-        });
 
         const deleteIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
@@ -353,13 +347,21 @@ class PanelIndicator extends PanelMenu.Button {
         });
         menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
-            menuItem.destroy();
+            this._destroyMenuItem(menuItem);
             if (this._historyMenuSection.section.numMenuItems === 0) {
                 this.menu.close();
             }
         });
 
         return menuItem;
+    }
+
+    _destroyMenuItem(menuItem) {
+        if (this._currentMenuItem === menuItem) {
+            this._currentMenuItem = null;
+            this._clipboard.clear();
+        }
+        menuItem.destroy();
     }
 
     _addKeybindings() {
@@ -389,7 +391,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
             } else if (this._trackChangesMenuItem.state) {
                 if (menuItems.length === this._settings.historySize) {
-                    menuItems.pop().destroy();
+                    this._destroyMenuItem(menuItems.pop());
                 }
                 matchedMenuItem = this._createMenuItem(text);
                 this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
@@ -407,7 +409,7 @@ class PanelIndicator extends PanelMenu.Button {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         const menuItemsToRemove = menuItems.slice(this._settings.historySize);
         menuItemsToRemove.forEach((menuItem) => {
-            menuItem.destroy();
+            this._destroyMenuItem(menuItem);
         });
     }
 
