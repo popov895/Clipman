@@ -12,6 +12,10 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const _ = Gettext.domain(Me.uuid).gettext;
 
+function isInUserSessionMode() {
+    return !Main.sessionMode.isGreeter && !Main.sessionMode.isLocked;
+}
+
 const Settings = GObject.registerClass({
     Signals: {
         'historySizeChanged': {},
@@ -48,7 +52,7 @@ const ClipboardManager = GObject.registerClass({
         this._selectionOwnerChangedId = this._selection.connect(
             'owner-changed',
             (...[, selectionType]) => {
-                if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
+                if (isInUserSessionMode() && selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
                     this.emit('changed');
                 }
             }
@@ -399,8 +403,8 @@ class PanelIndicator extends PanelMenu.Button {
         this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
 
-    _onSessionModeChanged(session) {
-        if (!session.isGreeter && !session.isLocked) {
+    _onSessionModeChanged() {
+        if (isInUserSessionMode()) {
             this.container.show();
         } else {
             this.container.hide();
@@ -420,6 +424,8 @@ function enable() {
 }
 
 function disable() {
+    // This extension uses the 'unlock-dialog' session mode to prevent losing
+    // clipboard history when locking the screen
     panelIndicator.destroy();
     panelIndicator = null;
 }
