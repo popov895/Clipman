@@ -400,10 +400,10 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _onSessionModeChanged(session) {
-        if (!session.isGreeter && !session.isLocked) {
-            this.container.show();
-        } else {
+        if (session.isGreeter || session.isLocked) {
             this.container.hide();
+        } else {
+            this.container.show();
         }
     }
 });
@@ -420,6 +420,9 @@ function enable() {
 }
 
 function disable() {
+    // This extension uses the 'unlock-dialog' session mode to prevent losing clipboard history
+    // when the screen is locked. It's also safe to continue running this extension while
+    // the screen is locked, as the clipboard is disabled in this case.
     panelIndicator.destroy();
     panelIndicator = null;
 }
