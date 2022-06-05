@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-03 16:02+0300\n"
-"PO-Revision-Date: 2022-05-09 13:58+0200\n"
+"POT-Creation-Date: 2022-06-04 22:54+0300\n"
+"PO-Revision-Date: 2022-06-05 19:40+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -15,48 +15,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.04.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
-#: extension.js:90
+#: extension.js:91
 msgid "History is Empty"
 msgstr "De geschiedenis is blanco"
 
-#: extension.js:109
+#: extension.js:110
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:121
+#: extension.js:122
 msgid "No Matches"
 msgstr "Er zijn geen overeenkomsten"
 
-#: extension.js:248
-msgid "Track Changes"
-msgstr "Wijzigingen bijhouden"
-
-#: extension.js:253
+#: extension.js:269
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:265
+#: extension.js:281
+msgid "Track Changes"
+msgstr "Wijzigingen bijhouden"
+
+#: extension.js:286
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: prefs.js:100
+#: prefs.js:107
 msgid "Enter the new shortcut"
 msgstr "Druk op een nieuwe sneltoets"
 
-#: prefs.js:102
+#: prefs.js:109
 msgid "Change"
 msgstr "Wijzigen"
 
-#: prefs.js:120
+#: prefs.js:140
 msgid "History size"
 msgstr "Geschiedenisomvang"
 
-#: prefs.js:141
-msgid "Shortcut to toggle menu"
-msgstr "Sneltoets om menu te openen"
-
 #: prefs.js:146
+msgid "General"
+msgstr "Algemeen"
+
+#: prefs.js:152
 msgid "Disabled"
 msgstr "Uitgeschakeld"
+
+#: prefs.js:161
+msgid "Toggle menu"
+msgstr "Menu tonen/verbergen"
+
+#: prefs.js:168
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#~ msgid "Shortcut to toggle menu"
+#~ msgstr "Sneltoets om menu te openen"
