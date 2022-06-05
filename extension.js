@@ -74,12 +74,13 @@ const ClipboardManager = GObject.registerClass({
     }
 });
 
-const PlaceholderMenuItem = GObject.registerClass(
-class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
-    _init() {
-        super._init({
+const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
+    constructor() {
+        super({
             reactive: false,
         });
+
+        this.actor.style_class = 'popup-menu-item';
 
         const icon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-copy' }),
@@ -97,9 +98,9 @@ class PlaceholderMenuItem extends PopupMenu.PopupBaseMenuItem {
         });
         boxLayout.add(icon);
         boxLayout.add(label);
-        this.add(boxLayout);
+        this.actor.add(boxLayout);
     }
-});
+}
 
 const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     constructor() {
@@ -126,11 +127,12 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             x_expand: true,
         });
         placeholderBoxLayout.add(placeholderLabel);
-        this._placeholderMenuItem = new PopupMenu.PopupBaseMenuItem({
+        this._placeholderMenuItem = new PopupMenu.PopupMenuSection({
             reactive: false,
         });
+        this._placeholderMenuItem.actor.style_class = 'popup-menu-item';
         this._placeholderMenuItem.actor.visible = false;
-        this._placeholderMenuItem.add(placeholderBoxLayout);
+        this._placeholderMenuItem.actor.add(placeholderBoxLayout);
         this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
@@ -212,13 +214,18 @@ class PanelIndicator extends PanelMenu.Button {
         this._settings = new Settings();
         this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
 
-        this._loadState();
+        this._sessionModeChangedId = Main.sessionMode.connect(
+            'updated',
+            this._onSessionModeChanged.bind(this)
+        );
+
         this._addKeybindings();
     }
 
     destroy() {
-        this._saveState();
         this._removeKeybindings();
+
+        Main.sessionMode.disconnect(this._sessionModeChangedId);
 
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
         this._historyMenuSection.destroy();
@@ -306,12 +313,6 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
-        menuItem.connect('destroy', () => {
-            if (this._currentMenuItem === menuItem) {
-                this._currentMenuItem = null;
-                this._clipboard.clear();
-            }
-        });
 
         const deleteIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
@@ -325,13 +326,21 @@ class PanelIndicator extends PanelMenu.Button {
         });
         menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
-            menuItem.destroy();
+            this._destroyMenuItem(menuItem);
             if (this._historyMenuSection.section.numMenuItems === 0) {
                 this.menu.close();
             }
         });
 
         return menuItem;
+    }
+
+    _destroyMenuItem(menuItem) {
+        if (this._currentMenuItem === menuItem) {
+            this._currentMenuItem = null;
+            this._clipboard.clear();
+        }
+        menuItem.destroy();
     }
 
     _addKeybindings() {
@@ -350,34 +359,6 @@ class PanelIndicator extends PanelMenu.Button {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
     }
 
-    _loadState() {
-        if (panelIndicator.state.history.length > 0) {
-            panelIndicator.state.history.forEach((text) => {
-                const menuItem = this._createMenuItem(text);
-                this._historyMenuSection.section.addMenuItem(menuItem);
-            });
-            this._clipboard.getText((text) => {
-                const menuItems = this._historyMenuSection.section._getMenuItems();
-                this._currentMenuItem = menuItems.find((menuItem) => {
-                    return menuItem.text === text;
-                });
-                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
-            });
-        }
-
-        this._trackChangesMenuItem.setToggleState(panelIndicator.state.trackChanges);
-    }
-
-    _saveState() {
-        panelIndicator.state.history.length = 0;
-        const menuItems = this._historyMenuSection.section._getMenuItems();
-        menuItems.forEach((menuItem) => {
-            panelIndicator.state.history.push(menuItem.text);
-        });
-
-        panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
-    }
-
     _onClipboardTextChanged(text) {
         let matchedMenuItem;
         if (text && text.length > 0) {
@@ -389,7 +370,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
             } else if (this._trackChangesMenuItem.state) {
                 if (menuItems.length === this._settings.historySize) {
-                    menuItems.pop().destroy();
+                    this._destroyMenuItem(menuItems.pop());
                 }
                 matchedMenuItem = this._createMenuItem(text);
                 this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
@@ -407,7 +388,7 @@ class PanelIndicator extends PanelMenu.Button {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         const menuItemsToRemove = menuItems.slice(this._settings.historySize);
         menuItemsToRemove.forEach((menuItem) => {
-            menuItem.destroy();
+            this._destroyMenuItem(menuItem);
         });
     }
 
@@ -417,26 +398,31 @@ class PanelIndicator extends PanelMenu.Button {
         this._historyMenuSection.actor.visible = menuItemsCount > 0;
         this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
+
+    _onSessionModeChanged(session) {
+        if (session.isGreeter || session.isLocked) {
+            this.container.hide();
+        } else {
+            this.container.show();
+        }
+    }
 });
 
-const panelIndicator = {
-    instance: null,
-    state: {
-        history: [],
-        trackChanges: true
-    }
-};
+let panelIndicator;
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
 function enable() {
-    panelIndicator.instance = new PanelIndicator();
-    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator.instance);
+    panelIndicator = new PanelIndicator();
+    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator);
 }
 
 function disable() {
-    panelIndicator.instance.destroy();
-    panelIndicator.instance = null;
+    // This extension uses the 'unlock-dialog' session mode to prevent losing clipboard history
+    // when the screen is locked. It's also safe to continue running this extension while
+    // the screen is locked, as the clipboard is disabled in this case.
+    panelIndicator.destroy();
+    panelIndicator = null;
 }

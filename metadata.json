@@ -2,11 +2,13 @@
     "uuid": "clipman@popov895.ukr.net",
     "name": "Clipman",
     "description": "Simple clipboard manager.",
-    "version": 9,
+    "version": 13,
     "shell-version": [
-        "40",
-        "41",
         "42"
+    ],
+    "session-modes": [
+        "user",
+        "unlock-dialog"
     ],
     "url": "https://github.com/popov895/Clipman"
 }

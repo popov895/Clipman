@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-03 16:02+0300\n"
+"POT-Creation-Date: 2022-06-04 22:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,46 +17,54 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:90
+#: extension.js:91
 msgid "History is Empty"
 msgstr ""
 
-#: extension.js:109
+#: extension.js:110
 msgid "Type to search..."
 msgstr ""
 
-#: extension.js:121
+#: extension.js:122
 msgid "No Matches"
 msgstr ""
 
-#: extension.js:248
-msgid "Track Changes"
-msgstr ""
-
-#: extension.js:253
+#: extension.js:269
 msgid "Clear History"
 msgstr ""
 
-#: extension.js:265
+#: extension.js:281
+msgid "Track Changes"
+msgstr ""
+
+#: extension.js:286
 msgid "Settings"
 msgstr ""
 
-#: prefs.js:100
+#: prefs.js:107
 msgid "Enter the new shortcut"
 msgstr ""
 
-#: prefs.js:102
+#: prefs.js:109
 msgid "Change"
 msgstr ""
 
-#: prefs.js:120
+#: prefs.js:140
 msgid "History size"
 msgstr ""
 
-#: prefs.js:141
-msgid "Shortcut to toggle menu"
+#: prefs.js:146
+msgid "General"
 msgstr ""
 
-#: prefs.js:146
+#: prefs.js:152
 msgid "Disabled"
+msgstr ""
+
+#: prefs.js:161
+msgid "Toggle menu"
+msgstr ""
+
+#: prefs.js:168
+msgid "Keyboard Shortcuts"
 msgstr ""

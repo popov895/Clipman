@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-03 16:02+0300\n"
-"PO-Revision-Date: 2022-04-03 20:11+0300\n"
+"POT-Creation-Date: 2022-06-04 22:54+0300\n"
+"PO-Revision-Date: 2022-06-04 22:56+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -18,46 +18,57 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: extension.js:90
+#: extension.js:91
 msgid "History is Empty"
 msgstr "Історія Порожня"
 
-#: extension.js:109
+#: extension.js:110
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:121
+#: extension.js:122
 msgid "No Matches"
 msgstr "Немає Збігів"
 
-#: extension.js:248
-msgid "Track Changes"
-msgstr "Відстежувати Зміни"
-
-#: extension.js:253
+#: extension.js:269
 msgid "Clear History"
 msgstr "Очистити Історію"
 
-#: extension.js:265
+#: extension.js:281
+msgid "Track Changes"
+msgstr "Відстежувати Зміни"
+
+#: extension.js:286
 msgid "Settings"
 msgstr "Налаштування"
 
-#: prefs.js:100
+#: prefs.js:107
 msgid "Enter the new shortcut"
 msgstr "Введіть нове поєднання клавіш"
 
-#: prefs.js:102
+#: prefs.js:109
 msgid "Change"
 msgstr "Змінити"
 
-#: prefs.js:120
+#: prefs.js:140
 msgid "History size"
 msgstr "Розмір історії"
 
-#: prefs.js:141
-msgid "Shortcut to toggle menu"
-msgstr "Поєднання клавіш для переключення меню"
-
 #: prefs.js:146
+msgid "General"
+msgstr "Загальне"
+
+#: prefs.js:152
 msgid "Disabled"
 msgstr "Вимкнено"
+
+#: prefs.js:161
+msgid "Toggle menu"
+msgstr "Переключити меню"
+
+#: prefs.js:168
+msgid "Keyboard Shortcuts"
+msgstr "Поєднання Клавіш"
+
+#~ msgid "Shortcut to toggle menu"
+#~ msgstr "Поєднання клавіш для переключення меню"
