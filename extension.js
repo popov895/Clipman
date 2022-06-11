@@ -364,12 +364,15 @@ class PanelIndicator extends PanelMenu.Button {
                 const menuItem = this._createMenuItem(text);
                 this._historyMenuSection.section.addMenuItem(menuItem);
             });
+            panelIndicator.state.history.length = 0;
             this._clipboard.getText((text) => {
-                const menuItems = this._historyMenuSection.section._getMenuItems();
-                this._currentMenuItem = menuItems.find((menuItem) => {
-                    return menuItem.text === text;
-                });
-                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                if (text && text.length > 0) {
+                    const menuItems = this._historyMenuSection.section._getMenuItems();
+                    this._currentMenuItem = menuItems.find((menuItem) => {
+                        return menuItem.text === text;
+                    });
+                    this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                }
             });
         }
 
@@ -377,7 +380,6 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _saveState() {
-        panelIndicator.state.history.length = 0;
         const menuItems = this._historyMenuSection.section._getMenuItems();
         menuItems.forEach((menuItem) => {
             panelIndicator.state.history.push(menuItem.text);
