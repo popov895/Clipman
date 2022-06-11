@@ -313,6 +313,11 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
+        menuItem.connect('destroy', () => {
+            if (this._currentMenuItem === menuItem) {
+                this._currentMenuItem = null;
+            }
+        });
 
         const deleteIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
@@ -337,7 +342,6 @@ class PanelIndicator extends PanelMenu.Button {
 
     _destroyMenuItem(menuItem) {
         if (this._currentMenuItem === menuItem) {
-            this._currentMenuItem = null;
             this._clipboard.clear();
         }
         menuItem.destroy();
