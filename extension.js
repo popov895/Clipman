@@ -214,10 +214,12 @@ class PanelIndicator extends PanelMenu.Button {
         this._settings = new Settings();
         this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
 
+        this._loadState();
         this._addKeybindings();
     }
 
     destroy() {
+        this._saveState();
         this._removeKeybindings();
 
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
@@ -356,6 +358,34 @@ class PanelIndicator extends PanelMenu.Button {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
     }
 
+    _loadState() {
+        if (panelIndicator.state.history.length > 0) {
+            panelIndicator.state.history.forEach((text) => {
+                const menuItem = this._createMenuItem(text);
+                this._historyMenuSection.section.addMenuItem(menuItem);
+            });
+            this._clipboard.getText((text) => {
+                const menuItems = this._historyMenuSection.section._getMenuItems();
+                this._currentMenuItem = menuItems.find((menuItem) => {
+                    return menuItem.text === text;
+                });
+                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+            });
+        }
+
+        this._trackChangesMenuItem.setToggleState(panelIndicator.state.trackChanges);
+    }
+
+    _saveState() {
+        panelIndicator.state.history.length = 0;
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        menuItems.forEach((menuItem) => {
+            panelIndicator.state.history.push(menuItem.text);
+        });
+
+        panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
+    }
+
     _onClipboardTextChanged(text) {
         let matchedMenuItem;
         if (text && text.length > 0) {
@@ -397,18 +427,24 @@ class PanelIndicator extends PanelMenu.Button {
     }
 });
 
-let panelIndicator;
+const panelIndicator = {
+    instance: null,
+    state: {
+        history: [],
+        trackChanges: true
+    }
+};
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
 function enable() {
-    panelIndicator = new PanelIndicator();
-    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator);
+    panelIndicator.instance = new PanelIndicator();
+    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator.instance);
 }
 
 function disable() {
-    panelIndicator.destroy();
-    panelIndicator = null;
+    panelIndicator.instance.destroy();
+    panelIndicator.instance = null;
 }
