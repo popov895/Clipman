@@ -2,7 +2,7 @@
     "uuid": "clipman@popov895.ukr.net",
     "name": "Clipman",
     "description": "Simple clipboard manager.",
-    "version": 13,
+    "version": 14,
     "shell-version": [
         "42"
     ],
