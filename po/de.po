@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-03 16:02+0300\n"
-"PO-Revision-Date: 2022-04-03 15:54+0200\n"
+"POT-Creation-Date: 2022-06-04 22:54+0300\n"
+"PO-Revision-Date: 2022-06-14 14:36+0200\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -18,46 +18,57 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: extension.js:90
+#: extension.js:91
 msgid "History is Empty"
 msgstr "Chronik ist leer"
 
-#: extension.js:109
+#: extension.js:110
 msgid "Type to search..."
 msgstr "Tippen, um zu suchen…"
 
-#: extension.js:121
+#: extension.js:122
 msgid "No Matches"
 msgstr "Keine Übereinstimmungen"
 
-#: extension.js:248
-msgid "Track Changes"
-msgstr "Änderungen überwachen"
-
-#: extension.js:253
+#: extension.js:269
 msgid "Clear History"
 msgstr "Chronik löschen"
 
-#: extension.js:265
+#: extension.js:281
+msgid "Track Changes"
+msgstr "Änderungen überwachen"
+
+#: extension.js:286
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: prefs.js:100
+#: prefs.js:107
 msgid "Enter the new shortcut"
 msgstr "Neues Kürzel eingeben"
 
-#: prefs.js:102
+#: prefs.js:109
 msgid "Change"
 msgstr "Ändern"
 
-#: prefs.js:120
+#: prefs.js:140
 msgid "History size"
 msgstr "Größe der Chronik"
 
-#: prefs.js:141
-msgid "Shortcut to toggle menu"
-msgstr "Tastenkombination zum Umschalten des Menüs"
-
 #: prefs.js:146
+msgid "General"
+msgstr "Allgemein"
+
+#: prefs.js:152
 msgid "Disabled"
 msgstr "Deaktiviert"
+
+#: prefs.js:161
+msgid "Toggle menu"
+msgstr "Menü umschalten"
+
+#: prefs.js:168
+msgid "Keyboard Shortcuts"
+msgstr "Tastenkombinationen"
+
+#~ msgid "Shortcut to toggle menu"
+#~ msgstr "Tastenkombination zum Umschalten des Menüs"
