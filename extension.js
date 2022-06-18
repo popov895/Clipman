@@ -265,11 +265,10 @@ class PanelIndicator extends PanelMenu.Button {
         this._clearMenuItem.actor.visible = false;
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
-            this._historyMenuSection.section.removeAll();
             if (this._currentMenuItem) {
-                this._currentMenuItem = null;
                 this._clipboard.clear();
             }
+            this._historyMenuSection.section.removeAll();
         });
         this.menu.addMenuItem(this._clearMenuItem);
 
@@ -326,10 +325,10 @@ class PanelIndicator extends PanelMenu.Button {
         });
         menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
-            this._destroyMenuItem(menuItem);
-            if (this._historyMenuSection.section.numMenuItems === 0) {
+            if (this._historyMenuSection.section.numMenuItems === 1) {
                 this.menu.close();
             }
+            this._destroyMenuItem(menuItem);
         });
 
         return menuItem;
