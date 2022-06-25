@@ -297,7 +297,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _createMenuItem(text) {
         const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
-            return match.replace(/ /g, '␣').replace(/\t/g, '↹').replace(/\n/g, '↵');
+            return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
         }).replaceAll(/\s+/g, ' ');
 
         const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
