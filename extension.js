@@ -380,8 +380,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _saveState() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
-        menuItems.forEach((menuItem) => {
-            panelIndicator.state.history.push(menuItem.text);
+        panelIndicator.state.history = menuItems.map((menuItem) => {
+            return menuItem.text;
         });
 
         panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
