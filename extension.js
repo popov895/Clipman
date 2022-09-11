@@ -1,15 +1,17 @@
 'use strict';
 
-const { Clutter, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
+const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
 const Main = imports.ui.main;
 const Mainloop = imports.mainloop;
+const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
+const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
 const _ = Gettext.domain(Me.uuid).gettext;
 
 const Settings = GObject.registerClass({
@@ -93,6 +95,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
         });
 
         const boxLayout = new St.BoxLayout({
+            style_class: 'clipman-placeholderpanel',
             vertical: true,
             x_expand: true,
         });
@@ -193,6 +196,74 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         }
     }
 }
+
+const QrCodeDialog = GObject.registerClass(
+class QrCodeDialog extends ModalDialog.ModalDialog {
+    _init(text) {
+        super._init();
+
+        const image = this._generateQrCodeImage(text);
+        if (image) {
+            const icon = new St.Icon({
+                gicon: image,
+                icon_size: image.preferred_width,
+            });
+            this.contentLayout.add_child(icon);
+        } else {
+            const label = new St.Label({
+                text: _('Failed to generate QR code'),
+            });
+            this.contentLayout.add_child(label);
+        }
+
+        this.addButton({
+            key: Clutter.KEY_Escape,
+            label: _("Close"),
+            action: () => {
+                this.close();
+            },
+        });
+    }
+
+    _generateQrCodeImage(text) {
+        let image;
+        try {
+            const borderSize = 20;
+            const minContentSize = 400;
+            const bytesPerPixel = 3;
+            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
+            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
+            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
+            data.fill(255);
+            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
+                for (let i = 0; i < pixelsPerModule; ++i) {
+                    const dataY = borderSize + qrCodeY * pixelsPerModule + i;
+                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0 : 255;
+                        for (let j = 0; j < pixelsPerModule; ++j) {
+                            const dataX = borderSize + qrCodeX * pixelsPerModule + j;
+                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
+                            data[dataI] = color;     // R
+                            data[dataI + 1] = color; // G
+                            data[dataI + 2] = color; // B
+                        }
+                    }
+                }
+            }
+
+            image = new St.ImageContent({
+                preferred_height: finalIconSize,
+                preferred_width: finalIconSize,
+            });
+            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
+        } catch (e) {
+            console.log('clipman@popov895.ukr.net: ' + e);
+        }
+
+        return image;
+    }
+});
 
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
@@ -313,23 +384,44 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
 
+        const qrCodeIcon = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: 'send-to-symbolic' }),
+            style_class: 'system-status-icon',
+        });
+        const qrCodeButton = new St.Button({
+            can_focus: true,
+            child: qrCodeIcon,
+            style_class: 'clipman-toolbutton',
+        });
+        qrCodeButton.connect('clicked', () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
+        });
+
         const deleteIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
             style_class: 'system-status-icon',
         });
         const deleteButton = new St.Button({
+            can_focus: true,
             child: deleteIcon,
-            style_class: 'clipman-deletebutton',
-            x_align: Clutter.ActorAlign.END,
-            x_expand: true,
+            style_class: 'clipman-toolbutton',
         });
-        menuItem.actor.add_child(deleteButton);
         deleteButton.connect('clicked', () => {
             if (this._historyMenuSection.section.numMenuItems === 1) {
                 this.menu.close();
             }
             this._destroyMenuItem(menuItem);
         });
+
+        const boxLayout = new St.BoxLayout({
+            style_class: 'clipman-toolbuttonnpanel',
+            x_align: Clutter.ActorAlign.END,
+            x_expand: true,
+        });
+        boxLayout.add(qrCodeButton);
+        boxLayout.add(deleteButton);
+        menuItem.actor.add(boxLayout);
 
         return menuItem;
     }
@@ -355,6 +447,10 @@ class PanelIndicator extends PanelMenu.Button {
 
     _removeKeybindings() {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
+    }
+
+    _showQrCode(text) {
+        new QrCodeDialog(text).open();
     }
 
     _loadState() {

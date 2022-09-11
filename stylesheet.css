@@ -12,6 +12,14 @@
     max-height: 500px;
 }
 
-.clipman-deletebutton .system-status-icon {
+.clipman-placeholderpanel {
+    spacing: 4px;
+}
+
+.clipman-toolbuttonnpanel {
+    spacing: 16px;
+}
+
+.clipman-toolbutton .system-status-icon {
     icon-size: 16px;
 }
