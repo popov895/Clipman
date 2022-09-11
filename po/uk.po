@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 22:54+0300\n"
-"PO-Revision-Date: 2022-06-04 22:56+0300\n"
+"POT-Creation-Date: 2022-09-11 19:38+0300\n"
+"PO-Revision-Date: 2022-09-11 16:46-0400\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,29 +16,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:91
+#: extension.js:93
 msgid "History is Empty"
 msgstr "Історія Порожня"
 
-#: extension.js:110
+#: extension.js:113
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:122
+#: extension.js:125
 msgid "No Matches"
 msgstr "Немає Збігів"
 
-#: extension.js:269
+#: extension.js:214
+msgid "Failed to generate QR code"
+msgstr "Не вдалося створити QR-код"
+
+#: extension.js:221
+msgid "Close"
+msgstr "Закрити"
+
+#: extension.js:335
 msgid "Clear History"
 msgstr "Очистити Історію"
 
-#: extension.js:281
+#: extension.js:346
 msgid "Track Changes"
 msgstr "Відстежувати Зміни"
 
-#: extension.js:286
+#: extension.js:351
 msgid "Settings"
 msgstr "Налаштування"
 
