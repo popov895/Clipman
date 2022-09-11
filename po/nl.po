@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 22:54+0300\n"
-"PO-Revision-Date: 2022-06-05 19:40+0200\n"
+"POT-Creation-Date: 2022-09-11 19:38+0300\n"
+"PO-Revision-Date: 2022-09-11 19:50+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -15,29 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:91
+#: extension.js:93
 msgid "History is Empty"
 msgstr "De geschiedenis is blanco"
 
-#: extension.js:110
+#: extension.js:113
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:122
+#: extension.js:125
 msgid "No Matches"
 msgstr "Er zijn geen overeenkomsten"
 
-#: extension.js:269
+#: extension.js:214
+msgid "Failed to generate QR code"
+msgstr "De QR-code kan niet worden aangemaakt"
+
+#: extension.js:221
+msgid "Close"
+msgstr "Sluiten"
+
+#: extension.js:335
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:281
+#: extension.js:346
 msgid "Track Changes"
 msgstr "Wijzigingen bijhouden"
 
-#: extension.js:286
+#: extension.js:351
 msgid "Settings"
 msgstr "Voorkeuren"
 
