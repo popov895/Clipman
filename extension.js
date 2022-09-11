@@ -1,15 +1,17 @@
 'use strict';
 
-const { Clutter, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
+const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
 const Main = imports.ui.main;
 const Mainloop = imports.mainloop;
+const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
+const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
 const _ = Gettext.domain(Me.uuid).gettext;
 
 const Settings = GObject.registerClass({
@@ -93,6 +95,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
         });
 
         const boxLayout = new St.BoxLayout({
+            style_class: 'clipman-placeholderpanel',
             vertical: true,
             x_expand: true,
         });
@@ -194,6 +197,74 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     }
 }
 
+const QrCodeDialog = GObject.registerClass(
+class QrCodeDialog extends ModalDialog.ModalDialog {
+    _init(text) {
+        super._init();
+
+        const image = this._generateQrCodeImage(text);
+        if (image) {
+            const icon = new St.Icon({
+                gicon: image,
+                icon_size: image.preferred_width,
+            });
+            this.contentLayout.add_child(icon);
+        } else {
+            const label = new St.Label({
+                text: _('Failed to generate QR code'),
+            });
+            this.contentLayout.add_child(label);
+        }
+
+        this.addButton({
+            key: Clutter.KEY_Escape,
+            label: _("Close"),
+            action: () => {
+                this.close();
+            },
+        });
+    }
+
+    _generateQrCodeImage(text) {
+        let image;
+        try {
+            const borderSize = 20;
+            const minContentSize = 400;
+            const bytesPerPixel = 3;
+            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
+            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
+            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
+            data.fill(255);
+            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
+                for (let i = 0; i < pixelsPerModule; ++i) {
+                    const dataY = borderSize + qrCodeY * pixelsPerModule + i;
+                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0 : 255;
+                        for (let j = 0; j < pixelsPerModule; ++j) {
+                            const dataX = borderSize + qrCodeX * pixelsPerModule + j;
+                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
+                            data[dataI] = color;     // R
+                            data[dataI + 1] = color; // G
+                            data[dataI + 2] = color; // B
+                        }
+                    }
+                }
+            }
+
+            image = new St.ImageContent({
+                preferred_height: finalIconSize,
+                preferred_width: finalIconSize,
+            });
+            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
+        } catch (e) {
+            console.log('clipman@popov895.ukr.net: ' + e);
+        }
+
+        return image;
+    }
+});
+
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
     _init() {
@@ -214,18 +285,13 @@ class PanelIndicator extends PanelMenu.Button {
         this._settings = new Settings();
         this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
 
-        this._sessionModeChangedId = Main.sessionMode.connect(
-            'updated',
-            this._onSessionModeChanged.bind(this)
-        );
-
+        this._loadState();
         this._addKeybindings();
     }
 
     destroy() {
+        this._saveState();
         this._removeKeybindings();
-
-        Main.sessionMode.disconnect(this._sessionModeChangedId);
 
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
         this._historyMenuSection.destroy();
@@ -270,11 +336,10 @@ class PanelIndicator extends PanelMenu.Button {
         this._clearMenuItem.actor.visible = false;
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
-            this._historyMenuSection.section.removeAll();
             if (this._currentMenuItem) {
-                this._currentMenuItem = null;
                 this._clipboard.clear();
             }
+            this._historyMenuSection.section.removeAll();
         });
         this.menu.addMenuItem(this._clearMenuItem);
 
@@ -303,7 +368,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _createMenuItem(text) {
         const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
-            return match.replace(/ /g, '␣').replace(/\t/g, '↹').replace(/\n/g, '↵');
+            return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
         }).replaceAll(/\s+/g, ' ');
 
         const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
@@ -313,31 +378,56 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
+        menuItem.connect('destroy', () => {
+            if (this._currentMenuItem === menuItem) {
+                this._currentMenuItem = null;
+            }
+        });
+
+        const qrCodeIcon = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: 'send-to-symbolic' }),
+            style_class: 'system-status-icon',
+        });
+        const qrCodeButton = new St.Button({
+            can_focus: true,
+            child: qrCodeIcon,
+            style_class: 'clipman-toolbutton',
+        });
+        qrCodeButton.connect('clicked', () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
+        });
 
         const deleteIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
             style_class: 'system-status-icon',
         });
         const deleteButton = new St.Button({
+            can_focus: true,
             child: deleteIcon,
-            style_class: 'clipman-deletebutton',
+            style_class: 'clipman-toolbutton',
+        });
+        deleteButton.connect('clicked', () => {
+            if (this._historyMenuSection.section.numMenuItems === 1) {
+                this.menu.close();
+            }
+            this._destroyMenuItem(menuItem);
+        });
+
+        const boxLayout = new St.BoxLayout({
+            style_class: 'clipman-toolbuttonnpanel',
             x_align: Clutter.ActorAlign.END,
             x_expand: true,
         });
-        menuItem.actor.add_child(deleteButton);
-        deleteButton.connect('clicked', () => {
-            this._destroyMenuItem(menuItem);
-            if (this._historyMenuSection.section.numMenuItems === 0) {
-                this.menu.close();
-            }
-        });
+        boxLayout.add(qrCodeButton);
+        boxLayout.add(deleteButton);
+        menuItem.actor.add(boxLayout);
 
         return menuItem;
     }
 
     _destroyMenuItem(menuItem) {
         if (this._currentMenuItem === menuItem) {
-            this._currentMenuItem = null;
             this._clipboard.clear();
         }
         menuItem.destroy();
@@ -357,6 +447,40 @@ class PanelIndicator extends PanelMenu.Button {
 
     _removeKeybindings() {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
+    }
+
+    _showQrCode(text) {
+        new QrCodeDialog(text).open();
+    }
+
+    _loadState() {
+        if (panelIndicator.state.history.length > 0) {
+            panelIndicator.state.history.forEach((text) => {
+                const menuItem = this._createMenuItem(text);
+                this._historyMenuSection.section.addMenuItem(menuItem);
+            });
+            panelIndicator.state.history.length = 0;
+            this._clipboard.getText((text) => {
+                if (text && text.length > 0) {
+                    const menuItems = this._historyMenuSection.section._getMenuItems();
+                    this._currentMenuItem = menuItems.find((menuItem) => {
+                        return menuItem.text === text;
+                    });
+                    this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                }
+            });
+        }
+
+        this._trackChangesMenuItem.setToggleState(panelIndicator.state.trackChanges);
+    }
+
+    _saveState() {
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        panelIndicator.state.history = menuItems.map((menuItem) => {
+            return menuItem.text;
+        });
+
+        panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
     }
 
     _onClipboardTextChanged(text) {
@@ -398,31 +522,26 @@ class PanelIndicator extends PanelMenu.Button {
         this._historyMenuSection.actor.visible = menuItemsCount > 0;
         this._clearMenuItem.actor.visible = menuItemsCount > 0;
     }
-
-    _onSessionModeChanged(session) {
-        if (session.isGreeter || session.isLocked) {
-            this.container.hide();
-        } else {
-            this.container.show();
-        }
-    }
 });
 
-let panelIndicator;
+const panelIndicator = {
+    instance: null,
+    state: {
+        history: [],
+        trackChanges: true
+    }
+};
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
 function enable() {
-    panelIndicator = new PanelIndicator();
-    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator);
+    panelIndicator.instance = new PanelIndicator();
+    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator.instance);
 }
 
 function disable() {
-    // This extension uses the 'unlock-dialog' session mode to prevent losing clipboard history
-    // when the screen is locked. It's also safe to continue running this extension while
-    // the screen is locked, as the clipboard is disabled in this case.
-    panelIndicator.destroy();
-    panelIndicator = null;
+    panelIndicator.instance.destroy();
+    panelIndicator.instance = null;
 }
