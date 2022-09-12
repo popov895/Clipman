@@ -385,7 +385,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         const qrCodeIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'send-to-symbolic' }),
+            gicon: Gio.icon_new_for_string(Me.path + '/icons/qrscanner-symbolic.svg'),
             style_class: 'system-status-icon',
         });
         const qrCodeButton = new St.Button({
