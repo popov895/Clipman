@@ -229,7 +229,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
         let image;
         try {
             const borderSize = 20;
-            const minContentSize = 400;
+            const minContentSize = 200;
             const bytesPerPixel = 3;
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
             const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
