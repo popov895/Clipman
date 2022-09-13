@@ -218,7 +218,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
 
         this.addButton({
             key: Clutter.KEY_Escape,
-            label: _("Close"),
+            label: _('Close'),
             action: () => {
                 this.close();
             },
@@ -230,7 +230,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
         try {
             const borderSize = 20;
             const minContentSize = 200;
-            const bytesPerPixel = 3;
+            const bytesPerPixel = 3; // RGB
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
             const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
             const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
@@ -240,7 +240,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
                 for (let i = 0; i < pixelsPerModule; ++i) {
                     const dataY = borderSize + qrCodeY * pixelsPerModule + i;
                     for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
-                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0 : 255;
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
                         for (let j = 0; j < pixelsPerModule; ++j) {
                             const dataX = borderSize + qrCodeX * pixelsPerModule + j;
                             const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
@@ -258,7 +258,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
             });
             image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
         } catch (e) {
-            console.log('clipman@popov895.ukr.net: ' + e);
+            console.log(Me.uuid + ': ' + e);
         }
 
         return image;
