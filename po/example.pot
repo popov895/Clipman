@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 19:38+0300\n"
+"POT-Creation-Date: 2022-09-17 16:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,35 +17,39 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:93
-msgid "History is Empty"
-msgstr ""
-
-#: extension.js:113
+#: extension.js:117
 msgid "Type to search..."
 msgstr ""
 
-#: extension.js:125
+#: extension.js:129
 msgid "No Matches"
 msgstr ""
 
-#: extension.js:214
+#: extension.js:218
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:221
+#: extension.js:225
 msgid "Close"
 msgstr ""
 
-#: extension.js:335
+#: extension.js:326
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:331
+msgid "History is Empty"
+msgstr ""
+
+#: extension.js:347
 msgid "Clear History"
 msgstr ""
 
-#: extension.js:346
-msgid "Track Changes"
+#: extension.js:357
+msgid "Private Mode"
 msgstr ""
 
-#: extension.js:351
+#: extension.js:382
 msgid "Settings"
 msgstr ""
 
