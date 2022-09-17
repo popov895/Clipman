@@ -85,7 +85,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
         this.actor.style_class = 'popup-menu-item';
 
         const icon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'edit-copy' }),
+            gicon: Gio.icon_new_for_string(Me.path + '/icons/clipboard-symbolic.svg'),
             x_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -385,7 +385,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         const qrCodeIcon = new St.Icon({
-            gicon: Gio.icon_new_for_string(Me.path + '/icons/qrscanner-symbolic.svg'),
+            gicon: Gio.icon_new_for_string(Me.path + '/icons/qrcode-symbolic.svg'),
             style_class: 'system-status-icon',
         });
         const qrCodeButton = new St.Button({
