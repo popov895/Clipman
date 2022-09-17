@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 19:38+0300\n"
-"PO-Revision-Date: 2022-09-11 16:46-0400\n"
+"POT-Creation-Date: 2022-09-17 16:21+0300\n"
+"PO-Revision-Date: 2022-09-17 09:32-0400\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -18,35 +18,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:93
-msgid "History is Empty"
-msgstr "Історія Порожня"
-
-#: extension.js:113
+#: extension.js:117
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:125
+#: extension.js:129
 msgid "No Matches"
 msgstr "Немає Збігів"
 
-#: extension.js:214
+#: extension.js:218
 msgid "Failed to generate QR code"
 msgstr "Не вдалося створити QR-код"
 
-#: extension.js:221
+#: extension.js:225
 msgid "Close"
 msgstr "Закрити"
 
-#: extension.js:335
+#: extension.js:326
+msgid "Private Mode is On"
+msgstr "Приватний Режим Увімкнено"
+
+#: extension.js:331
+msgid "History is Empty"
+msgstr "Історія Порожня"
+
+#: extension.js:347
 msgid "Clear History"
 msgstr "Очистити Історію"
 
-#: extension.js:346
-msgid "Track Changes"
-msgstr "Відстежувати Зміни"
+#: extension.js:357
+msgid "Private Mode"
+msgstr "Приватний Режим"
 
-#: extension.js:351
+#: extension.js:382
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -77,6 +81,9 @@ msgstr "Переключити меню"
 #: prefs.js:168
 msgid "Keyboard Shortcuts"
 msgstr "Поєднання Клавіш"
+
+#~ msgid "Track Changes"
+#~ msgstr "Відстежувати Зміни"
 
 #~ msgid "Shortcut to toggle menu"
 #~ msgstr "Поєднання клавіш для переключення меню"
