@@ -78,19 +78,15 @@ const ClipboardManager = GObject.registerClass({
 
 const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
     constructor() {
-        super({
-            reactive: false,
-        });
+        super();
 
-        this.actor.style_class = 'popup-menu-item';
+        this.actor.add_style_class_name('popup-menu-item');
 
-        const icon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'edit-copy' }),
+        this._icon = new St.Icon({
             x_align: Clutter.ActorAlign.CENTER,
         });
 
-        const label = new St.Label({
-            text: _('History is Empty'),
+        this._label = new St.Label({
             x_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -99,9 +95,17 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
             vertical: true,
             x_expand: true,
         });
-        boxLayout.add(icon);
-        boxLayout.add(label);
+        boxLayout.add(this._icon);
+        boxLayout.add(this._label);
         this.actor.add(boxLayout);
+    }
+
+    setIcon(icon) {
+        this._icon.gicon = icon;
+    }
+
+    setText(text) {
+        this._label.text = text;
     }
 }
 
@@ -218,7 +222,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
 
         this.addButton({
             key: Clutter.KEY_Escape,
-            label: _("Close"),
+            label: _('Close'),
             action: () => {
                 this.close();
             },
@@ -229,8 +233,8 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
         let image;
         try {
             const borderSize = 20;
-            const minContentSize = 400;
-            const bytesPerPixel = 3;
+            const minContentSize = 200;
+            const bytesPerPixel = 3; // RGB
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
             const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
             const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
@@ -240,7 +244,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
                 for (let i = 0; i < pixelsPerModule; ++i) {
                     const dataY = borderSize + qrCodeY * pixelsPerModule + i;
                     for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
-                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0 : 255;
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
                         for (let j = 0; j < pixelsPerModule; ++j) {
                             const dataX = borderSize + qrCodeX * pixelsPerModule + j;
                             const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
@@ -258,7 +262,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
             });
             image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
         } catch (e) {
-            console.log('clipman@popov895.ukr.net: ' + e);
+            console.log(Me.uuid + ': ' + e);
         }
 
         return image;
@@ -277,9 +281,11 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._clipboard = new ClipboardManager();
         this._clipboardChangedId = this._clipboard.connect('changed', () => {
-            this._clipboard.getText((text) => {
-                this._onClipboardTextChanged(text);
-            });
+            if (!this._privateModeMenuItem.state) {
+                this._clipboard.getText((text) => {
+                    this._onClipboardTextChanged(text);
+                });
+            }
         });
 
         this._settings = new Settings();
@@ -315,25 +321,30 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _buildMenu() {
-        this._placeholderMenuItem = new PlaceholderMenuItem();
-        this.menu.addMenuItem(this._placeholderMenuItem);
+        this._privateModePlaceholder = new PlaceholderMenuItem();
+        this._privateModePlaceholder.setIcon(Gio.icon_new_for_string(Me.path + '/icons/private-mode-symbolic.svg'));
+        this._privateModePlaceholder.setText(_('Private Mode is On'));
+        this.menu.addMenuItem(this._privateModePlaceholder);
+
+        this._emptyPlaceholder = new PlaceholderMenuItem();
+        this._emptyPlaceholder.setIcon(Gio.icon_new_for_string(Me.path + '/icons/clipboard-symbolic.svg'));
+        this._emptyPlaceholder.setText(_('History is Empty'));
+        this.menu.addMenuItem(this._emptyPlaceholder);
 
         this._historyMenuSection = new HistoryMenuSection();
-        this._historyMenuSection.actor.visible = false;
         this._historyMenuSection.section.box.connect(
             'actor-added',
-            this._onHistoryMenuSectionChanged.bind(this)
+            this._updateUi.bind(this)
         );
         this._historySectionActorRemovedId = this._historyMenuSection.section.box.connect(
             'actor-removed',
-            this._onHistoryMenuSectionChanged.bind(this)
+            this._updateUi.bind(this)
         );
         this.menu.addMenuItem(this._historyMenuSection);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
-        this._clearMenuItem.actor.visible = false;
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
             if (this._currentMenuItem) {
@@ -343,10 +354,30 @@ class PanelIndicator extends PanelMenu.Button {
         });
         this.menu.addMenuItem(this._clearMenuItem);
 
-        this._trackChangesMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Track Changes'), true, {
+        this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Private Mode'), false, {
             reactive: true,
         });
-        this.menu.addMenuItem(this._trackChangesMenuItem);
+        this._privateModeMenuItem.connect('toggled', (...[, state]) => {
+            this.menu.close();
+            if (!state) {
+                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
+                this._currentMenuItem = null;
+                this._clipboard.getText((text) => {
+                    if (text && text.length > 0) {
+                        const menuItems = this._historyMenuSection.section._getMenuItems();
+                        this._currentMenuItem = menuItems.find((menuItem) => {
+                            return menuItem.text === text;
+                        });
+                        if (this._currentMenuItem) {
+                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, 0);
+                        }
+                        this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                    }
+                });
+            }
+            this._updateUi();
+        });
+        this.menu.addMenuItem(this._privateModeMenuItem);
 
         const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'));
         settingsMenuItem.connect('activate', () => {
@@ -385,7 +416,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         const qrCodeIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'send-to-symbolic' }),
+            gicon: Gio.icon_new_for_string(Me.path + '/icons/qrcode-symbolic.svg'),
             style_class: 'system-status-icon',
         });
         const qrCodeButton = new St.Button({
@@ -471,7 +502,9 @@ class PanelIndicator extends PanelMenu.Button {
             });
         }
 
-        this._trackChangesMenuItem.setToggleState(panelIndicator.state.trackChanges);
+        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
+
+        this._updateUi();
     }
 
     _saveState() {
@@ -480,7 +513,16 @@ class PanelIndicator extends PanelMenu.Button {
             return menuItem.text;
         });
 
-        panelIndicator.state.trackChanges = this._trackChangesMenuItem.state;
+        panelIndicator.state.privateMode = this._privateModeMenuItem.state;
+    }
+
+    _updateUi() {
+        const privateMode = this._privateModeMenuItem.state;
+        this._privateModePlaceholder.actor.visible = privateMode;
+        const menuItemsCount = this._historyMenuSection.section.numMenuItems;
+        this._emptyPlaceholder.actor.visible = !privateMode && menuItemsCount === 0;
+        this._historyMenuSection.actor.visible = !privateMode && menuItemsCount > 0;
+        this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > 0;
     }
 
     _onClipboardTextChanged(text) {
@@ -492,7 +534,7 @@ class PanelIndicator extends PanelMenu.Button {
             });
             if (matchedMenuItem) {
                 this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
-            } else if (this._trackChangesMenuItem.state) {
+            } else {
                 if (menuItems.length === this._settings.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
@@ -515,20 +557,13 @@ class PanelIndicator extends PanelMenu.Button {
             this._destroyMenuItem(menuItem);
         });
     }
-
-    _onHistoryMenuSectionChanged() {
-        const menuItemsCount = this._historyMenuSection.section.numMenuItems;
-        this._placeholderMenuItem.actor.visible = menuItemsCount === 0;
-        this._historyMenuSection.actor.visible = menuItemsCount > 0;
-        this._clearMenuItem.actor.visible = menuItemsCount > 0;
-    }
 });
 
 const panelIndicator = {
     instance: null,
     state: {
         history: [],
-        trackChanges: true
+        privateMode: false
     }
 };
 
