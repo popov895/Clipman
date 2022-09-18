@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 19:38+0300\n"
-"PO-Revision-Date: 2022-09-11 19:50+0200\n"
+"POT-Creation-Date: 2022-09-17 16:21+0300\n"
+"PO-Revision-Date: 2022-09-18 19:45+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -17,35 +17,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:93
-msgid "History is Empty"
-msgstr "De geschiedenis is blanco"
-
-#: extension.js:113
+#: extension.js:117
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:125
+#: extension.js:129
 msgid "No Matches"
 msgstr "Er zijn geen overeenkomsten"
 
-#: extension.js:214
+#: extension.js:218
 msgid "Failed to generate QR code"
 msgstr "De QR-code kan niet worden aangemaakt"
 
-#: extension.js:221
+#: extension.js:225
 msgid "Close"
 msgstr "Sluiten"
 
-#: extension.js:335
+#: extension.js:326
+msgid "Private Mode is On"
+msgstr "De incognitomodus is ingeschakeld"
+
+#: extension.js:331
+msgid "History is Empty"
+msgstr "De geschiedenis is blanco"
+
+#: extension.js:347
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:346
-msgid "Track Changes"
-msgstr "Wijzigingen bijhouden"
+#: extension.js:357
+msgid "Private Mode"
+msgstr "Incognitomodus"
 
-#: extension.js:351
+#: extension.js:382
 msgid "Settings"
 msgstr "Voorkeuren"
 
@@ -76,6 +80,9 @@ msgstr "Menu tonen/verbergen"
 #: prefs.js:168
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
+
+#~ msgid "Track Changes"
+#~ msgstr "Wijzigingen bijhouden"
 
 #~ msgid "Shortcut to toggle menu"
 #~ msgstr "Sneltoets om menu te openen"
