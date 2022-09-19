@@ -14,6 +14,10 @@ const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
 const _ = Gettext.domain(Me.uuid).gettext;
 
+const sensitiveMimeTypes = [
+    'x-kde-passwordManagerHint',
+];
+
 const Settings = GObject.registerClass({
     Signals: {
         'historySizeChanged': {},
@@ -62,9 +66,17 @@ const ClipboardManager = GObject.registerClass({
     }
 
     getText(callback) {
-        this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
-            callback(text);
+        const mimeTypes = this._clipboard.get_mimetypes(St.ClipboardType.CLIPBOARD);
+        const hasSensitiveMimeTypes = sensitiveMimeTypes.some((sensitiveMimeType) => {
+            return mimeTypes.includes(sensitiveMimeType);
         });
+        if (hasSensitiveMimeTypes) {
+            callback(null);
+        } else {
+            this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
+                callback(text);
+            });
+        }
     }
 
     setText(text) {
