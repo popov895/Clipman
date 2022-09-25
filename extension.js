@@ -5,7 +5,6 @@ const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
 const Main = imports.ui.main;
-const Mainloop = imports.mainloop;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -317,10 +316,6 @@ class PanelIndicator extends PanelMenu.Button {
         this._clipboard.disconnect(this._clipboardChangedId);
         this._clipboard.destroy();
 
-        if (this._searchMenuItemFocusCallbackId) {
-            Mainloop.source_remove(this._searchMenuItemFocusCallbackId);
-        }
-
         super.destroy();
     }
 
@@ -401,9 +396,8 @@ class PanelIndicator extends PanelMenu.Button {
             if (open) {
                 this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
                 this._historyMenuSection.entry.text = '';
-                this._searchMenuItemFocusCallbackId = Mainloop.timeout_add(1, () => {
+                Promise.resolve().then(() => {
                     global.stage.set_key_focus(this._historyMenuSection.entry);
-                    this._searchMenuItemFocusCallbackId = null;
                 });
             }
         });
