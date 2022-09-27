@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the Clipman package.
 # Kamil Stępień <kamilst96@gmail.com>, 2022.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-04 22:54+0300\n"
-"PO-Revision-Date: 2022-06-12 16:45+0200\n"
+"PO-Revision-Date: 2022-09-27 17:53+0200\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -16,13 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
-#: extension.js:91
-msgid "History is Empty"
-msgstr "Historia jest pusta"
-
-#: extension.js:110
+#: extension.js:117
 msgid "Type to search..."
 msgstr "Szukaj..."
 
@@ -30,15 +27,31 @@ msgstr "Szukaj..."
 msgid "No Matches"
 msgstr "Brak wyników"
 
-#: extension.js:269
+#: extension.js:218
+msgid "Failed to generate QR code"
+msgstr "Nie udało się wygenerować kodu QR"
+
+#: extension.js:225
+msgid "Close"
+msgstr "Zamknij"
+
+#: extension.js:326
+msgid "Private Mode is On"
+msgstr "Tryb prywatny jest włączony"
+
+#: extension.js:331
+msgid "History is Empty"
+msgstr "Historia jest pusta"
+
+#: extension.js:347
 msgid "Clear History"
 msgstr "Wyczyść historię"
 
-#: extension.js:281
-msgid "Track Changes"
-msgstr "Śledź zmiany"
+#: extension.js:357
+msgid "Private Mode"
+msgstr "Tryb prywatny"
 
-#: extension.js:286
+#: extension.js:382
 msgid "Settings"
 msgstr "Ustawienia"
 
