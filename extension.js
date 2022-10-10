@@ -243,21 +243,21 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
     _generateQrCodeImage(text) {
         let image;
         try {
-            const borderSize = 20;
             const minContentSize = 200;
             const bytesPerPixel = 3; // RGB
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
             const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
-            const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
+            const quietZoneSize = 4 * pixelsPerModule;
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
             const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
             data.fill(255);
             for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
                 for (let i = 0; i < pixelsPerModule; ++i) {
-                    const dataY = borderSize + qrCodeY * pixelsPerModule + i;
+                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
                     for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
                         const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
                         for (let j = 0; j < pixelsPerModule; ++j) {
-                            const dataX = borderSize + qrCodeX * pixelsPerModule + j;
+                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
                             const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
                             data[dataI] = color;     // R
                             data[dataI + 1] = color; // G
