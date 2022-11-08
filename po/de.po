@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 22:54+0300\n"
-"PO-Revision-Date: 2022-06-14 14:36+0200\n"
+"POT-Creation-Date: 2022-09-17 16:21+0300\n"
+"PO-Revision-Date: 2022-11-08 11:55+0100\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,29 +16,41 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:91
-msgid "History is Empty"
-msgstr "Chronik ist leer"
-
-#: extension.js:110
+#: extension.js:117
 msgid "Type to search..."
 msgstr "Tippen, um zu suchen…"
 
-#: extension.js:122
+#: extension.js:129
 msgid "No Matches"
 msgstr "Keine Übereinstimmungen"
 
-#: extension.js:269
+#: extension.js:218
+msgid "Failed to generate QR code"
+msgstr "QR-Code konnte nicht erzeugt werden"
+
+#: extension.js:225
+msgid "Close"
+msgstr "Schließen"
+
+#: extension.js:326
+msgid "Private Mode is On"
+msgstr "Privater Modus ist aktiviert"
+
+#: extension.js:331
+msgid "History is Empty"
+msgstr "Chronik ist leer"
+
+#: extension.js:347
 msgid "Clear History"
 msgstr "Chronik löschen"
 
-#: extension.js:281
-msgid "Track Changes"
-msgstr "Änderungen überwachen"
+#: extension.js:357
+msgid "Private Mode"
+msgstr "Privater Modus"
 
-#: extension.js:286
+#: extension.js:382
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -69,6 +81,9 @@ msgstr "Menü umschalten"
 #: prefs.js:168
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkombinationen"
+
+#~ msgid "Track Changes"
+#~ msgstr "Änderungen überwachen"
 
 #~ msgid "Shortcut to toggle menu"
 #~ msgstr "Tastenkombination zum Umschalten des Menüs"
