@@ -290,6 +290,8 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildIcon();
         this._buildMenu();
 
+        this._pinnedCount = 0;
+
         this._clipboard = new ClipboardManager();
         this._clipboardChangedId = this._clipboard.connect('changed', () => {
             if (!this._privateModeMenuItem.state) {
@@ -354,10 +356,11 @@ class PanelIndicator extends PanelMenu.Button {
         this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
-            if (this._currentMenuItem) {
-                this._clipboard.clear();
-            }
-            this._historyMenuSection.section.removeAll();
+            const menuItems = this._historyMenuSection.section._getMenuItems();
+            const menuItemsToRemove = menuItems.slice(this._pinnedCount);
+            menuItemsToRemove.forEach((menuItem) => {
+                this._destroyMenuItem(menuItem);
+            });
         });
         this.menu.addMenuItem(this._clearMenuItem);
 
@@ -409,7 +412,9 @@ class PanelIndicator extends PanelMenu.Button {
         }).replaceAll(/\s+/g, ' ');
 
         const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
+        menuItem.pinned = false;
         menuItem.text = text;
+        menuItem.timestamp = Date.now();
         menuItem.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         menuItem.connect('activate', () => {
             this.menu.close();
@@ -419,6 +424,19 @@ class PanelIndicator extends PanelMenu.Button {
             if (this._currentMenuItem === menuItem) {
                 this._currentMenuItem = null;
             }
+        });
+
+        menuItem.pinIcon = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: 'non-starred-symbolic' }),
+            style_class: 'system-status-icon',
+        });
+        const pinButton = new St.Button({
+            can_focus: true,
+            child: menuItem.pinIcon,
+            style_class: 'clipman-toolbutton',
+        });
+        pinButton.connect('clicked', () => {
+            menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
 
         const qrCodeIcon = new St.Icon({
@@ -456,6 +474,7 @@ class PanelIndicator extends PanelMenu.Button {
             x_align: Clutter.ActorAlign.END,
             x_expand: true,
         });
+        boxLayout.add(pinButton);
         boxLayout.add(qrCodeButton);
         boxLayout.add(deleteButton);
         menuItem.actor.add(boxLayout);
@@ -467,7 +486,39 @@ class PanelIndicator extends PanelMenu.Button {
         if (this._currentMenuItem === menuItem) {
             this._clipboard.clear();
         }
+        if (menuItem.pinned) {
+            --this._pinnedCount;
+        }
         menuItem.destroy();
+    }
+
+    _pinMenuItem(menuItem) {
+        menuItem.pinned = true;
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'starred-symbolic' });
+        this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
+    }
+
+    _unpinMenuItem(menuItem) {
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        if (menuItems.length - this._pinnedCount === this._settings.historySize) {
+            const lastMenuItem = menuItems[menuItems.length - 1];
+            if (menuItem.timestamp < lastMenuItem.timestamp) {
+                this._destroyMenuItem(menuItem);
+                return;
+            }
+            this._destroyMenuItem(lastMenuItem);
+        }
+        menuItem.pinned = false;
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'non-starred-symbolic' });
+        let indexToMove = menuItems.length;
+        for (let i = this._pinnedCount; i < menuItems.length; ++i) {
+            if (menuItems[i].timestamp < menuItem.timestamp) {
+                indexToMove = i;
+                break;
+            }
+        }
+        this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
+        --this._pinnedCount;
     }
 
     _addKeybindings() {
@@ -539,13 +590,16 @@ class PanelIndicator extends PanelMenu.Button {
                 return menuItem.text === text;
             });
             if (matchedMenuItem) {
-                this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
+                matchedMenuItem.timestamp = Date.now();
+                if (!matchedMenuItem.pinned) {
+                    this._historyMenuSection.section.moveMenuItem(matchedMenuItem, this._pinnedCount);
+                }
             } else {
-                if (menuItems.length === this._settings.historySize) {
+                if (menuItems.length - this._pinnedCount === this._settings.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
                 matchedMenuItem = this._createMenuItem(text);
-                this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
+                this._historyMenuSection.section.addMenuItem(matchedMenuItem, this._pinnedCount);
             }
         }
 
@@ -558,7 +612,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _onHistorySizeChanged() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
-        const menuItemsToRemove = menuItems.slice(this._settings.historySize);
+        const menuItemsToRemove = menuItems.slice(this._settings.historySize + this._pinnedCount);
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
