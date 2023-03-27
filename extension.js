@@ -5,7 +5,6 @@ const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
 const Main = imports.ui.main;
-const Mainloop = imports.mainloop;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -13,6 +12,10 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
 const _ = Gettext.domain(Me.uuid).gettext;
+
+const sensitiveMimeTypes = [
+    'x-kde-passwordManagerHint',
+];
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -62,9 +65,17 @@ const ClipboardManager = GObject.registerClass({
     }
 
     getText(callback) {
-        this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
-            callback(text);
+        const mimeTypes = this._clipboard.get_mimetypes(St.ClipboardType.CLIPBOARD);
+        const hasSensitiveMimeTypes = sensitiveMimeTypes.some((sensitiveMimeType) => {
+            return mimeTypes.includes(sensitiveMimeType);
         });
+        if (hasSensitiveMimeTypes) {
+            callback(null);
+        } else {
+            this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
+                callback(text);
+            });
+        }
     }
 
     setText(text) {
@@ -232,21 +243,21 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
     _generateQrCodeImage(text) {
         let image;
         try {
-            const borderSize = 20;
             const minContentSize = 200;
             const bytesPerPixel = 3; // RGB
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
             const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
-            const finalIconSize = qrCode.size * pixelsPerModule + 2 * borderSize;
+            const quietZoneSize = 4 * pixelsPerModule;
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
             const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
             data.fill(255);
             for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
                 for (let i = 0; i < pixelsPerModule; ++i) {
-                    const dataY = borderSize + qrCodeY * pixelsPerModule + i;
+                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
                     for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
                         const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
                         for (let j = 0; j < pixelsPerModule; ++j) {
-                            const dataX = borderSize + qrCodeX * pixelsPerModule + j;
+                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
                             const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
                             data[dataI] = color;     // R
                             data[dataI + 1] = color; // G
@@ -279,6 +290,8 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildIcon();
         this._buildMenu();
 
+        this._pinnedCount = 0;
+
         this._clipboard = new ClipboardManager();
         this._clipboardChangedId = this._clipboard.connect('changed', () => {
             if (!this._privateModeMenuItem.state) {
@@ -304,10 +317,6 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._clipboard.disconnect(this._clipboardChangedId);
         this._clipboard.destroy();
-
-        if (this._searchMenuItemFocusCallbackId) {
-            Mainloop.source_remove(this._searchMenuItemFocusCallbackId);
-        }
 
         super.destroy();
     }
@@ -347,10 +356,11 @@ class PanelIndicator extends PanelMenu.Button {
         this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
         this._clearMenuItem.connect('activate', () => {
             this.menu.close();
-            if (this._currentMenuItem) {
-                this._clipboard.clear();
-            }
-            this._historyMenuSection.section.removeAll();
+            const menuItems = this._historyMenuSection.section._getMenuItems();
+            const menuItemsToRemove = menuItems.slice(this._pinnedCount);
+            menuItemsToRemove.forEach((menuItem) => {
+                this._destroyMenuItem(menuItem);
+            });
         });
         this.menu.addMenuItem(this._clearMenuItem);
 
@@ -389,21 +399,22 @@ class PanelIndicator extends PanelMenu.Button {
             if (open) {
                 this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
                 this._historyMenuSection.entry.text = '';
-                this._searchMenuItemFocusCallbackId = Mainloop.timeout_add(1, () => {
+                Promise.resolve().then(() => {
                     global.stage.set_key_focus(this._historyMenuSection.entry);
-                    this._searchMenuItemFocusCallbackId = null;
                 });
             }
         });
     }
 
-    _createMenuItem(text) {
+    _createMenuItem(text, pinned = false, timestamp = Date.now()) {
         const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
             return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
         }).replaceAll(/\s+/g, ' ');
 
         const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
+        menuItem.pinned = pinned;
         menuItem.text = text;
+        menuItem.timestamp = timestamp;
         menuItem.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         menuItem.connect('activate', () => {
             this.menu.close();
@@ -413,6 +424,19 @@ class PanelIndicator extends PanelMenu.Button {
             if (this._currentMenuItem === menuItem) {
                 this._currentMenuItem = null;
             }
+        });
+
+        menuItem.pinIcon = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? 'starred-symbolic' : 'non-starred-symbolic' }),
+            style_class: 'system-status-icon',
+        });
+        const pinButton = new St.Button({
+            can_focus: true,
+            child: menuItem.pinIcon,
+            style_class: 'clipman-toolbutton',
+        });
+        pinButton.connect('clicked', () => {
+            menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
 
         const qrCodeIcon = new St.Icon({
@@ -450,6 +474,7 @@ class PanelIndicator extends PanelMenu.Button {
             x_align: Clutter.ActorAlign.END,
             x_expand: true,
         });
+        boxLayout.add(pinButton);
         boxLayout.add(qrCodeButton);
         boxLayout.add(deleteButton);
         menuItem.actor.add(boxLayout);
@@ -461,7 +486,39 @@ class PanelIndicator extends PanelMenu.Button {
         if (this._currentMenuItem === menuItem) {
             this._clipboard.clear();
         }
+        if (menuItem.pinned) {
+            --this._pinnedCount;
+        }
         menuItem.destroy();
+    }
+
+    _pinMenuItem(menuItem) {
+        menuItem.pinned = true;
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'starred-symbolic' });
+        this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
+    }
+
+    _unpinMenuItem(menuItem) {
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        if (menuItems.length - this._pinnedCount === this._settings.historySize) {
+            const lastMenuItem = menuItems[menuItems.length - 1];
+            if (menuItem.timestamp < lastMenuItem.timestamp) {
+                this._destroyMenuItem(menuItem);
+                return;
+            }
+            this._destroyMenuItem(lastMenuItem);
+        }
+        menuItem.pinned = false;
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'non-starred-symbolic' });
+        let indexToMove = menuItems.length;
+        for (let i = this._pinnedCount; i < menuItems.length; ++i) {
+            if (menuItems[i].timestamp < menuItem.timestamp) {
+                indexToMove = i;
+                break;
+            }
+        }
+        this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
+        --this._pinnedCount;
     }
 
     _addKeybindings() {
@@ -486,9 +543,12 @@ class PanelIndicator extends PanelMenu.Button {
 
     _loadState() {
         if (panelIndicator.state.history.length > 0) {
-            panelIndicator.state.history.forEach((text) => {
-                const menuItem = this._createMenuItem(text);
+            panelIndicator.state.history.forEach((entry) => {
+                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.timestamp);
                 this._historyMenuSection.section.addMenuItem(menuItem);
+                if (menuItem.pinned) {
+                    ++this._pinnedCount;
+                }
             });
             panelIndicator.state.history.length = 0;
             this._clipboard.getText((text) => {
@@ -510,7 +570,11 @@ class PanelIndicator extends PanelMenu.Button {
     _saveState() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         panelIndicator.state.history = menuItems.map((menuItem) => {
-            return menuItem.text;
+            return {
+                pinned: menuItem.pinned,
+                text: menuItem.text,
+                timestamp: menuItem.timestamp
+            };
         });
 
         panelIndicator.state.privateMode = this._privateModeMenuItem.state;
@@ -533,13 +597,16 @@ class PanelIndicator extends PanelMenu.Button {
                 return menuItem.text === text;
             });
             if (matchedMenuItem) {
-                this._historyMenuSection.section.moveMenuItem(matchedMenuItem, 0);
+                matchedMenuItem.timestamp = Date.now();
+                if (!matchedMenuItem.pinned) {
+                    this._historyMenuSection.section.moveMenuItem(matchedMenuItem, this._pinnedCount);
+                }
             } else {
-                if (menuItems.length === this._settings.historySize) {
+                if (menuItems.length - this._pinnedCount === this._settings.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
                 matchedMenuItem = this._createMenuItem(text);
-                this._historyMenuSection.section.addMenuItem(matchedMenuItem, 0);
+                this._historyMenuSection.section.addMenuItem(matchedMenuItem, this._pinnedCount);
             }
         }
 
@@ -552,7 +619,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _onHistorySizeChanged() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
-        const menuItemsToRemove = menuItems.slice(this._settings.historySize);
+        const menuItemsToRemove = menuItems.slice(this._settings.historySize + this._pinnedCount);
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
