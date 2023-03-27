@@ -406,15 +406,15 @@ class PanelIndicator extends PanelMenu.Button {
         });
     }
 
-    _createMenuItem(text) {
+    _createMenuItem(text, pinned = false, timestamp = Date.now()) {
         const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
             return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
         }).replaceAll(/\s+/g, ' ');
 
         const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
-        menuItem.pinned = false;
+        menuItem.pinned = pinned;
         menuItem.text = text;
-        menuItem.timestamp = Date.now();
+        menuItem.timestamp = timestamp;
         menuItem.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         menuItem.connect('activate', () => {
             this.menu.close();
@@ -427,7 +427,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         menuItem.pinIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'non-starred-symbolic' }),
+            gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? 'starred-symbolic' : 'non-starred-symbolic' }),
             style_class: 'system-status-icon',
         });
         const pinButton = new St.Button({
@@ -543,9 +543,12 @@ class PanelIndicator extends PanelMenu.Button {
 
     _loadState() {
         if (panelIndicator.state.history.length > 0) {
-            panelIndicator.state.history.forEach((text) => {
-                const menuItem = this._createMenuItem(text);
+            panelIndicator.state.history.forEach((entry) => {
+                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.timestamp);
                 this._historyMenuSection.section.addMenuItem(menuItem);
+                if (menuItem.pinned) {
+                    ++this._pinnedCount;
+                }
             });
             panelIndicator.state.history.length = 0;
             this._clipboard.getText((text) => {
@@ -567,7 +570,11 @@ class PanelIndicator extends PanelMenu.Button {
     _saveState() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         panelIndicator.state.history = menuItems.map((menuItem) => {
-            return menuItem.text;
+            return {
+                pinned: menuItem.pinned,
+                text: menuItem.text,
+                timestamp: menuItem.timestamp
+            };
         });
 
         panelIndicator.state.privateMode = this._privateModeMenuItem.state;
