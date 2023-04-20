@@ -496,6 +496,7 @@ class PanelIndicator extends PanelMenu.Button {
         menuItem.pinned = true;
         menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'starred-symbolic' });
         this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
+        this._updateUi();
     }
 
     _unpinMenuItem(menuItem) {
@@ -519,6 +520,7 @@ class PanelIndicator extends PanelMenu.Button {
         }
         this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
         --this._pinnedCount;
+        this._updateUi();
     }
 
     _addKeybindings() {
@@ -586,7 +588,7 @@ class PanelIndicator extends PanelMenu.Button {
         const menuItemsCount = this._historyMenuSection.section.numMenuItems;
         this._emptyPlaceholder.actor.visible = !privateMode && menuItemsCount === 0;
         this._historyMenuSection.actor.visible = !privateMode && menuItemsCount > 0;
-        this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > 0;
+        this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > this._pinnedCount;
     }
 
     _onClipboardTextChanged(text) {
