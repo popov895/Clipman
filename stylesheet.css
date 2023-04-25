@@ -20,6 +20,10 @@
     spacing: 10px;
 }
 
+.clipman-toolbutton {
+    padding: 2px;
+}
+
 .clipman-toolbutton .system-status-icon {
     icon-size: 16px;
 }
