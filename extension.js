@@ -291,10 +291,11 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildMenu();
 
         this._pinnedCount = 0;
+        this._privateMode = false;
 
         this._clipboard = new ClipboardManager();
         this._clipboardChangedId = this._clipboard.connect('changed', () => {
-            if (!this._privateModeMenuItem.state) {
+            if (!this._privateMode) {
                 this._clipboard.getText((text) => {
                     this._onClipboardTextChanged(text);
                 });
@@ -353,8 +354,16 @@ class PanelIndicator extends PanelMenu.Button {
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
-        this._clearMenuItem.connect('activate', () => {
+        const clearIcon = new St.Icon({
+            icon_name: 'edit-clear-all-symbolic',
+            style_class: 'system-status-icon',
+        });
+        this._clearButton = new PopupMenu.PopupBaseMenuItem({
+            style_class: 'action-bar-button',
+        });
+        this._clearButton.setOrnament(PopupMenu.Ornament.HIDDEN);
+        this._clearButton.add_child(clearIcon);
+        this._clearButton.connect('activate', () => {
             this.menu.close();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             const menuItemsToRemove = menuItems.slice(this._pinnedCount);
@@ -362,14 +371,19 @@ class PanelIndicator extends PanelMenu.Button {
                 this._destroyMenuItem(menuItem);
             });
         });
-        this.menu.addMenuItem(this._clearMenuItem);
 
-        this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Private Mode'), false, {
-            reactive: true,
+        const privateModeIcon = new St.Icon({
+            icon_name: 'view-private-symbolic',
+            style_class: 'system-status-icon',
         });
-        this._privateModeMenuItem.connect('toggled', (...[, state]) => {
-            this.menu.close();
-            if (!state) {
+        const privateModeButton = new PopupMenu.PopupBaseMenuItem({
+            style_class: 'action-bar-button',
+        });
+        privateModeButton.setOrnament(PopupMenu.Ornament.HIDDEN);
+        privateModeButton.add_child(privateModeIcon);
+        privateModeButton.connect('activate', () => {
+            this._privateMode = !this._privateMode;
+            if (!this._privateMode) {
                 this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
                 this._currentMenuItem = null;
                 this._clipboard.getText((text) => {
@@ -387,13 +401,32 @@ class PanelIndicator extends PanelMenu.Button {
             }
             this._updateUi();
         });
-        this.menu.addMenuItem(this._privateModeMenuItem);
 
-        const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'));
-        settingsMenuItem.connect('activate', () => {
+        const settingsIcon = new St.Icon({
+            icon_name: 'emblem-system-symbolic',
+            style_class: 'system-status-icon',
+        });
+        const settingsButton = new PopupMenu.PopupBaseMenuItem({
+            style_class: 'action-bar-button',
+        });
+        settingsButton.setOrnament(PopupMenu.Ornament.HIDDEN);
+        settingsButton.add_child(settingsIcon);
+        settingsButton.connect('activate', () => {
+            this.menu.close();
             ExtensionUtils.openPrefs();
         });
-        this.menu.addMenuItem(settingsMenuItem);
+
+        const actionsBox = new St.BoxLayout({
+            vertical: false,
+        });
+        actionsBox.add(this._clearButton);
+        actionsBox.add(privateModeButton);
+        actionsBox.add(new St.BoxLayout({ x_expand: true }));
+        actionsBox.add(settingsButton);
+
+        const actionsSection = new PopupMenu.PopupMenuSection();
+        actionsSection.actor.add(actionsBox);
+        this.menu.addMenuItem(actionsSection);
 
         this.menu.connect('open-state-changed', (...[, open]) => {
             if (open) {
@@ -564,7 +597,7 @@ class PanelIndicator extends PanelMenu.Button {
             });
         }
 
-        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
+        this._privateMode = panelIndicator.state.privateMode;
 
         this._updateUi();
     }
@@ -579,16 +612,15 @@ class PanelIndicator extends PanelMenu.Button {
             };
         });
 
-        panelIndicator.state.privateMode = this._privateModeMenuItem.state;
+        panelIndicator.state.privateMode = this._privateMode;
     }
 
     _updateUi() {
-        const privateMode = this._privateModeMenuItem.state;
-        this._privateModePlaceholder.actor.visible = privateMode;
+        this._privateModePlaceholder.actor.visible = this._privateMode;
         const menuItemsCount = this._historyMenuSection.section.numMenuItems;
-        this._emptyPlaceholder.actor.visible = !privateMode && menuItemsCount === 0;
-        this._historyMenuSection.actor.visible = !privateMode && menuItemsCount > 0;
-        this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > this._pinnedCount;
+        this._emptyPlaceholder.actor.visible = !this._privateMode && menuItemsCount === 0;
+        this._historyMenuSection.actor.visible = !this._privateMode && menuItemsCount > 0;
+        this._clearButton.actor.visible = !this._privateMode && menuItemsCount > this._pinnedCount;
     }
 
     _onClipboardTextChanged(text) {

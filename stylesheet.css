@@ -27,3 +27,13 @@
 .clipman-toolbutton .system-status-icon {
     icon-size: 16px;
 }
+
+.action-bar-button {
+    border-radius: 99px;
+    margin: 6px;
+    padding: 12px;
+}
+
+.action-bar-button .system-status-icon {
+    icon-size: 18px;
+}
