@@ -8,6 +8,11 @@
     padding: 7px 12px;
 }
 
+.clipman-searchmenuitem {
+    /* padding: 6px; */
+    padding: 9px 12px;
+}
+
 .clipman-popuphistorymenusection {
     max-height: 500px;
 }

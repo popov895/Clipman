@@ -132,7 +132,9 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         this.entry.clutter_text.connect('text-changed', this._onEntryTextChanged.bind(this));
         const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
+            style_class: 'clipman-searchmenuitem',
         });
+        searchMenuItem._ornamentLabel.visible = false;
         searchMenuItem.add(this.entry);
         this.addMenuItem(searchMenuItem);
 
