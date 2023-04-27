@@ -138,15 +138,14 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         searchMenuItem.add(this.entry);
         this.addMenuItem(searchMenuItem);
 
-        const placeholderLabel = new St.Label({
-            text: _('No Matches'),
-            x_align: Clutter.ActorAlign.CENTER,
-        });
         const placeholderBoxLayout = new St.BoxLayout({
             vertical: true,
             x_expand: true,
         });
-        placeholderBoxLayout.add(placeholderLabel);
+        placeholderBoxLayout.add(new St.Label({
+            text: _('No Matches'),
+            x_align: Clutter.ActorAlign.CENTER,
+        }));
         this._placeholderMenuItem = new PopupMenu.PopupMenuSection({
             reactive: false,
         });
@@ -163,7 +162,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         );
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
-            style_class: 'clipman-popuphistorymenusection',
+            style_class: 'clipman-historyscrollview',
         });
         this.scrollView.hscrollbar_policy = St.PolicyType.NEVER;
         this.scrollView.add_actor(this.section.actor);
@@ -227,16 +226,14 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
 
         const image = this._generateQrCodeImage(text);
         if (image) {
-            const icon = new St.Icon({
+             this.contentLayout.add_child(new St.Icon({
                 gicon: image,
                 icon_size: image.preferred_width,
-            });
-            this.contentLayout.add_child(icon);
+            }));
         } else {
-            const label = new St.Label({
+            this.contentLayout.add_child(new St.Label({
                 text: _('Failed to generate QR code'),
-            });
-            this.contentLayout.add_child(label);
+            }));
         }
 
         this.addButton({
@@ -330,11 +327,10 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _buildIcon() {
-        this._icon = new St.Icon({
+        this.add_child(new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'edit-copy-symbolic' }),
             style_class: 'system-status-icon',
-        });
-        this.add_child(this._icon);
+        }));
     }
 
     _buildMenu() {
@@ -447,13 +443,12 @@ class PanelIndicator extends PanelMenu.Button {
             menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
 
-        const qrCodeIcon = new St.Icon({
-            gicon: Gio.icon_new_for_string(Me.path + '/icons/qrcode-symbolic.svg'),
-            style_class: 'system-status-icon',
-        });
         const qrCodeButton = new St.Button({
             can_focus: true,
-            child: qrCodeIcon,
+            child: new St.Icon({
+                gicon: Gio.icon_new_for_string(Me.path + '/icons/qrcode-symbolic.svg'),
+                style_class: 'system-status-icon',
+            }),
             style_class: 'clipman-toolbutton',
         });
         qrCodeButton.connect('clicked', () => {
@@ -461,13 +456,12 @@ class PanelIndicator extends PanelMenu.Button {
             this._showQrCode(menuItem.text);
         });
 
-        const deleteIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
-            style_class: 'system-status-icon',
-        });
         const deleteButton = new St.Button({
             can_focus: true,
-            child: deleteIcon,
+            child: new St.Icon({
+                gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
+                style_class: 'system-status-icon',
+            }),
             style_class: 'clipman-toolbutton',
         });
         deleteButton.connect('clicked', () => {
@@ -504,6 +498,7 @@ class PanelIndicator extends PanelMenu.Button {
         menuItem.pinned = true;
         menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'starred-symbolic' });
         this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
+
         this._updateUi();
     }
 
@@ -528,6 +523,7 @@ class PanelIndicator extends PanelMenu.Button {
         }
         this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
         --this._pinnedCount;
+
         this._updateUi();
     }
 
@@ -592,8 +588,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _updateUi() {
         const privateMode = this._privateModeMenuItem.state;
-        this._privateModePlaceholder.actor.visible = privateMode;
         const menuItemsCount = this._historyMenuSection.section.numMenuItems;
+        this._privateModePlaceholder.actor.visible = privateMode;
         this._emptyPlaceholder.actor.visible = !privateMode && menuItemsCount === 0;
         this._historyMenuSection.actor.visible = !privateMode && menuItemsCount > 0;
         this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > this._pinnedCount;
