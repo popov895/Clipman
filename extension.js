@@ -165,7 +165,13 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             overlay_scrollbars: true,
             style_class: 'clipman-popuphistorymenusection',
         });
+        this.scrollView.hscrollbar_policy = St.PolicyType.NEVER;
         this.scrollView.add_actor(this.section.actor);
+        this.scrollView.vscroll.adjustment.connect('changed', () => {
+            Promise.resolve().then(() => {
+                this.scrollView.overlay_scrollbars = !this.scrollView.vscrollbar_visible;
+            });
+        });
         const menuSection = new PopupMenu.PopupMenuSection();
         menuSection.actor.add_actor(this.scrollView);
         this.addMenuItem(menuSection);
