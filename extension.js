@@ -125,12 +125,14 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         super();
 
         this.entry = new St.Entry({
+            can_focus: true,
             hint_text: _('Type to search...'),
             style_class: 'clipman-popupsearchmenuitem',
             x_expand: true,
         });
         this.entry.clutter_text.connect('text-changed', this._onEntryTextChanged.bind(this));
         const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
+            can_focus: false,
             reactive: false,
             style_class: 'clipman-searchmenuitem',
         });
