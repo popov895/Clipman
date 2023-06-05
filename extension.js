@@ -2,6 +2,7 @@
 
 const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
 
+const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Gettext = imports.gettext;
 const Main = imports.ui.main;
@@ -207,6 +208,9 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
                 this._placeholderMenuItem.actor.visible = false;
             }
         }
+        menuItem.connect('key-focus-in', () => {
+            Util.ensureActorVisibleInScrollView(this.scrollView, menuItem);
+        });
     }
 
     _onMenuItemRemoved() {
