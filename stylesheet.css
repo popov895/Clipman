@@ -9,11 +9,10 @@
 }
 
 .clipman-searchmenuitem {
-    /* padding: 6px; */
     padding: 9px 12px;
 }
 
-.clipman-popuphistorymenusection {
+.clipman-historyscrollview {
     max-height: 500px;
 }
 
