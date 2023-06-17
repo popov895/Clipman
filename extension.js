@@ -283,8 +283,8 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
                 preferred_width: finalIconSize,
             });
             image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
-        } catch (e) {
-            console.log(Me.uuid + ': ' + e);
+        } catch (error) {
+            console.log(Me.uuid + ': ' + error);
         }
 
         return image;
@@ -363,8 +363,7 @@ class PanelIndicator extends PanelMenu.Button {
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._clearMenuItem = new PopupMenu.PopupMenuItem(_('Clear History'));
-        this._clearMenuItem.connect('activate', () => {
+        this._clearMenuItem = this.menu.addAction(_('Clear History'), () => {
             this.menu.close();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             const menuItemsToRemove = menuItems.slice(this._pinnedCount);
@@ -372,7 +371,6 @@ class PanelIndicator extends PanelMenu.Button {
                 this._destroyMenuItem(menuItem);
             });
         });
-        this.menu.addMenuItem(this._clearMenuItem);
 
         this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Private Mode'), false, {
             reactive: true,
@@ -399,11 +397,9 @@ class PanelIndicator extends PanelMenu.Button {
         });
         this.menu.addMenuItem(this._privateModeMenuItem);
 
-        const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'));
-        settingsMenuItem.connect('activate', () => {
+        this.menu.addAction(_('Settings'), () => {
             ExtensionUtils.openPrefs();
         });
-        this.menu.addMenuItem(settingsMenuItem);
 
         this.menu.connect('open-state-changed', (...[, open]) => {
             if (open) {
@@ -435,6 +431,12 @@ class PanelIndicator extends PanelMenu.Button {
                 this._currentMenuItem = null;
             }
         });
+
+        const expander = new St.Bin({
+            style_class: 'popup-menu-item-expander',
+            x_expand: true,
+        });
+        menuItem.add_child(expander);
 
         menuItem.pinIcon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? 'starred-symbolic' : 'non-starred-symbolic' }),
@@ -479,13 +481,11 @@ class PanelIndicator extends PanelMenu.Button {
 
         const boxLayout = new St.BoxLayout({
             style_class: 'clipman-toolbuttonnpanel',
-            x_align: Clutter.ActorAlign.END,
-            x_expand: true,
         });
         boxLayout.add(pinButton);
         boxLayout.add(qrCodeButton);
         boxLayout.add(deleteButton);
-        menuItem.actor.add(boxLayout);
+        menuItem.add_child(boxLayout);
 
         return menuItem;
     }
