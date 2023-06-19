@@ -1,6 +1,6 @@
 'use strict';
 
-const { Clutter, Cogl, Gio, GLib, GObject, Meta, Pango, Shell, St } = imports.gi;
+const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, St } = imports.gi;
 
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -158,6 +158,13 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
+        this.section._moveMenuItem = this.section.moveMenuItem.bind(this.section);
+        this.section.moveMenuItem = (menuItem, position) => {
+            this.section._moveMenuItem(menuItem, position);
+            if (menuItem instanceof PopupMenu.PopupSubMenuMenuItem) {
+                this.section.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
+            }
+        };
         this.section.box.connect('actor-added', this._onMenuItemAdded.bind(this));
         this._sectionActorRemovedId = this.section.box.connect(
             'actor-removed',
@@ -187,7 +194,11 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         const searchText = this.entry.text.toLowerCase();
         const menuItems = this.section._getMenuItems();
         menuItems.forEach((menuItem) => {
-            menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
+            const visible = menuItem.text.toLowerCase().includes(searchText);
+            if (!visible) {
+                menuItem.menu.close();
+            }
+            menuItem.actor.visible = visible;
         });
 
         if (searchText.length === 0) {
@@ -288,6 +299,64 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
         }
 
         return image;
+    }
+});
+
+const HistoryMenuItem = GObject.registerClass(
+class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
+    _init(text, topMenu) {
+        super._init(text);
+
+        this._topMenu = topMenu;
+
+        // disable animations
+        this.menu._open = this.menu.open.bind(this.menu);
+        this.menu.open = () => {
+            this.menu._open();
+        };
+        this.menu._close = this.menu.close.bind(this.menu);
+        this.menu.close = () => {
+            this.menu._close();
+        };
+
+        this._triangleBin.hide();
+
+        const clickAction = new Clutter.ClickAction({
+            enabled: this._activatable,
+        });
+        clickAction.connect('clicked', () => {
+            this.emit('activate', Clutter.get_current_event());
+        });
+        clickAction.connect('notify::pressed', () => {
+            if (clickAction.pressed) {
+                this.add_style_pseudo_class('active');
+            } else {
+                this.remove_style_pseudo_class('active');
+            }
+        });
+        this.add_action(clickAction);
+
+        this._topMenu.connect('open-state-changed', (...[, open]) => {
+            if (!open) {
+                this.menu.close();
+            }
+        });
+    }
+
+    _getTopMenu() {
+        return this._topMenu;
+    }
+
+    vfunc_button_press_event() {
+        return Clutter.EVENT_PROPAGATE;
+    }
+
+    vfunc_button_release_event() {
+        return Clutter.EVENT_PROPAGATE;
+    }
+
+    vfunc_touch_event() {
+        return Clutter.EVENT_PROPAGATE;
     }
 });
 
@@ -417,7 +486,7 @@ class PanelIndicator extends PanelMenu.Button {
             return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
         }).replaceAll(/\s+/g, ' ');
 
-        const menuItem = new PopupMenu.PopupMenuItem(menuItemText);
+        const menuItem = new HistoryMenuItem(menuItemText, this.menu);
         menuItem.pinned = pinned;
         menuItem.text = text;
         menuItem.timestamp = timestamp;
@@ -451,19 +520,6 @@ class PanelIndicator extends PanelMenu.Button {
             menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
 
-        const qrCodeButton = new St.Button({
-            can_focus: true,
-            child: new St.Icon({
-                gicon: Gio.icon_new_for_string(Me.path + '/icons/qrcode-symbolic.svg'),
-                style_class: 'system-status-icon',
-            }),
-            style_class: 'clipman-toolbutton',
-        });
-        qrCodeButton.connect('clicked', () => {
-            this.menu.close();
-            this._showQrCode(menuItem.text);
-        });
-
         const deleteButton = new St.Button({
             can_focus: true,
             child: new St.Icon({
@@ -479,13 +535,29 @@ class PanelIndicator extends PanelMenu.Button {
             this._destroyMenuItem(menuItem);
         });
 
+        menuItem.menu._arrow = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: 'pan-end-symbolic' }),
+            pivot_point: new Graphene.Point({ x: 0.5, y: 0.6 }),
+            style_class: 'system-status-icon',
+        });
+        const toggleSubMenuButton = new St.Button({
+            can_focus: true,
+            child: menuItem.menu._arrow,
+            style_class: 'clipman-toolbutton',
+        });
+        toggleSubMenuButton.connect('clicked', () => {
+            menuItem.menu.toggle();
+        });
+
         const boxLayout = new St.BoxLayout({
             style_class: 'clipman-toolbuttonnpanel',
         });
         boxLayout.add(pinButton);
-        boxLayout.add(qrCodeButton);
         boxLayout.add(deleteButton);
+        boxLayout.add(toggleSubMenuButton);
         menuItem.add_child(boxLayout);
+
+        this._populateSubMenu(menuItem);
 
         return menuItem;
     }
@@ -547,6 +619,22 @@ class PanelIndicator extends PanelMenu.Button {
 
     _removeKeybindings() {
         Main.wm.removeKeybinding('toggle-menu-shortcut');
+    }
+
+    _populateSubMenu(menuItem) {
+        menuItem.menu.addAction(_('Send via Email'), () => {
+            this.menu.close();
+            try {
+                Gio.app_info_launch_default_for_uri('mailto:?body=' + encodeURIComponent(menuItem.text), global.create_app_launch_context(0, -1));
+            } catch (error) {
+                console.log(Me.uuid + ': ' + error);
+            }
+        });
+
+        menuItem.menu.addAction(_('Show QR Code'), () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
+        });
     }
 
     _showQrCode(text) {
