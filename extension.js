@@ -12,6 +12,7 @@ const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
+const Validator = Me.imports.validator.validator;
 const _ = Gettext.domain(Me.uuid).gettext;
 
 const sensitiveMimeTypes = [
@@ -622,6 +623,47 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _populateSubMenu(menuItem) {
+        const actions = [
+            {
+                title: _('Open in Browser'),
+                validator: Validator.isURL,
+                validatorOptions: { require_protocol: true },
+            },
+            {
+                prefix: 'mailto:',
+                regExp: /^mailto:/i,
+                title: _('Send an Email'),
+                validator: Validator.isEmail,
+            },
+            {
+                prefix: 'tel:+',
+                regExp: /^(tel:)?\+/i,
+                title: _('Make a Call'),
+                validator: Validator.isMobilePhone,
+            },
+        ];
+
+        const trimmedText = menuItem.text.trim();
+        for (const action of actions) {
+            const capturedText = action.regExp ? trimmedText.replace(action.regExp, '') : trimmedText;
+            if (action.validator(capturedText, action.validatorOptions)) {
+                menuItem.menu.addAction(action.title, () => {
+                    this.menu.close();
+                    try {
+                        Gio.app_info_launch_default_for_uri((action.prefix || '') + capturedText, global.create_app_launch_context(0, -1));
+                    } catch (error) {
+                        console.log(Me.uuid + ': ' + error);
+                    }
+                });
+                break;
+            }
+        }
+
+        menuItem.menu.addAction(_('Show QR Code'), () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
+        });
+
         menuItem.menu.addAction(_('Send via Email'), () => {
             this.menu.close();
             try {
@@ -629,11 +671,6 @@ class PanelIndicator extends PanelMenu.Button {
             } catch (error) {
                 console.log(Me.uuid + ': ' + error);
             }
-        });
-
-        menuItem.menu.addAction(_('Show QR Code'), () => {
-            this.menu.close();
-            this._showQrCode(menuItem.text);
         });
     }
 
