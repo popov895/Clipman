@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-17 16:21+0300\n"
-"PO-Revision-Date: 2022-09-17 09:32-0400\n"
+"POT-Creation-Date: 2023-06-27 00:15+0300\n"
+"PO-Revision-Date: 2023-06-27 00:24+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,43 +16,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: extension.js:117
+#: extension.js:131
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:129
+#: extension.js:150
 msgid "No Matches"
 msgstr "Немає Збігів"
 
-#: extension.js:218
+#: extension.js:253
 msgid "Failed to generate QR code"
 msgstr "Не вдалося створити QR-код"
 
-#: extension.js:225
+#: extension.js:259
 msgid "Close"
 msgstr "Закрити"
 
-#: extension.js:326
+#: extension.js:421
 msgid "Private Mode is On"
 msgstr "Приватний Режим Увімкнено"
 
-#: extension.js:331
+#: extension.js:426
 msgid "History is Empty"
 msgstr "Історія Порожня"
 
-#: extension.js:347
+#: extension.js:442
 msgid "Clear History"
 msgstr "Очистити Історію"
 
-#: extension.js:357
+#: extension.js:451
 msgid "Private Mode"
 msgstr "Приватний Режим"
 
-#: extension.js:382
+#: extension.js:476
 msgid "Settings"
 msgstr "Налаштування"
+
+#: extension.js:634
+msgid "Open"
+msgstr "Відкрити"
+
+#: extension.js:660
+msgid "Compose an Email"
+msgstr "Створити Електронний Лист"
+
+#: extension.js:666
+msgid "Make a Call"
+msgstr "Зателефонувати"
+
+#: extension.js:687
+msgid "Show QR Code"
+msgstr "Показати QR-код"
+
+#: extension.js:692
+msgid "Send via Email"
+msgstr "Надіслати Електронною Поштою"
 
 #: prefs.js:107
 msgid "Enter the new shortcut"
