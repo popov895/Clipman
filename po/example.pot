@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-17 16:21+0300\n"
+"POT-Creation-Date: 2023-06-27 00:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,40 +17,60 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:117
+#: extension.js:131
 msgid "Type to search..."
 msgstr ""
 
-#: extension.js:129
+#: extension.js:150
 msgid "No Matches"
 msgstr ""
 
-#: extension.js:218
+#: extension.js:253
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:225
+#: extension.js:259
 msgid "Close"
 msgstr ""
 
-#: extension.js:326
+#: extension.js:421
 msgid "Private Mode is On"
 msgstr ""
 
-#: extension.js:331
+#: extension.js:426
 msgid "History is Empty"
 msgstr ""
 
-#: extension.js:347
+#: extension.js:442
 msgid "Clear History"
 msgstr ""
 
-#: extension.js:357
+#: extension.js:451
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:382
+#: extension.js:476
 msgid "Settings"
+msgstr ""
+
+#: extension.js:634
+msgid "Open"
+msgstr ""
+
+#: extension.js:660
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:666
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:687
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:692
+msgid "Send via Email"
 msgstr ""
 
 #: prefs.js:107
