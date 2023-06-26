@@ -394,6 +394,8 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     destroy() {
+        this._qrCodeDialog?.close();
+
         this._saveState();
         this._removeKeybindings();
 
@@ -679,7 +681,11 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _showQrCode(text) {
-        new QrCodeDialog(text).open();
+        this._qrCodeDialog = new QrCodeDialog(text);
+        this._qrCodeDialog.connect('destroy', () => {
+            this._qrCodeDialog = null;
+        });
+        this._qrCodeDialog.open();
     }
 
     _loadState() {
