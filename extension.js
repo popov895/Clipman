@@ -631,14 +631,33 @@ class PanelIndicator extends PanelMenu.Button {
     _populateSubMenu(menuItem) {
         const actions = [
             {
-                title: _('Open in Browser'),
+                title: _('Open'),
                 validator: Validator.isURL,
-                validatorOptions: { require_protocol: true },
+                validatorOptions: {
+                    protocols: [
+                        'http',
+                        'https',
+                        'ftp',
+                        'sftp',
+                        'ssh',
+                        'smb',
+                        'telnet',
+                        'gopher',
+                        'vnc',
+                        'irc',
+                        'irc6',
+                        'ircs',
+                        'git',
+                        'rsync',
+                        'feed',
+                    ],
+                    require_protocol: true,
+                },
             },
             {
                 prefix: 'mailto:',
                 regExp: /^mailto:/i,
-                title: _('Send an Email'),
+                title: _('Compose an Email'),
                 validator: Validator.isEmail,
             },
             {
@@ -656,7 +675,7 @@ class PanelIndicator extends PanelMenu.Button {
                 menuItem.menu.addAction(action.title, () => {
                     this.menu.close();
                     try {
-                        Gio.app_info_launch_default_for_uri((action.prefix || '') + capturedText, global.create_app_launch_context(0, -1));
+                        Gio.app_info_launch_default_for_uri((action.prefix ?? '') + capturedText, global.create_app_launch_context(0, -1));
                     } catch (error) {
                         console.log(Me.uuid + ': ' + error);
                     }
