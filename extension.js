@@ -326,7 +326,7 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
             enabled: this._activatable,
         });
         clickAction.connect('clicked', () => {
-            this.emit('activate', Clutter.get_current_event());
+            this.activate(Clutter.get_current_event());
         });
         clickAction.connect('notify::pressed', () => {
             if (clickAction.pressed) {
@@ -346,6 +346,10 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
     _getTopMenu() {
         return this._topMenu;
+    }
+
+    activate(event) {
+        this.emit('activate', event);
     }
 
     vfunc_button_press_event() {
