@@ -122,6 +122,73 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
     }
 }
 
+const QrCodeDialog = GObject.registerClass(
+class QrCodeDialog extends ModalDialog.ModalDialog {
+    _init(text) {
+        super._init();
+
+        const image = this._generateQrCodeImage(text);
+        if (image) {
+            this.contentLayout.add_child(new St.Icon({
+                gicon: image,
+                icon_size: image.preferred_width,
+            }));
+        } else {
+            this.contentLayout.add_child(new St.Label({
+                text: _('Failed to generate QR code'),
+            }));
+        }
+
+        this.addButton({
+            isDefault: true,
+            key: Clutter.KEY_Escape,
+            label: _('Close'),
+            action: () => {
+                this.close();
+            },
+        });
+    }
+
+    _generateQrCodeImage(text) {
+        let image;
+        try {
+            const minContentSize = 200;
+            const bytesPerPixel = 3; // RGB
+            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
+            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
+            const quietZoneSize = 4 * pixelsPerModule;
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
+            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
+            data.fill(255);
+            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
+                for (let i = 0; i < pixelsPerModule; ++i) {
+                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
+                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
+                        for (let j = 0; j < pixelsPerModule; ++j) {
+                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
+                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
+                            data[dataI] = color;     // R
+                            data[dataI + 1] = color; // G
+                            data[dataI + 2] = color; // B
+                        }
+                    }
+                }
+            }
+
+            image = new St.ImageContent({
+                preferred_height: finalIconSize,
+                preferred_width: finalIconSize,
+            });
+            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
+        } catch (error) {
+            console.log(Me.uuid + ': ' + error);
+        }
+
+        return image;
+    }
+});
+
 const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     constructor() {
         super();
@@ -237,72 +304,6 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     }
 }
 
-const QrCodeDialog = GObject.registerClass(
-class QrCodeDialog extends ModalDialog.ModalDialog {
-    _init(text) {
-        super._init();
-
-        const image = this._generateQrCodeImage(text);
-        if (image) {
-             this.contentLayout.add_child(new St.Icon({
-                gicon: image,
-                icon_size: image.preferred_width,
-            }));
-        } else {
-            this.contentLayout.add_child(new St.Label({
-                text: _('Failed to generate QR code'),
-            }));
-        }
-
-        this.addButton({
-            key: Clutter.KEY_Escape,
-            label: _('Close'),
-            action: () => {
-                this.close();
-            },
-        });
-    }
-
-    _generateQrCodeImage(text) {
-        let image;
-        try {
-            const minContentSize = 200;
-            const bytesPerPixel = 3; // RGB
-            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
-            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
-            const quietZoneSize = 4 * pixelsPerModule;
-            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
-            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
-            data.fill(255);
-            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
-                for (let i = 0; i < pixelsPerModule; ++i) {
-                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
-                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
-                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
-                        for (let j = 0; j < pixelsPerModule; ++j) {
-                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
-                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
-                            data[dataI] = color;     // R
-                            data[dataI + 1] = color; // G
-                            data[dataI + 2] = color; // B
-                        }
-                    }
-                }
-            }
-
-            image = new St.ImageContent({
-                preferred_height: finalIconSize,
-                preferred_width: finalIconSize,
-            });
-            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
-        } catch (error) {
-            console.log(Me.uuid + ': ' + error);
-        }
-
-        return image;
-    }
-});
-
 const HistoryMenuItem = GObject.registerClass(
 class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
     _init(text, topMenu) {
@@ -310,14 +311,13 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
         this._topMenu = topMenu;
 
-        // disable animations
         this.menu._open = this.menu.open.bind(this.menu);
         this.menu.open = () => {
-            this.menu._open();
+            this.menu._open(false);
         };
         this.menu._close = this.menu.close.bind(this.menu);
         this.menu.close = () => {
-            this.menu._close();
+            this.menu._close(false);
         };
 
         this._triangleBin.hide();
@@ -674,11 +674,7 @@ class PanelIndicator extends PanelMenu.Button {
             if (action.validator(capturedText, action.validatorOptions)) {
                 menuItem.menu.addAction(action.title, () => {
                     this.menu.close();
-                    try {
-                        Gio.app_info_launch_default_for_uri((action.prefix ?? '') + capturedText, global.create_app_launch_context(0, -1));
-                    } catch (error) {
-                        console.log(Me.uuid + ': ' + error);
-                    }
+                    this._launchUri((action.prefix ?? '') + capturedText);
                 });
                 break;
             }
@@ -691,11 +687,7 @@ class PanelIndicator extends PanelMenu.Button {
 
         menuItem.menu.addAction(_('Send via Email'), () => {
             this.menu.close();
-            try {
-                Gio.app_info_launch_default_for_uri('mailto:?body=' + encodeURIComponent(menuItem.text), global.create_app_launch_context(0, -1));
-            } catch (error) {
-                console.log(Me.uuid + ': ' + error);
-            }
+            this._launchUri('mailto:?body=' + encodeURIComponent(menuItem.text));
         });
     }
 
@@ -705,6 +697,14 @@ class PanelIndicator extends PanelMenu.Button {
             this._qrCodeDialog = null;
         });
         this._qrCodeDialog.open();
+    }
+
+    _launchUri(uri) {
+        try {
+            Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
+        } catch (error) {
+            console.log(Me.uuid + ': ' + error);
+        }
     }
 
     _loadState() {
