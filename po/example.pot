@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 00:15+0300\n"
+"POT-Creation-Date: 2023-06-28 12:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,64 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:131
-msgid "Type to search..."
-msgstr ""
-
-#: extension.js:150
-msgid "No Matches"
-msgstr ""
-
-#: extension.js:253
+#: extension.js:143
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:259
+#: extension.js:150
 msgid "Close"
 msgstr ""
 
-#: extension.js:421
-msgid "Private Mode is On"
+#: extension.js:203
+msgid "Type to search..."
+msgstr ""
+
+#: extension.js:222
+msgid "No Matches"
 msgstr ""
 
 #: extension.js:426
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:431
 msgid "History is Empty"
 msgstr ""
 
-#: extension.js:442
+#: extension.js:447
 msgid "Clear History"
 msgstr ""
 
-#: extension.js:451
+#: extension.js:456
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:476
+#: extension.js:481
 msgid "Settings"
 msgstr ""
 
-#: extension.js:634
+#: extension.js:639 extension.js:663
 msgid "Open"
 msgstr ""
 
-#: extension.js:660
+#: extension.js:669
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:666
+#: extension.js:675 extension.js:679
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:687
-msgid "Show QR Code"
+#: extension.js:698
+msgid "Search the Web"
 msgstr ""
 
-#: extension.js:692
+#: extension.js:703
 msgid "Send via Email"
+msgstr ""
+
+#: extension.js:708
+msgid "Show QR Code"
 msgstr ""
 
 #: prefs.js:107
@@ -86,17 +90,26 @@ msgid "History size"
 msgstr ""
 
 #: prefs.js:146
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:158
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:164
 msgid "General"
 msgstr ""
 
-#: prefs.js:152
+#: prefs.js:171
 msgid "Disabled"
 msgstr ""
 
-#: prefs.js:161
+#: prefs.js:180
 msgid "Toggle menu"
 msgstr ""
 
-#: prefs.js:168
+#: prefs.js:187
 msgid "Keyboard Shortcuts"
 msgstr ""
