@@ -28,6 +28,7 @@ const Settings = GObject.registerClass({
         super._init();
 
         this._keyHistorySize = 'history-size';
+        this._keyWebSearchUrl = 'web-search-url';
 
         this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.clipman');
         this.settings.connect('changed', (...[, key]) => {
@@ -39,6 +40,10 @@ const Settings = GObject.registerClass({
 
     get historySize() {
         return this.settings.get_int(this._keyHistorySize);
+    }
+
+    get webSearchUrl() {
+        return this.settings.get_string(this._keyWebSearchUrl);
     }
 });
 
@@ -690,14 +695,19 @@ class PanelIndicator extends PanelMenu.Button {
             }
         }
 
-        menuItem.menu.addAction(_('Show QR Code'), () => {
+        menuItem.menu.addAction(_('Search the Web'), () => {
             this.menu.close();
-            this._showQrCode(menuItem.text);
+            this._launchUri(this._settings.webSearchUrl.replace('%s', encodeURIComponent(menuItem.text)));
         });
 
         menuItem.menu.addAction(_('Send via Email'), () => {
             this.menu.close();
             this._launchUri('mailto:?body=' + encodeURIComponent(menuItem.text));
+        });
+
+        menuItem.menu.addAction(_('Show QR Code'), () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
         });
     }
 

@@ -8,5 +8,8 @@
         <key name="toggle-menu-shortcut" type="as">
             <default><![CDATA[['<Super>Z']]]></default>
         </key>
+        <key name="web-search-url" type="s">
+            <default>"https://duckduckgo.com/?q=%s"</default>
+        </key>
     </schema>
 </schemalist>
