@@ -655,6 +655,10 @@ class PanelIndicator extends PanelMenu.Button {
                 },
             },
             {
+                title: _('Open'),
+                validator: Validator.isMagnetURI,
+            },
+            {
                 prefix: 'mailto:',
                 regExp: /^mailto:/i,
                 title: _('Compose an Email'),
@@ -665,6 +669,12 @@ class PanelIndicator extends PanelMenu.Button {
                 regExp: /^(tel:)?\+/i,
                 title: _('Make a Call'),
                 validator: Validator.isMobilePhone,
+            },
+            {
+                title: _('Make a Call'),
+                validator: (str) => {
+                    return str.match(/^callto:?\S+/i);
+                },
             },
         ];
 
