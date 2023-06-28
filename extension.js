@@ -678,7 +678,7 @@ class PanelIndicator extends PanelMenu.Button {
             {
                 title: _('Make a Call'),
                 validator: (str) => {
-                    return str.match(/^callto:?\S+/i);
+                    return str.match(/^callto:\S+/i);
                 },
             },
         ];
