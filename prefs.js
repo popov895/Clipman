@@ -3,10 +3,9 @@
 const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const Gettext = imports.gettext;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const _ = Gettext.domain(Me.uuid).gettext;
+const _ = ExtensionUtils.gettext;
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -18,7 +17,7 @@ const Settings = GObject.registerClass({
 
         this._keyToggleMenuShortcut = 'toggle-menu-shortcut';
 
-        this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.clipman');
+        this._settings = ExtensionUtils.getSettings();
         this._settings.connect('changed', (...[, key]) => {
             if (key === this._keyToggleMenuShortcut) {
                 this.emit('toggleMenuShortcutChanged');
@@ -137,10 +136,10 @@ function fillPreferencesWindow(window) {
     );
 
     const historySizeRow = new Adw.ActionRow({
+        activatable_widget: historySizeSpinBox,
         title: _('History size'),
     });
     historySizeRow.add_suffix(historySizeSpinBox);
-    historySizeRow.activatable_widget = historySizeSpinBox;
 
     const webSearchEntry = new Gtk.Entry({
         placeholder_text: _('URL with %s in place of query'),
@@ -155,10 +154,10 @@ function fillPreferencesWindow(window) {
     );
 
     const webSearchRow = new Adw.ActionRow({
+        activatable_widget: webSearchEntry,
         title: _('Web Search'),
     });
     webSearchRow.add_suffix(webSearchEntry);
-    webSearchRow.activatable_widget = webSearchEntry;
 
     const generalGroup = new Adw.PreferencesGroup({
         title: _('General'),
@@ -177,11 +176,11 @@ function fillPreferencesWindow(window) {
     });
 
     const keybindingRow = new Adw.ActionRow({
+        activatable_widget: keybindingButton,
         title: _('Toggle menu'),
     });
     keybindingRow.add_suffix(keybindingShortcutLabel);
     keybindingRow.add_suffix(keybindingButton);
-    keybindingRow.activatable_widget = keybindingButton;
 
     const keybindingGroup = new Adw.PreferencesGroup({
         title: _('Keyboard Shortcuts'),

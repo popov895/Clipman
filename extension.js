@@ -4,20 +4,15 @@ const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, St } = 
 
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Gettext = imports.gettext;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
-const Validator = Me.imports.validator.validator;
-const _ = Gettext.domain(Me.uuid).gettext;
-
-const sensitiveMimeTypes = [
-    'x-kde-passwordManagerHint',
-];
+const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
+const Validator = Me.imports.libs.validator.validator;
+const _ = ExtensionUtils.gettext;
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -28,10 +23,11 @@ const Settings = GObject.registerClass({
         super._init();
 
         this._keyHistorySize = 'history-size';
+        this._keyToggleMenuShortcut = 'toggle-menu-shortcut';
         this._keyWebSearchUrl = 'web-search-url';
 
-        this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.clipman');
-        this.settings.connect('changed', (...[, key]) => {
+        this._settings = ExtensionUtils.getSettings();
+        this._settings.connect('changed', (...[, key]) => {
             if (key === this._keyHistorySize) {
                 this.emit('historySizeChanged');
             }
@@ -39,11 +35,11 @@ const Settings = GObject.registerClass({
     }
 
     get historySize() {
-        return this.settings.get_int(this._keyHistorySize);
+        return this._settings.get_int(this._keyHistorySize);
     }
 
     get webSearchUrl() {
-        return this.settings.get_string(this._keyWebSearchUrl);
+        return this._settings.get_string(this._keyWebSearchUrl);
     }
 });
 
@@ -54,6 +50,10 @@ const ClipboardManager = GObject.registerClass({
 }, class ClipboardManager extends GObject.Object {
     _init() {
         super._init();
+
+        this._sensitiveMimeTypes = [
+            'x-kde-passwordManagerHint',
+        ];
 
         this._clipboard = St.Clipboard.get_default();
         this._selection = Shell.Global.get().get_display().get_selection();
@@ -73,7 +73,7 @@ const ClipboardManager = GObject.registerClass({
 
     getText(callback) {
         const mimeTypes = this._clipboard.get_mimetypes(St.ClipboardType.CLIPBOARD);
-        const hasSensitiveMimeTypes = sensitiveMimeTypes.some((sensitiveMimeType) => {
+        const hasSensitiveMimeTypes = this._sensitiveMimeTypes.some((sensitiveMimeType) => {
             return mimeTypes.includes(sensitiveMimeType);
         });
         if (hasSensitiveMimeTypes) {
@@ -187,7 +187,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
             });
             image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
         } catch (error) {
-            console.log(Me.uuid + ': ' + error);
+            log(error);
         }
 
         return image;
@@ -619,8 +619,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _addKeybindings() {
         Main.wm.addKeybinding(
-            'toggle-menu-shortcut',
-            this._settings.settings,
+            this._settings._keyToggleMenuShortcut,
+            this._settings._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
             Shell.ActionMode.ALL,
             () => {
@@ -630,7 +630,7 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _removeKeybindings() {
-        Main.wm.removeKeybinding('toggle-menu-shortcut');
+        Main.wm.removeKeybinding(this._settings._keyToggleMenuShortcut);
     }
 
     _populateSubMenu(menuItem) {
@@ -723,7 +723,7 @@ class PanelIndicator extends PanelMenu.Button {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
         } catch (error) {
-            console.log(Me.uuid + ': ' + error);
+            log(error);
         }
     }
 
@@ -819,6 +819,10 @@ const panelIndicator = {
         privateMode: false
     }
 };
+
+function log(text) {
+    console.log(Me.uuid + ': ' + text);
+}
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
