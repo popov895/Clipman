@@ -3,6 +3,7 @@
     "name": "Clipman",
     "description": "Simple clipboard manager.",
     "version": 34,
+    "settings-schema": "org.gnome.shell.extensions.clipman",
     "shell-version": [
         "42",
         "43",

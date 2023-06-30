@@ -28,10 +28,11 @@ const Settings = GObject.registerClass({
         super._init();
 
         this._keyHistorySize = 'history-size';
+        this._keyToggleMenuShortcut = 'toggle-menu-shortcut';
         this._keyWebSearchUrl = 'web-search-url';
 
-        this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.clipman');
-        this.settings.connect('changed', (...[, key]) => {
+        this._settings = ExtensionUtils.getSettings();
+        this._settings.connect('changed', (...[, key]) => {
             if (key === this._keyHistorySize) {
                 this.emit('historySizeChanged');
             }
@@ -39,11 +40,11 @@ const Settings = GObject.registerClass({
     }
 
     get historySize() {
-        return this.settings.get_int(this._keyHistorySize);
+        return this._settings.get_int(this._keyHistorySize);
     }
 
     get webSearchUrl() {
-        return this.settings.get_string(this._keyWebSearchUrl);
+        return this._settings.get_string(this._keyWebSearchUrl);
     }
 });
 
@@ -619,8 +620,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _addKeybindings() {
         Main.wm.addKeybinding(
-            'toggle-menu-shortcut',
-            this._settings.settings,
+            this._settings._keyToggleMenuShortcut,
+            this._settings._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
             Shell.ActionMode.ALL,
             () => {
@@ -630,7 +631,7 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _removeKeybindings() {
-        Main.wm.removeKeybinding('toggle-menu-shortcut');
+        Main.wm.removeKeybinding(this._settings._keyToggleMenuShortcut);
     }
 
     _populateSubMenu(menuItem) {
