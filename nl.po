@@ -1,0 +1,121 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Heimen Stoffels <vistausss@fastmail.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-28 12:22+0300\n"
+"PO-Revision-Date: 2023-06-30 10:09+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#: extension.js:143
+msgid "Failed to generate QR code"
+msgstr "De QR-code kan niet worden aangemaakt"
+
+#: extension.js:150
+msgid "Close"
+msgstr "Sluiten"
+
+#: extension.js:203
+msgid "Type to search..."
+msgstr "Typ om te zoeken…"
+
+#: extension.js:222
+msgid "No Matches"
+msgstr "Er zijn geen overeenkomsten"
+
+#: extension.js:426
+msgid "Private Mode is On"
+msgstr "De incognitomodus is ingeschakeld"
+
+#: extension.js:431
+msgid "History is Empty"
+msgstr "De geschiedenis is blanco"
+
+#: extension.js:447
+msgid "Clear History"
+msgstr "Geschiedenis wissen"
+
+#: extension.js:456
+msgid "Private Mode"
+msgstr "Incognitomodus"
+
+#: extension.js:481
+msgid "Settings"
+msgstr "Voorkeuren"
+
+#: extension.js:639 extension.js:663
+msgid "Open"
+msgstr "Openen"
+
+#: extension.js:669
+msgid "Compose an Email"
+msgstr "E-mail opstellen"
+
+#: extension.js:675 extension.js:679
+msgid "Make a Call"
+msgstr "Gesprek starten"
+
+#: extension.js:698
+msgid "Search the Web"
+msgstr "Zoeken op internet"
+
+#: extension.js:703
+msgid "Send via Email"
+msgstr "Versturen per e-mail"
+
+#: extension.js:708
+msgid "Show QR Code"
+msgstr "QR-code tonen"
+
+#: prefs.js:107
+msgid "Enter the new shortcut"
+msgstr "Druk op een nieuwe sneltoets"
+
+#: prefs.js:109
+msgid "Change"
+msgstr "Wijzigen"
+
+#: prefs.js:140
+msgid "History size"
+msgstr "Geschiedenisomvang"
+
+#: prefs.js:146
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "De url, met %s op de plaats van de zoekopdracht"
+
+#: prefs.js:158
+msgid "Web Search"
+msgstr "Zoeken op internet"
+
+#: prefs.js:164
+msgid "General"
+msgstr "Algemeen"
+
+#: prefs.js:171
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: prefs.js:180
+msgid "Toggle menu"
+msgstr "Menu tonen/verbergen"
+
+#: prefs.js:187
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#~ msgid "Track Changes"
+#~ msgstr "Wijzigingen bijhouden"
+
+#~ msgid "Shortcut to toggle menu"
+#~ msgstr "Sneltoets om menu te openen"
