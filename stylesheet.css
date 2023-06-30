@@ -8,7 +8,11 @@
     padding: 7px 12px;
 }
 
-.clipman-popuphistorymenusection {
+.clipman-searchmenuitem {
+    padding: 9px 12px;
+}
+
+.clipman-historyscrollview {
     max-height: 500px;
 }
 
@@ -18,6 +22,10 @@
 
 .clipman-toolbuttonnpanel {
     spacing: 10px;
+}
+
+.clipman-toolbutton {
+    padding: 2px;
 }
 
 .clipman-toolbutton .system-status-icon {

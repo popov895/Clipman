@@ -13,3 +13,12 @@ To install manually follow the steps below:
 - run the following command:
 
    `$ gnome-extensions enable clipman@popov895.ukr.net`
+
+This extension uses the following libraries:
+
+- [QR Code generator library](https://github.com/nayuki/QR-Code-generator)
+- [validator.js](https://github.com/validatorjs/validator.js/)
+
+### Support
+
+[![Support via Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://www.buymeacoffee.com/popov895a)

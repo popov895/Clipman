@@ -142,10 +142,29 @@ function fillPreferencesWindow(window) {
     historySizeRow.add_suffix(historySizeSpinBox);
     historySizeRow.activatable_widget = historySizeSpinBox;
 
-    const historySizeGroup = new Adw.PreferencesGroup({
+    const webSearchEntry = new Gtk.Entry({
+        placeholder_text: _('URL with %s in place of query'),
+        valign: Gtk.Align.CENTER,
+    });
+    webSearchEntry.set_size_request(300, -1);
+    settings.bind(
+        'web-search-url',
+        webSearchEntry,
+        'text',
+        Gio.SettingsBindFlags.DEFAULT
+    );
+
+    const webSearchRow = new Adw.ActionRow({
+        title: _('Web Search'),
+    });
+    webSearchRow.add_suffix(webSearchEntry);
+    webSearchRow.activatable_widget = webSearchEntry;
+
+    const generalGroup = new Adw.PreferencesGroup({
         title: _('General'),
     });
-    historySizeGroup.add(historySizeRow);
+    generalGroup.add(historySizeRow);
+    generalGroup.add(webSearchRow);
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
         accelerator: settings.toggleMenuShortcut,
@@ -170,7 +189,7 @@ function fillPreferencesWindow(window) {
     keybindingGroup.add(keybindingRow);
 
     const page = new Adw.PreferencesPage();
-    page.add(historySizeGroup);
+    page.add(generalGroup);
     page.add(keybindingGroup);
 
     window.add(page);
