@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-02 16:16+0300\n"
-"PO-Revision-Date: 2023-06-28 12:42+0300\n"
+"PO-Revision-Date: 2023-07-02 16:18+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -23,7 +23,6 @@ msgid "Failed to generate QR code"
 msgstr "Не вдалося створити QR-код"
 
 #: extension.js:147
-#, fuzzy
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Закрити"
@@ -53,13 +52,11 @@ msgid "Private Mode"
 msgstr "Приватний режим"
 
 #: extension.js:478
-#, fuzzy
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Налаштування"
 
 #: extension.js:636 extension.js:660
-#, fuzzy
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Відкрити"
@@ -85,12 +82,10 @@ msgid "Show QR Code"
 msgstr "Показати QR-код"
 
 #: prefs.js:103
-#, fuzzy
 msgid "Enter a new shortcut"
 msgstr "Введіть нове поєднання клавіш"
 
 #: prefs.js:105
-#, fuzzy
 msgctxt "Change current shortcut"
 msgid "Change"
 msgstr "Змінити"
@@ -113,7 +108,6 @@ msgid "General"
 msgstr "Загальне"
 
 #: prefs.js:171
-#, fuzzy
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Вимкнено"
