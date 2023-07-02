@@ -465,7 +465,7 @@ class PanelIndicator extends PanelMenu.Button {
                             return menuItem.text === text;
                         });
                         if (this._currentMenuItem) {
-                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, 0);
+                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, this._pinnedCount);
                         }
                         this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
                     }
