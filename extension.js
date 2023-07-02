@@ -12,7 +12,6 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
 const Validator = Me.imports.libs.validator.validator;
-const _ = ExtensionUtils.gettext;
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -145,7 +144,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
         this.addButton({
             isDefault: true,
             key: Clutter.KEY_Escape,
-            label: _(`Close`),
+            label: _(`Close`, `Close dialog`),
             action: () => {
                 this.close();
             },
@@ -476,7 +475,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
         this.menu.addMenuItem(this._privateModeMenuItem);
 
-        this.menu.addAction(_(`Settings`), () => {
+        this.menu.addAction(_(`Settings`, `Open settings`), () => {
             ExtensionUtils.openPrefs();
         });
 
@@ -634,7 +633,7 @@ class PanelIndicator extends PanelMenu.Button {
     _populateSubMenu(menuItem) {
         const actions = [
             {
-                title: _(`Open`),
+                title: _(`Open`, `Open URL`),
                 validator: Validator.isURL,
                 validatorOptions: {
                     protocols: [
@@ -658,7 +657,7 @@ class PanelIndicator extends PanelMenu.Button {
                 },
             },
             {
-                title: _(`Open`),
+                title: _(`Open`, `Open URL`),
                 validator: Validator.isMagnetURI,
             },
             {
@@ -817,6 +816,10 @@ const panelIndicator = {
         privateMode: false
     }
 };
+
+function _(text, context) {
+    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
+}
 
 function log(text) {
     console.log(`${Me.uuid}: ${text}`);

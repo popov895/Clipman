@@ -5,7 +5,6 @@ const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const _ = ExtensionUtils.gettext;
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -101,12 +100,16 @@ class KeybindingButton extends Gtk.ToggleButton {
 
     _updateLabel() {
         if (this.active) {
-            this.label = _(`Enter the new shortcut`);
+            this.label = _(`Enter a new shortcut`);
         } else {
-            this.label = _(`Change`);
+            this.label = _(`Change`, `Change current shortcut`);
         }
     }
 });
+
+function _(text, context) {
+    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
+}
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
@@ -165,7 +168,7 @@ function fillPreferencesWindow(window) {
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
         accelerator: settings.toggleMenuShortcut,
-        disabled_text: _(`Disabled`),
+        disabled_text: _(`Disabled`, `Keyboard shortcut is disabled`),
         valign: Gtk.Align.CENTER,
     });
 
