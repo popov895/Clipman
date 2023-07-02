@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 22:54+0300\n"
+"POT-Creation-Date: 2023-07-02 16:16+0300\n"
 "PO-Revision-Date: 2022-09-27 17:53+0200\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -16,69 +16,113 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1\n"
 
-#: extension.js:117
-msgid "Type to search..."
-msgstr "Szukaj..."
-
-#: extension.js:122
-msgid "No Matches"
-msgstr "Brak wyników"
-
-#: extension.js:218
+#: extension.js:140
 msgid "Failed to generate QR code"
 msgstr "Nie udało się wygenerować kodu QR"
 
-#: extension.js:225
+#: extension.js:147
+#, fuzzy
+msgctxt "Close dialog"
 msgid "Close"
 msgstr "Zamknij"
 
-#: extension.js:326
+#: extension.js:200
+msgid "Type to search..."
+msgstr "Szukaj..."
+
+#: extension.js:219
+msgid "No Matches"
+msgstr "Brak wyników"
+
+#: extension.js:423
 msgid "Private Mode is On"
 msgstr "Tryb prywatny jest włączony"
 
-#: extension.js:331
+#: extension.js:428
 msgid "History is Empty"
 msgstr "Historia jest pusta"
 
-#: extension.js:347
+#: extension.js:444
 msgid "Clear History"
 msgstr "Wyczyść historię"
 
-#: extension.js:357
+#: extension.js:453
 msgid "Private Mode"
 msgstr "Tryb prywatny"
 
-#: extension.js:382
+#: extension.js:478
+#, fuzzy
+msgctxt "Open settings"
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: prefs.js:107
-msgid "Enter the new shortcut"
+#: extension.js:636 extension.js:660
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:666
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:672 extension.js:676
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:695
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:700
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:705
+msgid "Show QR Code"
+msgstr ""
+
+#: prefs.js:103
+#, fuzzy
+msgid "Enter a new shortcut"
 msgstr "Wprowadź nowy skrót"
 
-#: prefs.js:109
+#: prefs.js:105
+#, fuzzy
+msgctxt "Change current shortcut"
 msgid "Change"
 msgstr "Zmień"
 
-#: prefs.js:140
+#: prefs.js:141
 msgid "History size"
 msgstr "Rozmiar historii"
 
 #: prefs.js:146
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:159
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:164
 msgid "General"
 msgstr "Ogólne"
 
-#: prefs.js:152
+#: prefs.js:171
+#, fuzzy
+msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Wyłączony"
 
-#: prefs.js:161
+#: prefs.js:181
 msgid "Toggle menu"
 msgstr "Pokaż/ukryj menu"
 
-#: prefs.js:168
+#: prefs.js:187
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiaturowe"

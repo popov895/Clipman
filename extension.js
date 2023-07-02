@@ -4,20 +4,14 @@ const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, St } = 
 
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Gettext = imports.gettext;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const QrCode = Me.imports.qrcodegen.qrcodegen.QrCode;
-const Validator = Me.imports.validator.validator;
-const _ = Gettext.domain(Me.uuid).gettext;
-
-const sensitiveMimeTypes = [
-    'x-kde-passwordManagerHint',
-];
+const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
+const Validator = Me.imports.libs.validator.validator;
 
 const Settings = GObject.registerClass({
     Signals: {
@@ -27,18 +21,22 @@ const Settings = GObject.registerClass({
     _init() {
         super._init();
 
-        this._keyHistorySize = 'history-size';
+        this._keyHistorySize = `history-size`;
+        this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
+        this._keyWebSearchUrl = `web-search-url`;
 
-        this.settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.clipman');
-        this.settings.connect('changed', (...[, key]) => {
-            if (key === this._keyHistorySize) {
-                this.emit('historySizeChanged');
-            }
+        this._settings = ExtensionUtils.getSettings();
+        this._settings.connect(`changed::${this._keyHistorySize}`, () => {
+            this.emit(`historySizeChanged`);
         });
     }
 
     get historySize() {
-        return this.settings.get_int(this._keyHistorySize);
+        return this._settings.get_int(this._keyHistorySize);
+    }
+
+    get webSearchUrl() {
+        return this._settings.get_string(this._keyWebSearchUrl);
     }
 });
 
@@ -50,13 +48,17 @@ const ClipboardManager = GObject.registerClass({
     _init() {
         super._init();
 
+        this._sensitiveMimeTypes = [
+            `x-kde-passwordManagerHint`,
+        ];
+
         this._clipboard = St.Clipboard.get_default();
         this._selection = Shell.Global.get().get_display().get_selection();
         this._selectionOwnerChangedId = this._selection.connect(
-            'owner-changed',
+            `owner-changed`,
             (...[, selectionType]) => {
                 if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
-                    this.emit('changed');
+                    this.emit(`changed`);
                 }
             }
         );
@@ -68,7 +70,7 @@ const ClipboardManager = GObject.registerClass({
 
     getText(callback) {
         const mimeTypes = this._clipboard.get_mimetypes(St.ClipboardType.CLIPBOARD);
-        const hasSensitiveMimeTypes = sensitiveMimeTypes.some((sensitiveMimeType) => {
+        const hasSensitiveMimeTypes = this._sensitiveMimeTypes.some((sensitiveMimeType) => {
             return mimeTypes.includes(sensitiveMimeType);
         });
         if (hasSensitiveMimeTypes) {
@@ -85,7 +87,7 @@ const ClipboardManager = GObject.registerClass({
     }
 
     clear() {
-        this._clipboard.set_content(St.ClipboardType.CLIPBOARD, '', new GLib.Bytes(null));
+        this._clipboard.set_content(St.ClipboardType.CLIPBOARD, ``, new GLib.Bytes(null));
     }
 });
 
@@ -93,7 +95,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
     constructor() {
         super();
 
-        this.actor.add_style_class_name('popup-menu-item');
+        this.actor.add_style_class_name(`popup-menu-item`);
 
         this._icon = new St.Icon({
             x_align: Clutter.ActorAlign.CENTER,
@@ -104,7 +106,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
         });
 
         const boxLayout = new St.BoxLayout({
-            style_class: 'clipman-placeholderpanel',
+            style_class: `clipman-placeholderpanel`,
             vertical: true,
             x_expand: true,
         });
@@ -122,21 +124,88 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
     }
 }
 
+const QrCodeDialog = GObject.registerClass(
+class QrCodeDialog extends ModalDialog.ModalDialog {
+    _init(text) {
+        super._init();
+
+        const image = this._generateQrCodeImage(text);
+        if (image) {
+            this.contentLayout.add_child(new St.Icon({
+                gicon: image,
+                icon_size: image.preferred_width,
+            }));
+        } else {
+            this.contentLayout.add_child(new St.Label({
+                text: _(`Failed to generate QR code`),
+            }));
+        }
+
+        this.addButton({
+            isDefault: true,
+            key: Clutter.KEY_Escape,
+            label: _(`Close`, `Close dialog`),
+            action: () => {
+                this.close();
+            },
+        });
+    }
+
+    _generateQrCodeImage(text) {
+        let image;
+        try {
+            const minContentSize = 200;
+            const bytesPerPixel = 3; // RGB
+            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
+            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
+            const quietZoneSize = 4 * pixelsPerModule;
+            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
+            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
+            data.fill(255);
+            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
+                for (let i = 0; i < pixelsPerModule; ++i) {
+                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
+                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
+                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
+                        for (let j = 0; j < pixelsPerModule; ++j) {
+                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
+                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
+                            data[dataI] = color;     // R
+                            data[dataI + 1] = color; // G
+                            data[dataI + 2] = color; // B
+                        }
+                    }
+                }
+            }
+
+            image = new St.ImageContent({
+                preferred_height: finalIconSize,
+                preferred_width: finalIconSize,
+            });
+            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
+        } catch (error) {
+            log(error);
+        }
+
+        return image;
+    }
+});
+
 const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     constructor() {
         super();
 
         this.entry = new St.Entry({
             can_focus: true,
-            hint_text: _('Type to search...'),
-            style_class: 'clipman-popupsearchmenuitem',
+            hint_text: _(`Type to search...`),
+            style_class: `clipman-popupsearchmenuitem`,
             x_expand: true,
         });
-        this.entry.clutter_text.connect('text-changed', this._onEntryTextChanged.bind(this));
+        this.entry.clutter_text.connect(`text-changed`, this._onEntryTextChanged.bind(this));
         const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
             can_focus: false,
             reactive: false,
-            style_class: 'clipman-searchmenuitem',
+            style_class: `clipman-searchmenuitem`,
         });
         searchMenuItem._ornamentLabel.visible = false;
         searchMenuItem.add(this.entry);
@@ -147,13 +216,13 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             x_expand: true,
         });
         placeholderBoxLayout.add(new St.Label({
-            text: _('No Matches'),
+            text: _(`No Matches`),
             x_align: Clutter.ActorAlign.CENTER,
         }));
         this._placeholderMenuItem = new PopupMenu.PopupMenuSection({
             reactive: false,
         });
-        this._placeholderMenuItem.actor.style_class = 'popup-menu-item';
+        this._placeholderMenuItem.actor.style_class = `popup-menu-item`;
         this._placeholderMenuItem.actor.visible = false;
         this._placeholderMenuItem.actor.add(placeholderBoxLayout);
         this.addMenuItem(this._placeholderMenuItem);
@@ -166,18 +235,18 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
                 this.section.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
             }
         };
-        this.section.box.connect('actor-added', this._onMenuItemAdded.bind(this));
+        this.section.box.connect(`actor-added`, this._onMenuItemAdded.bind(this));
         this._sectionActorRemovedId = this.section.box.connect(
-            'actor-removed',
+            `actor-removed`,
             this._onMenuItemRemoved.bind(this)
         );
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
-            style_class: 'clipman-historyscrollview',
+            style_class: `clipman-historyscrollview`,
         });
         this.scrollView.hscrollbar_policy = St.PolicyType.NEVER;
         this.scrollView.add_actor(this.section.actor);
-        this.scrollView.vscroll.adjustment.connect('changed', () => {
+        this.scrollView.vscroll.adjustment.connect(`changed`, () => {
             Promise.resolve().then(() => {
                 this.scrollView.overlay_scrollbars = !this.scrollView.vscrollbar_visible;
             });
@@ -220,7 +289,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
                 this._placeholderMenuItem.actor.visible = false;
             }
         }
-        menuItem.connect('key-focus-in', () => {
+        menuItem.connect(`key-focus-in`, () => {
             Util.ensureActorVisibleInScrollView(this.scrollView, menuItem);
         });
     }
@@ -237,72 +306,6 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     }
 }
 
-const QrCodeDialog = GObject.registerClass(
-class QrCodeDialog extends ModalDialog.ModalDialog {
-    _init(text) {
-        super._init();
-
-        const image = this._generateQrCodeImage(text);
-        if (image) {
-             this.contentLayout.add_child(new St.Icon({
-                gicon: image,
-                icon_size: image.preferred_width,
-            }));
-        } else {
-            this.contentLayout.add_child(new St.Label({
-                text: _('Failed to generate QR code'),
-            }));
-        }
-
-        this.addButton({
-            key: Clutter.KEY_Escape,
-            label: _('Close'),
-            action: () => {
-                this.close();
-            },
-        });
-    }
-
-    _generateQrCodeImage(text) {
-        let image;
-        try {
-            const minContentSize = 200;
-            const bytesPerPixel = 3; // RGB
-            const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
-            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
-            const quietZoneSize = 4 * pixelsPerModule;
-            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
-            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
-            data.fill(255);
-            for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
-                for (let i = 0; i < pixelsPerModule; ++i) {
-                    const dataY = quietZoneSize + qrCodeY * pixelsPerModule + i;
-                    for (let qrCodeX = 0; qrCodeX < qrCode.size; ++qrCodeX) {
-                        const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
-                        for (let j = 0; j < pixelsPerModule; ++j) {
-                            const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
-                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
-                            data[dataI] = color;     // R
-                            data[dataI + 1] = color; // G
-                            data[dataI + 2] = color; // B
-                        }
-                    }
-                }
-            }
-
-            image = new St.ImageContent({
-                preferred_height: finalIconSize,
-                preferred_width: finalIconSize,
-            });
-            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
-        } catch (error) {
-            console.log(Me.uuid + ': ' + error);
-        }
-
-        return image;
-    }
-});
-
 const HistoryMenuItem = GObject.registerClass(
 class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
     _init(text, topMenu) {
@@ -310,14 +313,13 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
         this._topMenu = topMenu;
 
-        // disable animations
         this.menu._open = this.menu.open.bind(this.menu);
         this.menu.open = () => {
-            this.menu._open();
+            this.menu._open(false);
         };
         this.menu._close = this.menu.close.bind(this.menu);
         this.menu.close = () => {
-            this.menu._close();
+            this.menu._close(false);
         };
 
         this._triangleBin.hide();
@@ -325,19 +327,19 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
         const clickAction = new Clutter.ClickAction({
             enabled: this._activatable,
         });
-        clickAction.connect('clicked', () => {
-            this.emit('activate', Clutter.get_current_event());
+        clickAction.connect(`clicked`, () => {
+            this.activate(Clutter.get_current_event());
         });
-        clickAction.connect('notify::pressed', () => {
+        clickAction.connect(`notify::pressed`, () => {
             if (clickAction.pressed) {
-                this.add_style_pseudo_class('active');
+                this.add_style_pseudo_class(`active`);
             } else {
-                this.remove_style_pseudo_class('active');
+                this.remove_style_pseudo_class(`active`);
             }
         });
         this.add_action(clickAction);
 
-        this._topMenu.connect('open-state-changed', (...[, open]) => {
+        this._topMenu.connect(`open-state-changed`, (...[, open]) => {
             if (!open) {
                 this.menu.close();
             }
@@ -346,6 +348,10 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
     _getTopMenu() {
         return this._topMenu;
+    }
+
+    activate(event) {
+        this.emit(`activate`, event);
     }
 
     vfunc_button_press_event() {
@@ -366,7 +372,7 @@ class PanelIndicator extends PanelMenu.Button {
     _init() {
         super._init(0);
 
-        this.menu.actor.add_style_class_name('clipman-panelmenu-button');
+        this.menu.actor.add_style_class_name(`clipman-panelmenu-button`);
 
         this._buildIcon();
         this._buildMenu();
@@ -374,7 +380,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._pinnedCount = 0;
 
         this._clipboard = new ClipboardManager();
-        this._clipboardChangedId = this._clipboard.connect('changed', () => {
+        this._clipboardChangedId = this._clipboard.connect(`changed`, () => {
             if (!this._privateModeMenuItem.state) {
                 this._clipboard.getText((text) => {
                     this._onClipboardTextChanged(text);
@@ -383,13 +389,15 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         this._settings = new Settings();
-        this._settings.connect('historySizeChanged', this._onHistorySizeChanged.bind(this));
+        this._settings.connect(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
 
         this._loadState();
         this._addKeybindings();
     }
 
     destroy() {
+        this._qrCodeDialog?.close();
+
         this._saveState();
         this._removeKeybindings();
 
@@ -404,36 +412,36 @@ class PanelIndicator extends PanelMenu.Button {
 
     _buildIcon() {
         this.add_child(new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'edit-copy-symbolic' }),
-            style_class: 'system-status-icon',
+            gicon: new Gio.ThemedIcon({ name: `edit-copy-symbolic` }),
+            style_class: `system-status-icon`,
         }));
     }
 
     _buildMenu() {
         this._privateModePlaceholder = new PlaceholderMenuItem();
-        this._privateModePlaceholder.setIcon(Gio.icon_new_for_string(Me.path + '/icons/private-mode-symbolic.svg'));
-        this._privateModePlaceholder.setText(_('Private Mode is On'));
+        this._privateModePlaceholder.setIcon(Gio.icon_new_for_string(`${Me.path}/icons/private-mode-symbolic.svg`));
+        this._privateModePlaceholder.setText(_(`Private Mode is On`));
         this.menu.addMenuItem(this._privateModePlaceholder);
 
         this._emptyPlaceholder = new PlaceholderMenuItem();
-        this._emptyPlaceholder.setIcon(Gio.icon_new_for_string(Me.path + '/icons/clipboard-symbolic.svg'));
-        this._emptyPlaceholder.setText(_('History is Empty'));
+        this._emptyPlaceholder.setIcon(Gio.icon_new_for_string(`${Me.path}/icons/clipboard-symbolic.svg`));
+        this._emptyPlaceholder.setText(_(`History is Empty`));
         this.menu.addMenuItem(this._emptyPlaceholder);
 
         this._historyMenuSection = new HistoryMenuSection();
         this._historyMenuSection.section.box.connect(
-            'actor-added',
+            `actor-added`,
             this._updateUi.bind(this)
         );
         this._historySectionActorRemovedId = this._historyMenuSection.section.box.connect(
-            'actor-removed',
+            `actor-removed`,
             this._updateUi.bind(this)
         );
         this.menu.addMenuItem(this._historyMenuSection);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._clearMenuItem = this.menu.addAction(_('Clear History'), () => {
+        this._clearMenuItem = this.menu.addAction(_(`Clear History`), () => {
             this.menu.close();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             const menuItemsToRemove = menuItems.slice(this._pinnedCount);
@@ -442,10 +450,10 @@ class PanelIndicator extends PanelMenu.Button {
             });
         });
 
-        this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_('Private Mode'), false, {
+        this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_(`Private Mode`), false, {
             reactive: true,
         });
-        this._privateModeMenuItem.connect('toggled', (...[, state]) => {
+        this._privateModeMenuItem.connect(`toggled`, (...[, state]) => {
             this.menu.close();
             if (!state) {
                 this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
@@ -457,7 +465,7 @@ class PanelIndicator extends PanelMenu.Button {
                             return menuItem.text === text;
                         });
                         if (this._currentMenuItem) {
-                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, 0);
+                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, this._pinnedCount);
                         }
                         this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
                     }
@@ -467,14 +475,14 @@ class PanelIndicator extends PanelMenu.Button {
         });
         this.menu.addMenuItem(this._privateModeMenuItem);
 
-        this.menu.addAction(_('Settings'), () => {
+        this.menu.addAction(_(`Settings`, `Open settings`), () => {
             ExtensionUtils.openPrefs();
         });
 
-        this.menu.connect('open-state-changed', (...[, open]) => {
+        this.menu.connect(`open-state-changed`, (...[, open]) => {
             if (open) {
                 this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
-                this._historyMenuSection.entry.text = '';
+                this._historyMenuSection.entry.text = ``;
                 Promise.resolve().then(() => {
                     global.stage.set_key_focus(this._historyMenuSection.entry);
                 });
@@ -484,52 +492,52 @@ class PanelIndicator extends PanelMenu.Button {
 
     _createMenuItem(text, pinned = false, timestamp = Date.now()) {
         const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
-            return match.replace(/ /g, '␣').replace(/\t/g, '⇥').replace(/\n/g, '↵');
-        }).replaceAll(/\s+/g, ' ');
+            return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
+        }).replaceAll(/\s+/g, ` `);
 
         const menuItem = new HistoryMenuItem(menuItemText, this.menu);
         menuItem.pinned = pinned;
         menuItem.text = text;
         menuItem.timestamp = timestamp;
         menuItem.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-        menuItem.connect('activate', () => {
+        menuItem.connect(`activate`, () => {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
-        menuItem.connect('destroy', () => {
+        menuItem.connect(`destroy`, () => {
             if (this._currentMenuItem === menuItem) {
                 this._currentMenuItem = null;
             }
         });
 
         const expander = new St.Bin({
-            style_class: 'popup-menu-item-expander',
+            style_class: `popup-menu-item-expander`,
             x_expand: true,
         });
         menuItem.add_child(expander);
 
         menuItem.pinIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? 'starred-symbolic' : 'non-starred-symbolic' }),
-            style_class: 'system-status-icon',
+            gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? `starred-symbolic` : `non-starred-symbolic` }),
+            style_class: `system-status-icon`,
         });
         const pinButton = new St.Button({
             can_focus: true,
             child: menuItem.pinIcon,
-            style_class: 'clipman-toolbutton',
+            style_class: `clipman-toolbutton`,
         });
-        pinButton.connect('clicked', () => {
+        pinButton.connect(`clicked`, () => {
             menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
 
         const deleteButton = new St.Button({
             can_focus: true,
             child: new St.Icon({
-                gicon: new Gio.ThemedIcon({ name: 'edit-delete-symbolic' }),
-                style_class: 'system-status-icon',
+                gicon: new Gio.ThemedIcon({ name: `edit-delete-symbolic` }),
+                style_class: `system-status-icon`,
             }),
-            style_class: 'clipman-toolbutton',
+            style_class: `clipman-toolbutton`,
         });
-        deleteButton.connect('clicked', () => {
+        deleteButton.connect(`clicked`, () => {
             if (this._historyMenuSection.section.numMenuItems === 1) {
                 this.menu.close();
             }
@@ -537,21 +545,21 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         menuItem.menu._arrow = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: 'pan-end-symbolic' }),
+            gicon: new Gio.ThemedIcon({ name: `pan-end-symbolic` }),
             pivot_point: new Graphene.Point({ x: 0.5, y: 0.6 }),
-            style_class: 'system-status-icon',
+            style_class: `system-status-icon`,
         });
         const toggleSubMenuButton = new St.Button({
             can_focus: true,
             child: menuItem.menu._arrow,
-            style_class: 'clipman-toolbutton',
+            style_class: `clipman-toolbutton`,
         });
-        toggleSubMenuButton.connect('clicked', () => {
+        toggleSubMenuButton.connect(`clicked`, () => {
             menuItem.menu.toggle();
         });
 
         const boxLayout = new St.BoxLayout({
-            style_class: 'clipman-toolbuttonnpanel',
+            style_class: `clipman-toolbuttonnpanel`,
         });
         boxLayout.add(pinButton);
         boxLayout.add(deleteButton);
@@ -575,7 +583,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _pinMenuItem(menuItem) {
         menuItem.pinned = true;
-        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'starred-symbolic' });
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: `starred-symbolic` });
         this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
 
         this._updateUi();
@@ -592,7 +600,7 @@ class PanelIndicator extends PanelMenu.Button {
             this._destroyMenuItem(lastMenuItem);
         }
         menuItem.pinned = false;
-        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: 'non-starred-symbolic' });
+        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: `non-starred-symbolic` });
         let indexToMove = menuItems.length;
         for (let i = this._pinnedCount; i < menuItems.length; ++i) {
             if (menuItems[i].timestamp < menuItem.timestamp) {
@@ -608,8 +616,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _addKeybindings() {
         Main.wm.addKeybinding(
-            'toggle-menu-shortcut',
-            this._settings.settings,
+            this._settings._keyToggleMenuShortcut,
+            this._settings._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
             Shell.ActionMode.ALL,
             () => {
@@ -619,63 +627,101 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _removeKeybindings() {
-        Main.wm.removeKeybinding('toggle-menu-shortcut');
+        Main.wm.removeKeybinding(this._settings._keyToggleMenuShortcut);
     }
 
     _populateSubMenu(menuItem) {
         const actions = [
             {
-                title: _('Open in Browser'),
+                title: _(`Open`, `Open URL`),
                 validator: Validator.isURL,
-                validatorOptions: { require_protocol: true },
+                validatorOptions: {
+                    protocols: [
+                        `http`,
+                        `https`,
+                        `ftp`,
+                        `sftp`,
+                        `ssh`,
+                        `smb`,
+                        `telnet`,
+                        `gopher`,
+                        `vnc`,
+                        `irc`,
+                        `irc6`,
+                        `ircs`,
+                        `git`,
+                        `rsync`,
+                        `feed`,
+                    ],
+                    require_protocol: true,
+                },
             },
             {
-                prefix: 'mailto:',
+                title: _(`Open`, `Open URL`),
+                validator: Validator.isMagnetURI,
+            },
+            {
+                prefix: `mailto:`,
                 regExp: /^mailto:/i,
-                title: _('Send an Email'),
+                title: _(`Compose an Email`),
                 validator: Validator.isEmail,
             },
             {
-                prefix: 'tel:+',
+                prefix: `tel:+`,
                 regExp: /^(tel:)?\+/i,
-                title: _('Make a Call'),
+                title: _(`Make a Call`),
                 validator: Validator.isMobilePhone,
+            },
+            {
+                title: _(`Make a Call`),
+                validator: (str) => {
+                    return str.match(/^callto:\S+/i);
+                },
             },
         ];
 
         const trimmedText = menuItem.text.trim();
         for (const action of actions) {
-            const capturedText = action.regExp ? trimmedText.replace(action.regExp, '') : trimmedText;
+            const capturedText = action.regExp ? trimmedText.replace(action.regExp, ``) : trimmedText;
             if (action.validator(capturedText, action.validatorOptions)) {
                 menuItem.menu.addAction(action.title, () => {
                     this.menu.close();
-                    try {
-                        Gio.app_info_launch_default_for_uri((action.prefix || '') + capturedText, global.create_app_launch_context(0, -1));
-                    } catch (error) {
-                        console.log(Me.uuid + ': ' + error);
-                    }
+                    this._launchUri((action.prefix ?? ``) + capturedText);
                 });
                 break;
             }
         }
 
-        menuItem.menu.addAction(_('Show QR Code'), () => {
+        menuItem.menu.addAction(_(`Search the Web`), () => {
             this.menu.close();
-            this._showQrCode(menuItem.text);
+            this._launchUri(this._settings.webSearchUrl.replace(`%s`, encodeURIComponent(menuItem.text)));
         });
 
-        menuItem.menu.addAction(_('Send via Email'), () => {
+        menuItem.menu.addAction(_(`Send via Email`), () => {
             this.menu.close();
-            try {
-                Gio.app_info_launch_default_for_uri('mailto:?body=' + encodeURIComponent(menuItem.text), global.create_app_launch_context(0, -1));
-            } catch (error) {
-                console.log(Me.uuid + ': ' + error);
-            }
+            this._launchUri(`mailto:?body=${encodeURIComponent(menuItem.text)}`);
+        });
+
+        menuItem.menu.addAction(_(`Show QR Code`), () => {
+            this.menu.close();
+            this._showQrCode(menuItem.text);
         });
     }
 
     _showQrCode(text) {
-        new QrCodeDialog(text).open();
+        this._qrCodeDialog = new QrCodeDialog(text);
+        this._qrCodeDialog.connect(`destroy`, () => {
+            this._qrCodeDialog = null;
+        });
+        this._qrCodeDialog.open();
+    }
+
+    _launchUri(uri) {
+        try {
+            Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
+        } catch (error) {
+            log(error);
+        }
     }
 
     _loadState() {
@@ -770,6 +816,14 @@ const panelIndicator = {
         privateMode: false
     }
 };
+
+function _(text, context) {
+    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
+}
+
+function log(text) {
+    console.log(`${Me.uuid}: ${text}`);
+}
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
