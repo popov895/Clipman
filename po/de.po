@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-17 16:21+0300\n"
+"POT-Creation-Date: 2023-07-02 16:16+0300\n"
 "PO-Revision-Date: 2022-11-08 11:55+0100\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: \n"
@@ -18,67 +18,110 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: extension.js:117
-msgid "Type to search..."
-msgstr "Tippen, um zu suchen…"
-
-#: extension.js:129
-msgid "No Matches"
-msgstr "Keine Übereinstimmungen"
-
-#: extension.js:218
+#: extension.js:140
 msgid "Failed to generate QR code"
 msgstr "QR-Code konnte nicht erzeugt werden"
 
-#: extension.js:225
+#: extension.js:147
+#, fuzzy
+msgctxt "Close dialog"
 msgid "Close"
 msgstr "Schließen"
 
-#: extension.js:326
+#: extension.js:200
+msgid "Type to search..."
+msgstr "Tippen, um zu suchen…"
+
+#: extension.js:219
+msgid "No Matches"
+msgstr "Keine Übereinstimmungen"
+
+#: extension.js:423
 msgid "Private Mode is On"
 msgstr "Privater Modus ist aktiviert"
 
-#: extension.js:331
+#: extension.js:428
 msgid "History is Empty"
 msgstr "Chronik ist leer"
 
-#: extension.js:347
+#: extension.js:444
 msgid "Clear History"
 msgstr "Chronik löschen"
 
-#: extension.js:357
+#: extension.js:453
 msgid "Private Mode"
 msgstr "Privater Modus"
 
-#: extension.js:382
+#: extension.js:478
+#, fuzzy
+msgctxt "Open settings"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: prefs.js:107
-msgid "Enter the new shortcut"
+#: extension.js:636 extension.js:660
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:666
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:672 extension.js:676
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:695
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:700
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:705
+msgid "Show QR Code"
+msgstr ""
+
+#: prefs.js:103
+#, fuzzy
+msgid "Enter a new shortcut"
 msgstr "Neues Kürzel eingeben"
 
-#: prefs.js:109
+#: prefs.js:105
+#, fuzzy
+msgctxt "Change current shortcut"
 msgid "Change"
 msgstr "Ändern"
 
-#: prefs.js:140
+#: prefs.js:141
 msgid "History size"
 msgstr "Größe der Chronik"
 
 #: prefs.js:146
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:159
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:164
 msgid "General"
 msgstr "Allgemein"
 
-#: prefs.js:152
+#: prefs.js:171
+#, fuzzy
+msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: prefs.js:161
+#: prefs.js:181
 msgid "Toggle menu"
 msgstr "Menü umschalten"
 
-#: prefs.js:168
+#: prefs.js:187
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkombinationen"
 
