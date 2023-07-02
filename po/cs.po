@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-02 16:16+0300\n"
-"PO-Revision-Date: 2023-04-26 17:43+0200\n"
+"PO-Revision-Date: 2023-07-02 16:52+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -16,14 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: extension.js:140
 msgid "Failed to generate QR code"
 msgstr "Vygenerování QR kódu se nezdařilo"
 
 #: extension.js:147
-#, fuzzy
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Zavřít"
@@ -53,7 +52,6 @@ msgid "Private Mode"
 msgstr "Soukromý režim"
 
 #: extension.js:478
-#, fuzzy
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Nastavení"
@@ -61,35 +59,33 @@ msgstr "Nastavení"
 #: extension.js:636 extension.js:660
 msgctxt "Open URL"
 msgid "Open"
-msgstr ""
+msgstr "Otevřít"
 
 #: extension.js:666
 msgid "Compose an Email"
-msgstr ""
+msgstr "Napsat e-mail"
 
 #: extension.js:672 extension.js:676
 msgid "Make a Call"
-msgstr ""
+msgstr "Zavolat"
 
 #: extension.js:695
 msgid "Search the Web"
-msgstr ""
+msgstr "Prohledat internet"
 
 #: extension.js:700
 msgid "Send via Email"
-msgstr ""
+msgstr "Odeslat e-mailem"
 
 #: extension.js:705
 msgid "Show QR Code"
-msgstr ""
+msgstr "Zobrazit QR kód"
 
 #: prefs.js:103
-#, fuzzy
 msgid "Enter a new shortcut"
 msgstr "Zadejte novou zkratku"
 
 #: prefs.js:105
-#, fuzzy
 msgctxt "Change current shortcut"
 msgid "Change"
 msgstr "Změnit"
@@ -101,18 +97,17 @@ msgstr "Velikost historie"
 #: prefs.js:146
 #, javascript-format
 msgid "URL with %s in place of query"
-msgstr ""
+msgstr "Adresa URL s %s na místě dotazu"
 
 #: prefs.js:159
 msgid "Web Search"
-msgstr ""
+msgstr "Vyhledávání na webu"
 
 #: prefs.js:164
 msgid "General"
 msgstr "Obecné"
 
 #: prefs.js:171
-#, fuzzy
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Vypnuto"
