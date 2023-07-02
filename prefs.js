@@ -15,18 +15,16 @@ const Settings = GObject.registerClass({
     _init() {
         super._init();
 
-        this._keyToggleMenuShortcut = 'toggle-menu-shortcut';
+        this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
 
         this._settings = ExtensionUtils.getSettings();
-        this._settings.connect('changed', (...[, key]) => {
-            if (key === this._keyToggleMenuShortcut) {
-                this.emit('toggleMenuShortcutChanged');
-            }
+        this._settings.connect(`changed::${this._keyToggleMenuShortcut}`, () => {
+            this.emit(`toggleMenuShortcutChanged`);
         });
     }
 
     get toggleMenuShortcut() {
-        return this._settings.get_strv(this._keyToggleMenuShortcut)[0] ?? '';
+        return this._settings.get_strv(this._keyToggleMenuShortcut)[0] ?? ``;
     }
 
     set toggleMenuShortcut(toggleMenuShortcut) {
@@ -46,7 +44,7 @@ class KeybindingButton extends Gtk.ToggleButton {
         this._updateLabel();
 
         const keyController = new Gtk.EventControllerKey();
-        keyController.connect('key-pressed', (...[, keyval, keycode, state]) => {
+        keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
             if (this.active) {
                 switch (keyval) {
                     case Gdk.KEY_Alt_L:
@@ -67,7 +65,7 @@ class KeybindingButton extends Gtk.ToggleButton {
                         this.set_active(false);
                         return Gdk.EVENT_STOP;
                     case Gdk.KEY_BackSpace:
-                        settings.toggleMenuShortcut = '';
+                        settings.toggleMenuShortcut = ``;
                         this.set_active(false);
                         return Gdk.EVENT_STOP;
                     default:
@@ -86,13 +84,13 @@ class KeybindingButton extends Gtk.ToggleButton {
         this.add_controller(keyController);
 
         const focusController = new Gtk.EventControllerFocus();
-        focusController.connect('leave', () => {
+        focusController.connect(`leave`, () => {
             this.set_active(false);
         });
         this.add_controller(focusController);
 
-        this.connect('toggled', this._updateLabel.bind(this));
-        this.connect('toggled', () => {
+        this.connect(`toggled`, this._updateLabel.bind(this));
+        this.connect(`toggled`, () => {
             if (this.active) {
                 this.root.get_surface().inhibit_system_shortcuts(null);
             } else {
@@ -103,9 +101,9 @@ class KeybindingButton extends Gtk.ToggleButton {
 
     _updateLabel() {
         if (this.active) {
-            this.label = _('Enter the new shortcut');
+            this.label = _(`Enter the new shortcut`);
         } else {
-            this.label = _('Change');
+            this.label = _(`Change`);
         }
     }
 });
@@ -116,7 +114,7 @@ function init() {
 
 function fillPreferencesWindow(window) {
     const settings = new Settings();
-    settings.connect('toggleMenuShortcutChanged', () => {
+    settings.connect(`toggleMenuShortcutChanged`, () => {
         keybindingShortcutLabel.accelerator = settings.toggleMenuShortcut;
     });
 
@@ -129,45 +127,45 @@ function fillPreferencesWindow(window) {
         valign: Gtk.Align.CENTER,
     });
     settings.bind(
-        'history-size',
+        `history-size`,
         historySizeSpinBox,
-        'value',
+        `value`,
         Gio.SettingsBindFlags.DEFAULT
     );
 
     const historySizeRow = new Adw.ActionRow({
         activatable_widget: historySizeSpinBox,
-        title: _('History size'),
+        title: _(`History size`),
     });
     historySizeRow.add_suffix(historySizeSpinBox);
 
     const webSearchEntry = new Gtk.Entry({
-        placeholder_text: _('URL with %s in place of query'),
+        placeholder_text: _(`URL with %s in place of query`),
         valign: Gtk.Align.CENTER,
     });
     webSearchEntry.set_size_request(300, -1);
     settings.bind(
-        'web-search-url',
+        `web-search-url`,
         webSearchEntry,
-        'text',
+        `text`,
         Gio.SettingsBindFlags.DEFAULT
     );
 
     const webSearchRow = new Adw.ActionRow({
         activatable_widget: webSearchEntry,
-        title: _('Web Search'),
+        title: _(`Web Search`),
     });
     webSearchRow.add_suffix(webSearchEntry);
 
     const generalGroup = new Adw.PreferencesGroup({
-        title: _('General'),
+        title: _(`General`),
     });
     generalGroup.add(historySizeRow);
     generalGroup.add(webSearchRow);
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
         accelerator: settings.toggleMenuShortcut,
-        disabled_text: _('Disabled'),
+        disabled_text: _(`Disabled`),
         valign: Gtk.Align.CENTER,
     });
 
@@ -177,13 +175,13 @@ function fillPreferencesWindow(window) {
 
     const keybindingRow = new Adw.ActionRow({
         activatable_widget: keybindingButton,
-        title: _('Toggle menu'),
+        title: _(`Toggle menu`),
     });
     keybindingRow.add_suffix(keybindingShortcutLabel);
     keybindingRow.add_suffix(keybindingButton);
 
     const keybindingGroup = new Adw.PreferencesGroup({
-        title: _('Keyboard Shortcuts'),
+        title: _(`Keyboard Shortcuts`),
     });
     keybindingGroup.add(keybindingRow);
 
