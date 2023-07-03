@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the Clipman package.
 # Kamil Stępień <kamilst96@gmail.com>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-02 16:16+0300\n"
-"PO-Revision-Date: 2022-09-27 17:53+0200\n"
+"PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -18,14 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: extension.js:140
 msgid "Failed to generate QR code"
 msgstr "Nie udało się wygenerować kodu QR"
 
 #: extension.js:147
-#, fuzzy
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Zamknij"
@@ -55,7 +53,6 @@ msgid "Private Mode"
 msgstr "Tryb prywatny"
 
 #: extension.js:478
-#, fuzzy
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Ustawienia"
@@ -86,12 +83,10 @@ msgid "Show QR Code"
 msgstr ""
 
 #: prefs.js:103
-#, fuzzy
 msgid "Enter a new shortcut"
 msgstr "Wprowadź nowy skrót"
 
 #: prefs.js:105
-#, fuzzy
 msgctxt "Change current shortcut"
 msgid "Change"
 msgstr "Zmień"
@@ -114,7 +109,6 @@ msgid "General"
 msgstr "Ogólne"
 
 #: prefs.js:171
-#, fuzzy
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Wyłączony"
