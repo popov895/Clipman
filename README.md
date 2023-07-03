@@ -9,7 +9,11 @@ The extension is available for installation on the [GNOME Shell Extensions websi
 To install manually follow the steps below:
 
 - download the latest version of the extension from the [releases page](https://github.com/popov895/Clipman/releases)
-- extract the downloaded archive into your local extensions directory (usually **~/.local/share/gnome-shell/extensions/**)
+- run the following command:
+
+   `$ gnome-extensions install clipman@popov895.ukr.net.zip`
+
+- restart your session (logout and login)
 - run the following command:
 
    `$ gnome-extensions enable clipman@popov895.ukr.net`
