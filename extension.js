@@ -11,34 +11,9 @@ const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
+const Preferences = Me.imports.libs.preferences.Preferences;
 const Validator = Me.imports.libs.validator.validator;
-
-const Settings = GObject.registerClass({
-    Signals: {
-        'historySizeChanged': {},
-    },
-}, class Settings extends GObject.Object {
-    _init() {
-        super._init();
-
-        this._keyHistorySize = `history-size`;
-        this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
-        this._keyWebSearchUrl = `web-search-url`;
-
-        this._settings = ExtensionUtils.getSettings();
-        this._settings.connect(`changed::${this._keyHistorySize}`, () => {
-            this.emit(`historySizeChanged`);
-        });
-    }
-
-    get historySize() {
-        return this._settings.get_int(this._keyHistorySize);
-    }
-
-    get webSearchUrl() {
-        return this._settings.get_string(this._keyWebSearchUrl);
-    }
-});
+const { _, log } = Me.imports.libs.utils;
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -229,12 +204,12 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 
         this.section = new PopupMenu.PopupMenuSection();
         this.section._moveMenuItem = this.section.moveMenuItem.bind(this.section);
-        this.section.moveMenuItem = (menuItem, position) => {
-            this.section._moveMenuItem(menuItem, position);
+        this.section.moveMenuItem = function(menuItem, position) {
+            this._moveMenuItem(menuItem, position);
             if (menuItem instanceof PopupMenu.PopupSubMenuMenuItem) {
-                this.section.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
+                this.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
             }
-        };
+        }.bind(this.section);
         this.section.box.connect(`actor-added`, this._onMenuItemAdded.bind(this));
         this._sectionActorRemovedId = this.section.box.connect(
             `actor-removed`,
@@ -313,14 +288,15 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
         this._topMenu = topMenu;
 
+        // disable animation on opening and closing
         this.menu._open = this.menu.open.bind(this.menu);
-        this.menu.open = () => {
-            this.menu._open(false);
-        };
+        this.menu.open = function() {
+            this._open(false);
+        }.bind(this.menu);
         this.menu._close = this.menu.close.bind(this.menu);
-        this.menu.close = () => {
-            this.menu._close(false);
-        };
+        this.menu.close = function() {
+            this._close(false);
+        }.bind(this.menu);
 
         this._triangleBin.hide();
 
@@ -388,8 +364,8 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
 
-        this._settings = new Settings();
-        this._settings.connect(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
+        this._preferences = new Preferences();
+        this._preferences.connect(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
 
         this._loadState();
         this._addKeybindings();
@@ -591,7 +567,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _unpinMenuItem(menuItem) {
         const menuItems = this._historyMenuSection.section._getMenuItems();
-        if (menuItems.length - this._pinnedCount === this._settings.historySize) {
+        if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
             const lastMenuItem = menuItems[menuItems.length - 1];
             if (menuItem.timestamp < lastMenuItem.timestamp) {
                 this._destroyMenuItem(menuItem);
@@ -616,8 +592,8 @@ class PanelIndicator extends PanelMenu.Button {
 
     _addKeybindings() {
         Main.wm.addKeybinding(
-            this._settings._keyToggleMenuShortcut,
-            this._settings._settings,
+            this._preferences._keyToggleMenuShortcut,
+            this._preferences._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
             Shell.ActionMode.ALL,
             () => {
@@ -627,7 +603,7 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _removeKeybindings() {
-        Main.wm.removeKeybinding(this._settings._keyToggleMenuShortcut);
+        Main.wm.removeKeybinding(this._preferences._keyToggleMenuShortcut);
     }
 
     _populateSubMenu(menuItem) {
@@ -694,7 +670,7 @@ class PanelIndicator extends PanelMenu.Button {
 
         menuItem.menu.addAction(_(`Search the Web`), () => {
             this.menu.close();
-            this._launchUri(this._settings.webSearchUrl.replace(`%s`, encodeURIComponent(menuItem.text)));
+            this._launchUri(this._preferences.webSearchUrl.replace(`%s`, encodeURIComponent(menuItem.text)));
         });
 
         menuItem.menu.addAction(_(`Send via Email`), () => {
@@ -785,7 +761,7 @@ class PanelIndicator extends PanelMenu.Button {
                     this._historyMenuSection.section.moveMenuItem(matchedMenuItem, this._pinnedCount);
                 }
             } else {
-                if (menuItems.length - this._pinnedCount === this._settings.historySize) {
+                if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
                 matchedMenuItem = this._createMenuItem(text);
@@ -802,7 +778,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _onHistorySizeChanged() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
-        const menuItemsToRemove = menuItems.slice(this._settings.historySize + this._pinnedCount);
+        const menuItemsToRemove = menuItems.slice(this._preferences.historySize + this._pinnedCount);
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
@@ -816,14 +792,6 @@ const panelIndicator = {
         privateMode: false
     }
 };
-
-function _(text, context) {
-    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
-}
-
-function log(text) {
-    console.log(`${Me.uuid}: ${text}`);
-}
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);

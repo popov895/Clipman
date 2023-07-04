@@ -5,39 +5,12 @@ const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
-
-const Settings = GObject.registerClass({
-    Signals: {
-        'toggleMenuShortcutChanged': {},
-    },
-}, class Settings extends GObject.Object {
-    _init() {
-        super._init();
-
-        this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
-
-        this._settings = ExtensionUtils.getSettings();
-        this._settings.connect(`changed::${this._keyToggleMenuShortcut}`, () => {
-            this.emit(`toggleMenuShortcutChanged`);
-        });
-    }
-
-    get toggleMenuShortcut() {
-        return this._settings.get_strv(this._keyToggleMenuShortcut)[0] ?? ``;
-    }
-
-    set toggleMenuShortcut(toggleMenuShortcut) {
-        this._settings.set_strv(this._keyToggleMenuShortcut, [toggleMenuShortcut]);
-    }
-
-    bind(key, object, property, flags) {
-        this._settings.bind(key, object, property, flags);
-    }
-});
+const Preferences = Me.imports.libs.preferences.Preferences;
+const { _ } = Me.imports.libs.utils;
 
 const KeybindingButton = GObject.registerClass(
 class KeybindingButton extends Gtk.ToggleButton {
-    _init(settings, params) {
+    _init(preferences, params) {
         super._init(params);
 
         this._updateLabel();
@@ -64,14 +37,14 @@ class KeybindingButton extends Gtk.ToggleButton {
                         this.set_active(false);
                         return Gdk.EVENT_STOP;
                     case Gdk.KEY_BackSpace:
-                        settings.toggleMenuShortcut = ``;
+                        preferences.toggleMenuShortcut = ``;
                         this.set_active(false);
                         return Gdk.EVENT_STOP;
                     default:
                         const mask = state & Gtk.accelerator_get_default_mod_mask();
                         const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
                         if (accelerator.length > 0) {
-                            settings.toggleMenuShortcut = accelerator;
+                            preferences.toggleMenuShortcut = accelerator;
                             this.set_active(false);
                             return Gdk.EVENT_STOP;
                         }
@@ -107,18 +80,14 @@ class KeybindingButton extends Gtk.ToggleButton {
     }
 });
 
-function _(text, context) {
-    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
-}
-
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
 function fillPreferencesWindow(window) {
-    const settings = new Settings();
-    settings.connect(`toggleMenuShortcutChanged`, () => {
-        keybindingShortcutLabel.accelerator = settings.toggleMenuShortcut;
+    const preferences = new Preferences();
+    preferences.connect(`toggleMenuShortcutChanged`, () => {
+        keybindingShortcutLabel.accelerator = preferences.toggleMenuShortcut;
     });
 
     const historySizeSpinBox = new Gtk.SpinButton({
@@ -129,7 +98,7 @@ function fillPreferencesWindow(window) {
         }),
         valign: Gtk.Align.CENTER,
     });
-    settings.bind(
+    preferences.bind(
         `history-size`,
         historySizeSpinBox,
         `value`,
@@ -147,7 +116,7 @@ function fillPreferencesWindow(window) {
         valign: Gtk.Align.CENTER,
     });
     webSearchEntry.set_size_request(300, -1);
-    settings.bind(
+    preferences.bind(
         `web-search-url`,
         webSearchEntry,
         `text`,
@@ -167,12 +136,12 @@ function fillPreferencesWindow(window) {
     generalGroup.add(webSearchRow);
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
-        accelerator: settings.toggleMenuShortcut,
+        accelerator: preferences.toggleMenuShortcut,
         disabled_text: _(`Disabled`, `Keyboard shortcut is disabled`),
         valign: Gtk.Align.CENTER,
     });
 
-    const keybindingButton = new KeybindingButton(settings, {
+    const keybindingButton = new KeybindingButton(preferences, {
         valign: Gtk.Align.CENTER,
     });
 
