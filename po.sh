@@ -2,7 +2,7 @@
 
 mkdir -p po
 
-xgettext --keyword=_:1,2c --from-code=UTF-8 --output=po/example.pot *.js
+xgettext  `find . -name \*.js` --keyword=_:1,2c --from-code=UTF-8 --output=po/example.pot
 
 for file in po/*.po
 do

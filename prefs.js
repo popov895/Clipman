@@ -6,6 +6,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const Preferences = Me.imports.libs.preferences.Preferences;
+const SearchEngines = Me.imports.libs.searchengines;
 const { _ } = Me.imports.libs.utils;
 
 const KeybindingButton = GObject.registerClass(
@@ -89,6 +90,9 @@ function fillPreferencesWindow(window) {
     preferences.connect(`toggleMenuShortcutChanged`, () => {
         keybindingShortcutLabel.accelerator = preferences.toggleMenuShortcut;
     });
+    preferences.connect(`webSearchEngineChanged`, () => {
+        searchEngineDropDown.selected = searchEngines.getPosition(preferences.webSearchEngine);
+    });
 
     const historySizeSpinBox = new Gtk.SpinButton({
         adjustment: new Gtk.Adjustment({
@@ -111,29 +115,86 @@ function fillPreferencesWindow(window) {
     });
     historySizeRow.add_suffix(historySizeSpinBox);
 
-    const webSearchEntry = new Gtk.Entry({
+    const generalGroup = new Adw.PreferencesGroup({
+        title: _(`General`, `General options`),
+    });
+    generalGroup.add(historySizeRow);
+
+    const customSearchUrlEntry = new Gtk.Entry({
         placeholder_text: _(`URL with %s in place of query`),
         valign: Gtk.Align.CENTER,
     });
-    webSearchEntry.set_size_request(300, -1);
+    customSearchUrlEntry.set_size_request(300, -1);
     preferences.bind(
-        `web-search-url`,
-        webSearchEntry,
+        `custom-web-search-url`,
+        customSearchUrlEntry,
         `text`,
         Gio.SettingsBindFlags.DEFAULT
     );
 
-    const webSearchRow = new Adw.ActionRow({
-        activatable_widget: webSearchEntry,
+    const customSearchUrlRow = new Adw.ActionRow({
+        activatable_widget: customSearchUrlEntry,
+        title: _(`Search URL`),
+    });
+    customSearchUrlRow.add_suffix(customSearchUrlEntry);
+    customSearchUrlRow.connect(`notify::visible`, () => {
+        if (customSearchUrlRow.visible) {
+            customSearchUrlEntry.grab_focus();
+        }
+    });
+
+    const searchEngines = SearchEngines.get(preferences);
+    searchEngines.sort((engine1, engine2) => {
+        if (engine1.name === `custom`) {
+            return 1;
+        }
+        if (engine2.name === `custom`) {
+            return -1;
+        }
+        return engine1.title.localeCompare(engine2.title);
+    });
+    searchEngines.getPosition = function(engineName) {
+        return this.findIndex((engine) => {
+            return engine.name === engineName;
+        });
+    }.bind(searchEngines);
+
+    const searchEngineDropDown = new Gtk.DropDown({
+        model: Gtk.StringList.new(searchEngines.map((engine) => {
+            return engine.title;
+        })),
+        selected: -1,
+        valign: Gtk.Align.CENTER,
+    });
+    searchEngineDropDown.bind_property_full(
+        `selected`,
+        customSearchUrlRow,
+        `visible`,
+        GObject.BindingFlags.DEFAULT,
+        () => {
+            return [
+                true,
+                searchEngines[searchEngineDropDown.selected].name === `custom`,
+            ];
+        },
+        null
+    );
+    searchEngineDropDown.connect(`notify::selected`, () => {
+        preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
+    });
+    searchEngineDropDown.selected = searchEngines.getPosition(preferences.webSearchEngine);
+
+    const searchEngineRow = new Adw.ActionRow({
+        activatable_widget: searchEngineDropDown,
+        title: _(`Search Engine`),
+    });
+    searchEngineRow.add_suffix(searchEngineDropDown);
+
+    const webSearchGroup = new Adw.PreferencesGroup({
         title: _(`Web Search`),
     });
-    webSearchRow.add_suffix(webSearchEntry);
-
-    const generalGroup = new Adw.PreferencesGroup({
-        title: _(`General`),
-    });
-    generalGroup.add(historySizeRow);
-    generalGroup.add(webSearchRow);
+    webSearchGroup.add(searchEngineRow);
+    webSearchGroup.add(customSearchUrlRow);
 
     const keybindingShortcutLabel = new Gtk.ShortcutLabel({
         accelerator: preferences.toggleMenuShortcut,
@@ -159,6 +220,7 @@ function fillPreferencesWindow(window) {
 
     const page = new Adw.PreferencesPage();
     page.add(generalGroup);
+    page.add(webSearchGroup);
     page.add(keybindingGroup);
 
     window.add(page);

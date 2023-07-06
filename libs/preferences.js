@@ -7,6 +7,7 @@ var Preferences = GObject.registerClass({
     Signals: {
         'historySizeChanged': {},
         'toggleMenuShortcutChanged': {},
+        'webSearchEngineChanged': {},
     },
 }, class Preferences extends GObject.Object {
     _init() {
@@ -14,7 +15,8 @@ var Preferences = GObject.registerClass({
 
         this._keyHistorySize = `history-size`;
         this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
-        this._keyWebSearchUrl = `web-search-url`;
+        this._keyWebSearchEngine = `web-search-engine`;
+        this._keyCustomWebSearchUrl = `custom-web-search-url`;
 
         this._settings = ExtensionUtils.getSettings();
         this._settings.connect(`changed::${this._keyHistorySize}`, () => {
@@ -23,14 +25,13 @@ var Preferences = GObject.registerClass({
         this._settings.connect(`changed::${this._keyToggleMenuShortcut}`, () => {
             this.emit(`toggleMenuShortcutChanged`);
         });
+        this._settings.connect(`changed::${this._keyWebSearchEngine}`, () => {
+            this.emit(`webSearchEngineChanged`);
+        });
     }
 
     get historySize() {
         return this._settings.get_int(this._keyHistorySize);
-    }
-
-    get webSearchUrl() {
-        return this._settings.get_string(this._keyWebSearchUrl);
     }
 
     get toggleMenuShortcut() {
@@ -39,6 +40,18 @@ var Preferences = GObject.registerClass({
 
     set toggleMenuShortcut(toggleMenuShortcut) {
         this._settings.set_strv(this._keyToggleMenuShortcut, [toggleMenuShortcut]);
+    }
+
+    get webSearchEngine() {
+        return this._settings.get_string(this._keyWebSearchEngine);
+    }
+
+    set webSearchEngine(webSearchEngine) {
+        this._settings.set_string(this._keyWebSearchEngine, webSearchEngine);
+    }
+
+    get customWebSearchUrl() {
+        return this._settings.get_string(this._keyCustomWebSearchUrl);
     }
 
     bind(key, object, property, flags) {

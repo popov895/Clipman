@@ -8,8 +8,24 @@
         <key name="toggle-menu-shortcut" type="as">
             <default><![CDATA[['<Super>Z']]]></default>
         </key>
-        <key name="web-search-url" type="s">
-            <default>"https://duckduckgo.com/?q=%s"</default>
+        <key name="web-search-engine" type="s">
+            <choices>
+                <choice value="duckduckgo"/>
+                <choice value="brave"/>
+                <choice value="google"/>
+                <choice value="bing"/>
+                <choice value="baidu"/>
+                <choice value="yahoo"/>
+                <choice value="ecosia"/>
+                <choice value="ask"/>
+                <choice value="aol"/>
+                <choice value="naver"/>
+                <choice value="custom"/>
+            </choices>
+            <default>"duckduckgo"</default>
+        </key>
+        <key name="custom-web-search-url" type="s">
+            <default>""</default>
         </key>
     </schema>
 </schemalist>

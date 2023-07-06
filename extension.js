@@ -12,6 +12,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
 const Preferences = Me.imports.libs.preferences.Preferences;
+const SearchEngines = Me.imports.libs.searchengines;
 const Validator = Me.imports.libs.validator.validator;
 const { _, log } = Me.imports.libs.utils;
 
@@ -670,7 +671,7 @@ class PanelIndicator extends PanelMenu.Button {
 
         menuItem.menu.addAction(_(`Search the Web`), () => {
             this.menu.close();
-            this._launchUri(this._preferences.webSearchUrl.replace(`%s`, encodeURIComponent(menuItem.text)));
+            this._searchTheWeb(menuItem.text);
         });
 
         menuItem.menu.addAction(_(`Send via Email`), () => {
@@ -698,6 +699,34 @@ class PanelIndicator extends PanelMenu.Button {
         } catch (error) {
             log(error);
         }
+    }
+
+    _searchTheWeb(text) {
+        const selectedEngineName = this._preferences.webSearchEngine;
+        const selectedEngine = SearchEngines.get(this._preferences).find((engine) => {
+            return engine.name === selectedEngineName;
+        });
+
+        if (!selectedEngine) {
+            log(`Unknown search engine`);
+            return;
+        }
+
+        if (selectedEngine.name === `custom`) {
+            const validatorOptions = {
+                protocols: [
+                    `http`,
+                    `https`,
+                ],
+                require_protocol: true,
+            };
+            if (!selectedEngine.url.includes(`%s`) || !Validator.isURL(selectedEngine.url, validatorOptions)) {
+                log(`Invalid search URL "${selectedEngine.url}"`);
+                return;
+            }
+        }
+
+        this._launchUri(selectedEngine.url.replace(`%s`, encodeURIComponent(text)));
     }
 
     _loadState() {
