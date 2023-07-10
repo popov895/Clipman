@@ -178,7 +178,7 @@ msgstr ""
 #: libs/searchengines.js:30
 msgctxt "Other search engine"
 msgid "Other"
-msgstr ""
+msgstr "Інша"
 
 #~ msgid "Track Changes"
 #~ msgstr "Відстежувати Зміни"
