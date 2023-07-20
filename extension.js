@@ -694,8 +694,8 @@ class PanelIndicator extends PanelMenu.Button {
     _launchUri(uri) {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
-        } catch (error) {
-            log(error);
+        } catch {
+            Main.notify(_(`Failed to launch URI "%s"`).format(uri));
         }
     }
 
@@ -717,7 +717,7 @@ class PanelIndicator extends PanelMenu.Button {
                 require_protocol: true,
             };
             if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
-                log(`Invalid search URL "${currentEngine.url}"`);
+                Main.notify(_(`Invalid search URL "%s"`).format(currentEngine.url));
                 return;
             }
         }
