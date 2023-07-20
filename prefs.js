@@ -11,8 +11,8 @@ const { _ } = Me.imports.libs.utils;
 
 const KeybindingButton = GObject.registerClass(
 class KeybindingButton extends Gtk.ToggleButton {
-    _init(preferences, params) {
-        super._init(params);
+    constructor(preferences, params) {
+        super(params);
 
         this._updateLabel();
 
@@ -91,7 +91,7 @@ function fillPreferencesWindow(window) {
         keybindingShortcutLabel.accelerator = preferences.toggleMenuShortcut;
     });
     preferences.connect(`webSearchEngineChanged`, () => {
-        searchEngineDropDown.selected = searchEngines.getPosition(preferences.webSearchEngine);
+        searchEngineDropDown.selected = searchEngines.findIndex(preferences.webSearchEngine);
     });
 
     const historySizeSpinBox = new Gtk.SpinButton({
@@ -144,20 +144,7 @@ function fillPreferencesWindow(window) {
     });
 
     const searchEngines = SearchEngines.get(preferences);
-    searchEngines.sort((engine1, engine2) => {
-        if (engine1.name === `custom`) {
-            return 1;
-        }
-        if (engine2.name === `custom`) {
-            return -1;
-        }
-        return engine1.title.localeCompare(engine2.title);
-    });
-    searchEngines.getPosition = function(engineName) {
-        return this.findIndex((engine) => {
-            return engine.name === engineName;
-        });
-    }.bind(searchEngines);
+    searchEngines.sort();
 
     const searchEngineDropDown = new Gtk.DropDown({
         model: Gtk.StringList.new(searchEngines.map((engine) => {
@@ -182,7 +169,7 @@ function fillPreferencesWindow(window) {
     searchEngineDropDown.connect(`notify::selected`, () => {
         preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
     });
-    searchEngineDropDown.selected = searchEngines.getPosition(preferences.webSearchEngine);
+    searchEngineDropDown.selected = searchEngines.findIndex(preferences.webSearchEngine);
 
     const searchEngineRow = new Adw.ActionRow({
         activatable_widget: searchEngineDropDown,

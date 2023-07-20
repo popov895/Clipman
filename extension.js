@@ -21,8 +21,8 @@ const ClipboardManager = GObject.registerClass({
         'changed': {},
     },
 }, class ClipboardManager extends GObject.Object {
-    _init() {
-        super._init();
+    constructor() {
+        super();
 
         this._sensitiveMimeTypes = [
             `x-kde-passwordManagerHint`,
@@ -102,8 +102,8 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
 
 const QrCodeDialog = GObject.registerClass(
 class QrCodeDialog extends ModalDialog.ModalDialog {
-    _init(text) {
-        super._init();
+    constructor(text) {
+        super();
 
         const image = this._generateQrCodeImage(text);
         if (image) {
@@ -158,7 +158,13 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
                 preferred_height: finalIconSize,
                 preferred_width: finalIconSize,
             });
-            image.set_bytes(new GLib.Bytes(data), Cogl.PixelFormat.RGB_888, finalIconSize, finalIconSize, finalIconSize * bytesPerPixel);
+            image.set_bytes(
+                new GLib.Bytes(data),
+                Cogl.PixelFormat.RGB_888,
+                finalIconSize,
+                finalIconSize,
+                finalIconSize * bytesPerPixel
+            );
         } catch (error) {
             log(error);
         }
@@ -204,9 +210,8 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
-        this.section._moveMenuItem = this.section.moveMenuItem.bind(this.section);
         this.section.moveMenuItem = function(menuItem, position) {
-            this._moveMenuItem(menuItem, position);
+            Object.getPrototypeOf(this).moveMenuItem.call(this, menuItem, position);
             if (menuItem instanceof PopupMenu.PopupSubMenuMenuItem) {
                 this.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
             }
@@ -240,11 +245,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         const searchText = this.entry.text.toLowerCase();
         const menuItems = this.section._getMenuItems();
         menuItems.forEach((menuItem) => {
-            const visible = menuItem.text.toLowerCase().includes(searchText);
-            if (!visible) {
+            menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
+            if (!menuItem.actor.visible) {
                 menuItem.menu.close();
             }
-            menuItem.actor.visible = visible;
         });
 
         if (searchText.length === 0) {
@@ -284,20 +288,14 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 
 const HistoryMenuItem = GObject.registerClass(
 class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
-    _init(text, topMenu) {
-        super._init(text);
+    constructor(text, topMenu) {
+        super(text);
 
         this._topMenu = topMenu;
 
         // disable animation on opening and closing
-        this.menu._open = this.menu.open.bind(this.menu);
-        this.menu.open = function() {
-            this._open(false);
-        }.bind(this.menu);
-        this.menu._close = this.menu.close.bind(this.menu);
-        this.menu.close = function() {
-            this._close(false);
-        }.bind(this.menu);
+        this.menu.open = this.menu.open.bind(this.menu, false);
+        this.menu.close = this.menu.close.bind(this.menu, false);
 
         this._triangleBin.hide();
 
@@ -346,8 +344,8 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
 
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
-    _init() {
-        super._init(0);
+    constructor() {
+        super(0);
 
         this.menu.actor.add_style_class_name(`clipman-panelmenu-button`);
 
@@ -702,17 +700,15 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _searchTheWeb(text) {
-        const selectedEngineName = this._preferences.webSearchEngine;
-        const selectedEngine = SearchEngines.get(this._preferences).find((engine) => {
-            return engine.name === selectedEngineName;
-        });
+        const searchEngines = SearchEngines.get(this._preferences);
+        const currentEngine = searchEngines.find(this._preferences.webSearchEngine);
 
-        if (!selectedEngine) {
+        if (!currentEngine) {
             log(`Unknown search engine`);
             return;
         }
 
-        if (selectedEngine.name === `custom`) {
+        if (currentEngine.name === `custom`) {
             const validatorOptions = {
                 protocols: [
                     `http`,
@@ -720,13 +716,13 @@ class PanelIndicator extends PanelMenu.Button {
                 ],
                 require_protocol: true,
             };
-            if (!selectedEngine.url.includes(`%s`) || !Validator.isURL(selectedEngine.url, validatorOptions)) {
-                log(`Invalid search URL "${selectedEngine.url}"`);
+            if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
+                log(`Invalid search URL "${currentEngine.url}"`);
                 return;
             }
         }
 
-        this._launchUri(selectedEngine.url.replace(`%s`, encodeURIComponent(text)));
+        this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
     }
 
     _loadState() {
@@ -778,29 +774,29 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _onClipboardTextChanged(text) {
-        let matchedMenuItem;
+        let currentMenuItem;
         if (text && text.length > 0) {
             const menuItems = this._historyMenuSection.section._getMenuItems();
-            matchedMenuItem = menuItems.find((menuItem) => {
+            currentMenuItem = menuItems.find((menuItem) => {
                 return menuItem.text === text;
             });
-            if (matchedMenuItem) {
-                matchedMenuItem.timestamp = Date.now();
-                if (!matchedMenuItem.pinned) {
-                    this._historyMenuSection.section.moveMenuItem(matchedMenuItem, this._pinnedCount);
+            if (currentMenuItem) {
+                currentMenuItem.timestamp = Date.now();
+                if (!currentMenuItem.pinned) {
+                    this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                 }
             } else {
                 if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
                     this._destroyMenuItem(menuItems.pop());
                 }
-                matchedMenuItem = this._createMenuItem(text);
-                this._historyMenuSection.section.addMenuItem(matchedMenuItem, this._pinnedCount);
+                currentMenuItem = this._createMenuItem(text);
+                this._historyMenuSection.section.addMenuItem(currentMenuItem, this._pinnedCount);
             }
         }
 
-        if (this._currentMenuItem !== matchedMenuItem) {
+        if (this._currentMenuItem !== currentMenuItem) {
             this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
-            this._currentMenuItem = matchedMenuItem;
+            this._currentMenuItem = currentMenuItem;
             this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
         }
     }

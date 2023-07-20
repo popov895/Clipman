@@ -10,8 +10,8 @@ var Preferences = GObject.registerClass({
         'webSearchEngineChanged': {},
     },
 }, class Preferences extends GObject.Object {
-    _init() {
-        super._init();
+    constructor() {
+        super();
 
         this._keyHistorySize = `history-size`;
         this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
