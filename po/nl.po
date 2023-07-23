@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-11 19:25+0300\n"
+"POT-Creation-Date: 2023-07-24 01:44+0300\n"
 "PO-Revision-Date: 2023-07-02 21:25+0300\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -26,59 +26,69 @@ msgctxt "Close dialog"
 msgid "Close"
 msgstr "Sluiten"
 
-#: extension.js:176
+#: extension.js:182
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:195
+#: extension.js:201
 msgid "No Matches"
 msgstr "Er zijn geen overeenkomsten"
 
-#: extension.js:400
+#: extension.js:398
 msgid "Private Mode is On"
 msgstr "De incognitomodus is ingeschakeld"
 
-#: extension.js:405
+#: extension.js:403
 msgid "History is Empty"
 msgstr "De geschiedenis is blanco"
 
-#: extension.js:421
+#: extension.js:419
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:430
+#: extension.js:428
 msgid "Private Mode"
 msgstr "Incognitomodus"
 
-#: extension.js:455
+#: extension.js:453
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: extension.js:613 extension.js:637
+#: extension.js:611 extension.js:635
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Openen"
 
-#: extension.js:643
+#: extension.js:641
 msgid "Compose an Email"
 msgstr "E-mail opstellen"
 
-#: extension.js:649 extension.js:653
+#: extension.js:647 extension.js:651
 msgid "Make a Call"
 msgstr "Gesprek starten"
 
-#: extension.js:672
+#: extension.js:670
 msgid "Search the Web"
 msgstr "Zoeken op internet"
 
-#: extension.js:677
+#: extension.js:675
 msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
-#: extension.js:682
+#: extension.js:680
 msgid "Show QR Code"
 msgstr "QR-code tonen"
+
+#: extension.js:698
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:720
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
 
 #: prefs.js:77
 msgid "Enter a new shortcut"
@@ -109,24 +119,24 @@ msgstr "De url, met %s op de plaats van de zoekopdracht"
 msgid "Search URL"
 msgstr "Zoeken op internet"
 
-#: prefs.js:189
+#: prefs.js:176
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:194
+#: prefs.js:181
 msgid "Web Search"
 msgstr "Zoeken op internet"
 
-#: prefs.js:201
+#: prefs.js:188
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: prefs.js:211
+#: prefs.js:198
 msgid "Toggle menu"
 msgstr "Menu tonen/verbergen"
 
-#: prefs.js:217
+#: prefs.js:204
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
