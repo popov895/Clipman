@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-24 01:44+0300\n"
-"PO-Revision-Date: 2023-07-10 22:57+0300\n"
+"PO-Revision-Date: 2023-07-24 01:50+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -84,12 +84,12 @@ msgstr "Показати QR-код"
 #: extension.js:698
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
-msgstr ""
+msgstr "Не вдалося запустити URI \"%s\""
 
 #: extension.js:720
 #, javascript-format
 msgid "Invalid search URL \"%s\""
-msgstr ""
+msgstr "Неправильна URL-адреса для пошуку \"%s\""
 
 #: prefs.js:77
 msgid "Enter a new shortcut"
