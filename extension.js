@@ -98,7 +98,7 @@ const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
     setText(text) {
         this._label.text = text;
     }
-}
+};
 
 const QrCodeDialog = GObject.registerClass(
 class QrCodeDialog extends ModalDialog.ModalDialog {
@@ -284,7 +284,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             this._placeholderMenuItem.actor.visible = !hasVisibleMenuItems;
         }
     }
-}
+};
 
 const HistoryMenuItem = GObject.registerClass(
 class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
