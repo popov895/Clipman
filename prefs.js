@@ -9,75 +9,63 @@ const Preferences = Me.imports.libs.preferences.Preferences;
 const SearchEngines = Me.imports.libs.searchengines;
 const { _ } = Me.imports.libs.utils;
 
-const KeybindingButton = GObject.registerClass(
-class KeybindingButton extends Gtk.ToggleButton {
-    constructor(preferences, params) {
-        super(params);
+const KeybindingWindow = GObject.registerClass(
+class KeybindingWindow extends Adw.Window {
+    constructor(keybinding, parentWindow) {
+        super({
+            content: new Adw.StatusPage({
+                description: _(`Press Backspace to clear shortcut or Esc to cancel`),
+                title: _(`Enter a new shortcut`),
+            }),
+            modal: true,
+            resizable: false,
+            transient_for: parentWindow,
+            width_request: 450,
+        });
 
-        this._updateLabel();
+        this._keybinding = keybinding;
 
         const keyController = new Gtk.EventControllerKey();
         keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
-            if (this.active) {
-                switch (keyval) {
-                    case Gdk.KEY_Alt_L:
-                    case Gdk.KEY_Alt_R:
-                    case Gdk.KEY_Control_L:
-                    case Gdk.KEY_Control_R:
-                    case Gdk.KEY_Hyper_L:
-                    case Gdk.KEY_Hyper_R:
-                    case Gdk.KEY_Meta_L:
-                    case Gdk.KEY_Meta_R:
-                    case Gdk.KEY_Shift_L:
-                    case Gdk.KEY_Shift_R:
-                    case Gdk.KEY_Super_L:
-                    case Gdk.KEY_Super_R:
-                    case Gdk.KEY_Tab:
-                        break;
-                    case Gdk.KEY_Escape:
-                        this.set_active(false);
+            switch (keyval) {
+                case Gdk.KEY_Alt_L:
+                case Gdk.KEY_Alt_R:
+                case Gdk.KEY_Control_L:
+                case Gdk.KEY_Control_R:
+                case Gdk.KEY_Hyper_L:
+                case Gdk.KEY_Hyper_R:
+                case Gdk.KEY_Meta_L:
+                case Gdk.KEY_Meta_R:
+                case Gdk.KEY_Shift_L:
+                case Gdk.KEY_Shift_R:
+                case Gdk.KEY_Super_L:
+                case Gdk.KEY_Super_R:
+                case Gdk.KEY_Tab:
+                    break;
+                case Gdk.KEY_Escape:
+                    this.close();
+                    return Gdk.EVENT_STOP;
+                case Gdk.KEY_BackSpace:
+                    this._keybinding = ``;
+                    this.close();
+                    return Gdk.EVENT_STOP;
+                default:
+                    const mask = state & Gtk.accelerator_get_default_mod_mask();
+                    const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
+                    if (accelerator.length > 0) {
+                        this._keybinding = accelerator;
+                        this.close();
                         return Gdk.EVENT_STOP;
-                    case Gdk.KEY_BackSpace:
-                        preferences.toggleMenuShortcut = ``;
-                        this.set_active(false);
-                        return Gdk.EVENT_STOP;
-                    default:
-                        const mask = state & Gtk.accelerator_get_default_mod_mask();
-                        const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
-                        if (accelerator.length > 0) {
-                            preferences.toggleMenuShortcut = accelerator;
-                            this.set_active(false);
-                            return Gdk.EVENT_STOP;
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
             return Gdk.EVENT_PROPAGATE;
         });
         this.add_controller(keyController);
-
-        const focusController = new Gtk.EventControllerFocus();
-        focusController.connect(`leave`, () => {
-            this.set_active(false);
-        });
-        this.add_controller(focusController);
-
-        this.connect(`toggled`, this._updateLabel.bind(this));
-        this.connect(`toggled`, () => {
-            if (this.active) {
-                this.root.get_surface().inhibit_system_shortcuts(null);
-            } else {
-                this.root.get_surface().restore_system_shortcuts();
-            }
-        });
     }
 
-    _updateLabel() {
-        if (this.active) {
-            this.label = _(`Enter a new shortcut`);
-        } else {
-            this.label = _(`Change`, `Change current shortcut`);
-        }
+    get keybinding() {
+        return this._keybinding;
     }
 });
 
@@ -189,16 +177,19 @@ function fillPreferencesWindow(window) {
         valign: Gtk.Align.CENTER,
     });
 
-    const keybindingButton = new KeybindingButton(preferences, {
-        valign: Gtk.Align.CENTER,
-    });
-
     const keybindingRow = new Adw.ActionRow({
-        activatable_widget: keybindingButton,
+        activatable_widget: keybindingShortcutLabel,
         title: _(`Toggle menu`),
     });
     keybindingRow.add_suffix(keybindingShortcutLabel);
-    keybindingRow.add_suffix(keybindingButton);
+    keybindingRow.connect(`activated`, () => {
+        const keybindingWindow = new KeybindingWindow(preferences.toggleMenuShortcut, window);
+        keybindingWindow.connect(`close-request`, () => {
+            preferences.toggleMenuShortcut = keybindingWindow.keybinding;
+            keybindingWindow.destroy();
+        });
+        keybindingWindow.present();
+    });
 
     const keybindingGroup = new Adw.PreferencesGroup({
         title: _(`Keyboard Shortcuts`),
