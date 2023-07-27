@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 23:50+0300\n"
-"PO-Revision-Date: 2023-07-24 01:50+0300\n"
+"PO-Revision-Date: 2023-07-27 23:59+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -144,7 +144,7 @@ msgstr "Інша"
 
 #: prefs.js:17
 msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
+msgstr "Натисніть Backspace, щоб очистити поєднання клавіш, або Esc, щоб скасувати"
 
 #: prefs.js:18
 msgid "Enter a new shortcut"
