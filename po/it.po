@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-24 01:44+0300\n"
+"POT-Creation-Date: 2023-07-27 23:50+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -91,54 +91,6 @@ msgstr ""
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: prefs.js:77
-msgid "Enter a new shortcut"
-msgstr "Inserisci la nuova scorciatoia"
-
-#: prefs.js:79
-msgctxt "Change current shortcut"
-msgid "Change"
-msgstr "Modifica"
-
-#: prefs.js:114
-msgid "History size"
-msgstr "Dimensione della Cronologia"
-
-#: prefs.js:119
-msgctxt "General options"
-msgid "General"
-msgstr ""
-
-#: prefs.js:124
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr ""
-
-#: prefs.js:137
-msgid "Search URL"
-msgstr ""
-
-#: prefs.js:176
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:181
-msgid "Web Search"
-msgstr ""
-
-#: prefs.js:188
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Disabilitato"
-
-#: prefs.js:198
-msgid "Toggle menu"
-msgstr ""
-
-#: prefs.js:204
-msgid "Keyboard Shortcuts"
-msgstr ""
-
 #: libs/searchengines.js:13
 msgid "DuckDuckGo"
 msgstr ""
@@ -189,6 +141,57 @@ msgstr ""
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""
+
+#: prefs.js:17
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:18
+msgid "Enter a new shortcut"
+msgstr "Inserisci la nuova scorciatoia"
+
+#: prefs.js:102
+msgid "History size"
+msgstr "Dimensione della Cronologia"
+
+#: prefs.js:107
+msgctxt "General options"
+msgid "General"
+msgstr ""
+
+#: prefs.js:112
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:125
+msgid "Search URL"
+msgstr ""
+
+#: prefs.js:164
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:169
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:176
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Disabilitato"
+
+#: prefs.js:182
+msgid "Toggle menu"
+msgstr ""
+
+#: prefs.js:195
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#~ msgctxt "Change current shortcut"
+#~ msgid "Change"
+#~ msgstr "Modifica"
 
 #~ msgid "Track Changes"
 #~ msgstr "Tracciare le Modifiche"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-24 01:44+0300\n"
+"POT-Creation-Date: 2023-07-27 23:50+0300\n"
 "PO-Revision-Date: 2023-07-02 21:25+0300\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -90,56 +90,6 @@ msgstr ""
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: prefs.js:77
-msgid "Enter a new shortcut"
-msgstr "Druk op een nieuwe sneltoets"
-
-#: prefs.js:79
-msgctxt "Change current shortcut"
-msgid "Change"
-msgstr "Wijzigen"
-
-#: prefs.js:114
-msgid "History size"
-msgstr "Geschiedenisomvang"
-
-#: prefs.js:119
-#, fuzzy
-msgctxt "General options"
-msgid "General"
-msgstr "Algemeen"
-
-#: prefs.js:124
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "De url, met %s op de plaats van de zoekopdracht"
-
-#: prefs.js:137
-#, fuzzy
-msgid "Search URL"
-msgstr "Zoeken op internet"
-
-#: prefs.js:176
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:181
-msgid "Web Search"
-msgstr "Zoeken op internet"
-
-#: prefs.js:188
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
-#: prefs.js:198
-msgid "Toggle menu"
-msgstr "Menu tonen/verbergen"
-
-#: prefs.js:204
-msgid "Keyboard Shortcuts"
-msgstr "Sneltoetsen"
-
 #: libs/searchengines.js:13
 msgid "DuckDuckGo"
 msgstr ""
@@ -190,6 +140,59 @@ msgstr ""
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""
+
+#: prefs.js:17
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:18
+msgid "Enter a new shortcut"
+msgstr "Druk op een nieuwe sneltoets"
+
+#: prefs.js:102
+msgid "History size"
+msgstr "Geschiedenisomvang"
+
+#: prefs.js:107
+#, fuzzy
+msgctxt "General options"
+msgid "General"
+msgstr "Algemeen"
+
+#: prefs.js:112
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "De url, met %s op de plaats van de zoekopdracht"
+
+#: prefs.js:125
+#, fuzzy
+msgid "Search URL"
+msgstr "Zoeken op internet"
+
+#: prefs.js:164
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:169
+msgid "Web Search"
+msgstr "Zoeken op internet"
+
+#: prefs.js:176
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: prefs.js:182
+msgid "Toggle menu"
+msgstr "Menu tonen/verbergen"
+
+#: prefs.js:195
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#~ msgctxt "Change current shortcut"
+#~ msgid "Change"
+#~ msgstr "Wijzigen"
 
 #~ msgid "Track Changes"
 #~ msgstr "Wijzigingen bijhouden"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-24 01:44+0300\n"
+"POT-Creation-Date: 2023-07-27 23:50+0300\n"
 "PO-Revision-Date: 2023-07-02 16:52+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -91,56 +91,6 @@ msgstr ""
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: prefs.js:77
-msgid "Enter a new shortcut"
-msgstr "Zadejte novou zkratku"
-
-#: prefs.js:79
-msgctxt "Change current shortcut"
-msgid "Change"
-msgstr "Změnit"
-
-#: prefs.js:114
-msgid "History size"
-msgstr "Velikost historie"
-
-#: prefs.js:119
-#, fuzzy
-msgctxt "General options"
-msgid "General"
-msgstr "Obecné"
-
-#: prefs.js:124
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "Adresa URL s %s na místě dotazu"
-
-#: prefs.js:137
-#, fuzzy
-msgid "Search URL"
-msgstr "Vyhledávání na webu"
-
-#: prefs.js:176
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:181
-msgid "Web Search"
-msgstr "Vyhledávání na webu"
-
-#: prefs.js:188
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Vypnuto"
-
-#: prefs.js:198
-msgid "Toggle menu"
-msgstr "Skrýt/Zobrazit nabídku"
-
-#: prefs.js:204
-msgid "Keyboard Shortcuts"
-msgstr "Klávesové zkratky"
-
 #: libs/searchengines.js:13
 msgid "DuckDuckGo"
 msgstr ""
@@ -191,3 +141,56 @@ msgstr ""
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""
+
+#: prefs.js:17
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:18
+msgid "Enter a new shortcut"
+msgstr "Zadejte novou zkratku"
+
+#: prefs.js:102
+msgid "History size"
+msgstr "Velikost historie"
+
+#: prefs.js:107
+#, fuzzy
+msgctxt "General options"
+msgid "General"
+msgstr "Obecné"
+
+#: prefs.js:112
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "Adresa URL s %s na místě dotazu"
+
+#: prefs.js:125
+#, fuzzy
+msgid "Search URL"
+msgstr "Vyhledávání na webu"
+
+#: prefs.js:164
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:169
+msgid "Web Search"
+msgstr "Vyhledávání na webu"
+
+#: prefs.js:176
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Vypnuto"
+
+#: prefs.js:182
+msgid "Toggle menu"
+msgstr "Skrýt/Zobrazit nabídku"
+
+#: prefs.js:195
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové zkratky"
+
+#~ msgctxt "Change current shortcut"
+#~ msgid "Change"
+#~ msgstr "Změnit"
