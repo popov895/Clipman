@@ -11,7 +11,7 @@ const { _ } = Me.imports.libs.utils;
 
 const KeybindingWindow = GObject.registerClass(
 class KeybindingWindow extends Adw.Window {
-    constructor(keybinding, parentWindow) {
+    constructor(transientWindow) {
         super({
             content: new Adw.StatusPage({
                 description: _(`Press Backspace to clear shortcut or Esc to cancel`),
@@ -19,11 +19,11 @@ class KeybindingWindow extends Adw.Window {
             }),
             modal: true,
             resizable: false,
-            transient_for: parentWindow,
+            transient_for: transientWindow,
             width_request: 450,
         });
 
-        this._keybinding = keybinding;
+        this._keybinding = undefined;
 
         const keyController = new Gtk.EventControllerKey();
         keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
@@ -69,15 +69,49 @@ class KeybindingWindow extends Adw.Window {
     }
 });
 
+const ShortcutRow = GObject.registerClass(
+class ShortcutRow extends Adw.ActionRow {
+    constructor(title, preferences, preferencesKey) {
+        super({
+            title: title,
+        });
+
+        this._preferences = preferences;
+        this._preferencesKey = preferencesKey;
+
+        this.activatable_widget = new Gtk.ShortcutLabel({
+            accelerator: this._preferences.getShortcut(this._preferencesKey),
+            disabled_text: _(`Disabled`, `Keyboard shortcut is disabled`),
+            valign: Gtk.Align.CENTER,
+        });
+        this.add_suffix(this.activatable_widget);
+
+        this._preferences.connect(`shortcutChanged`, (...[, key]) => {
+            if (key === this._preferencesKey) {
+                this.activatable_widget.accelerator = this._preferences.getShortcut(key);
+            }
+        });
+    }
+
+    vfunc_activate() {
+        const window = new KeybindingWindow(this.get_root());
+        window.connect(`close-request`, () => {
+            const shortcut = window.keybinding;
+            if (shortcut !== undefined) {
+                this._preferences.setShortcut(this._preferencesKey, shortcut);
+            }
+            window.destroy();
+        });
+        window.present();
+    }
+});
+
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
 function fillPreferencesWindow(window) {
     const preferences = new Preferences();
-    preferences.connect(`toggleMenuShortcutChanged`, () => {
-        keybindingShortcutLabel.accelerator = preferences.toggleMenuShortcut;
-    });
     preferences.connect(`webSearchEngineChanged`, () => {
         searchEngineDropDown.selected = searchEngines.findIndex(preferences.webSearchEngine);
     });
@@ -171,30 +205,24 @@ function fillPreferencesWindow(window) {
     webSearchGroup.add(searchEngineRow);
     webSearchGroup.add(customSearchUrlRow);
 
-    const keybindingShortcutLabel = new Gtk.ShortcutLabel({
-        accelerator: preferences.toggleMenuShortcut,
-        disabled_text: _(`Disabled`, `Keyboard shortcut is disabled`),
-        valign: Gtk.Align.CENTER,
-    });
-
-    const keybindingRow = new Adw.ActionRow({
-        activatable_widget: keybindingShortcutLabel,
-        title: _(`Toggle menu`),
-    });
-    keybindingRow.add_suffix(keybindingShortcutLabel);
-    keybindingRow.connect(`activated`, () => {
-        const keybindingWindow = new KeybindingWindow(preferences.toggleMenuShortcut, window);
-        keybindingWindow.connect(`close-request`, () => {
-            preferences.toggleMenuShortcut = keybindingWindow.keybinding;
-            keybindingWindow.destroy();
-        });
-        keybindingWindow.present();
-    });
-
     const keybindingGroup = new Adw.PreferencesGroup({
         title: _(`Keyboard Shortcuts`),
     });
-    keybindingGroup.add(keybindingRow);
+    keybindingGroup.add(new ShortcutRow(
+        _(`Toggle menu`),
+        preferences,
+        preferences._keyToggleMenuShortcut
+    ));
+    keybindingGroup.add(new ShortcutRow(
+        _(`Toggle private mode`),
+        preferences,
+        preferences._keyTogglePrivateModeShortcut
+    ));
+    keybindingGroup.add(new ShortcutRow(
+        _(`Clear history`),
+        preferences,
+        preferences._keyClearHistoryShortcut
+    ));
 
     const page = new Adw.PreferencesPage();
     page.add(generalGroup);

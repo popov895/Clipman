@@ -261,7 +261,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         }
     }
 
-    _onMenuItemAdded(_, menuItem) {
+    _onMenuItemAdded(...[, menuItem]) {
         const searchText = this.entry.text.toLowerCase();
         if (searchText.length > 0) {
             menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
@@ -599,9 +599,29 @@ class PanelIndicator extends PanelMenu.Button {
                 this.menu.toggle();
             }
         );
+        Main.wm.addKeybinding(
+            this._preferences._keyTogglePrivateModeShortcut,
+            this._preferences._settings,
+            Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+            Shell.ActionMode.ALL,
+            () => {
+                this._privateModeMenuItem.toggle();
+            }
+        );
+        Main.wm.addKeybinding(
+            this._preferences._keyClearHistoryShortcut,
+            this._preferences._settings,
+            Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+            Shell.ActionMode.ALL,
+            () => {
+                this._clearMenuItem.activate(Clutter.get_current_event());
+            }
+        );
     }
 
     _removeKeybindings() {
+        Main.wm.removeKeybinding(this._preferences._keyClearHistoryShortcut);
+        Main.wm.removeKeybinding(this._preferences._keyTogglePrivateModeShortcut);
         Main.wm.removeKeybinding(this._preferences._keyToggleMenuShortcut);
     }
 

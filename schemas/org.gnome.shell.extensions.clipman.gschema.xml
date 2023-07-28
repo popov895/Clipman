@@ -5,9 +5,6 @@
             <default>15</default>
             <range min="1" max="500"/>
         </key>
-        <key name="toggle-menu-shortcut" type="as">
-            <default><![CDATA[['<Super>Z']]]></default>
-        </key>
         <key name="web-search-engine" type="s">
             <choices>
                 <choice value="duckduckgo"/>
@@ -26,6 +23,15 @@
         </key>
         <key name="custom-web-search-url" type="s">
             <default>""</default>
+        </key>
+        <key name="toggle-menu-shortcut" type="as">
+            <default><![CDATA[['<Super>Z']]]></default>
+        </key>
+        <key name="toggle-private-mode-shortcut" type="as">
+            <default><![CDATA[['']]]></default>
+        </key>
+        <key name="clear-history-shortcut" type="as">
+            <default><![CDATA[['']]]></default>
         </key>
     </schema>
 </schemalist>
