@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-27 23:50+0300\n"
+"POT-Creation-Date: 2023-07-30 15:58+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -17,79 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-#: extension.js:116
-msgid "Failed to generate QR code"
-msgstr ""
-
-#: extension.js:123
-msgctxt "Close dialog"
-msgid "Close"
-msgstr ""
-
-#: extension.js:182
-msgid "Type to search..."
-msgstr "Digita per cercare..."
-
-#: extension.js:201
-msgid "No Matches"
-msgstr "Nessuna Corrispondenza"
-
-#: extension.js:398
-msgid "Private Mode is On"
-msgstr ""
-
-#: extension.js:403
-msgid "History is Empty"
-msgstr "Cronologia vuota"
-
-#: extension.js:419
-msgid "Clear History"
-msgstr "Cancella Cronologia"
-
-#: extension.js:428
-msgid "Private Mode"
-msgstr ""
-
-#: extension.js:453
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Impostazioni"
-
-#: extension.js:611 extension.js:635
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:641
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:647 extension.js:651
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:670
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:675
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:680
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:698
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:720
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
 
 #: libs/searchengines.js:13
 msgid "DuckDuckGo"
@@ -150,43 +77,125 @@ msgstr ""
 msgid "Enter a new shortcut"
 msgstr "Inserisci la nuova scorciatoia"
 
-#: prefs.js:102
-msgid "History size"
-msgstr "Dimensione della Cronologia"
-
-#: prefs.js:107
-msgctxt "General options"
-msgid "General"
-msgstr ""
-
-#: prefs.js:112
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr ""
-
-#: prefs.js:125
-msgid "Search URL"
-msgstr ""
-
-#: prefs.js:164
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:169
-msgid "Web Search"
-msgstr ""
-
-#: prefs.js:176
+#: prefs.js:84
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Disabilitato"
 
-#: prefs.js:182
+#: prefs.js:136
+msgid "History size"
+msgstr "Dimensione della Cronologia"
+
+#: prefs.js:141
+msgctxt "General options"
+msgid "General"
+msgstr ""
+
+#: prefs.js:146
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:159
+msgid "Search URL"
+msgstr ""
+
+#: prefs.js:198
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:203
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:209
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: prefs.js:212
 msgid "Toggle menu"
 msgstr ""
 
-#: prefs.js:195
-msgid "Keyboard Shortcuts"
+#: prefs.js:217
+msgid "Toggle private mode"
+msgstr ""
+
+#: prefs.js:222
+#, fuzzy
+msgid "Clear history"
+msgstr "Cancella Cronologia"
+
+#: extension.js:116
+msgid "Failed to generate QR code"
+msgstr ""
+
+#: extension.js:123
+msgctxt "Close dialog"
+msgid "Close"
+msgstr ""
+
+#: extension.js:182
+msgid "Type to search..."
+msgstr "Digita per cercare..."
+
+#: extension.js:201
+msgid "No Matches"
+msgstr "Nessuna Corrispondenza"
+
+#: extension.js:477
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:482
+msgid "History is Empty"
+msgstr "Cronologia vuota"
+
+#: extension.js:498
+msgid "Clear History"
+msgstr "Cancella Cronologia"
+
+#: extension.js:507
+msgid "Private Mode"
+msgstr ""
+
+#: extension.js:532
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: extension.js:667 extension.js:691
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:697
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:703 extension.js:707
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:726
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:731
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:736
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:754
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:776
+#, javascript-format
+msgid "Invalid search URL \"%s\""
 msgstr ""
 
 #~ msgctxt "Change current shortcut"
