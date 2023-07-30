@@ -286,18 +286,88 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     }
 };
 
-const HistoryMenuItem = GObject.registerClass(
-class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
-    constructor(text, topMenu) {
-        super(text);
+const HistoryMenuItem = GObject.registerClass({
+    Signals: {
+        'delete': {},
+        'togglePin': {},
+    },
+}, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
+    constructor(text, pinned, timestamp, topMenu) {
+        super(``);
 
-        this._topMenu = topMenu;
+        this.text = text;
+        this.pinned = pinned;
+        this.timestamp = timestamp;
+
+        this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        this.label.text = this.text.replace(/^\s+|\s+$/g, (match) => {
+            return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
+        }).replaceAll(/\s+/g, ` `);
 
         // disable animation on opening and closing
         this.menu.open = this.menu.open.bind(this.menu, false);
         this.menu.close = this.menu.close.bind(this.menu, false);
 
+        this._topMenu = topMenu;
+        this._topMenu.connect(`open-state-changed`, (...[, open]) => {
+            if (!open) {
+                this.menu.close();
+            }
+        });
+
+        this.add_child(new St.Bin({
+            style_class: `popup-menu-item-expander`,
+            x_expand: true,
+        }));
+
+        this.pinIcon = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: this.pinned ? `starred-symbolic` : `non-starred-symbolic` }),
+            style_class: `system-status-icon`,
+        });
+        const pinButton = new St.Button({
+            can_focus: true,
+            child: this.pinIcon,
+            style_class: `clipman-toolbutton`,
+        });
+        pinButton.connect(`clicked`, () => {
+            this.emit(`togglePin`);
+        });
+
+        const deleteButton = new St.Button({
+            can_focus: true,
+            child: new St.Icon({
+                gicon: new Gio.ThemedIcon({ name: `edit-delete-symbolic` }),
+                style_class: `system-status-icon`,
+            }),
+            style_class: `clipman-toolbutton`,
+        });
+        deleteButton.connect(`clicked`, () => {
+            this.emit(`delete`);
+        });
+
         this._triangleBin.hide();
+
+        this.menu._arrow = new St.Icon({
+            gicon: new Gio.ThemedIcon({ name: `pan-end-symbolic` }),
+            pivot_point: new Graphene.Point({ x: 0.5, y: 0.6 }),
+            style_class: `system-status-icon`,
+        });
+        const toggleSubMenuButton = new St.Button({
+            can_focus: true,
+            child: this.menu._arrow,
+            style_class: `clipman-toolbutton`,
+        });
+        toggleSubMenuButton.connect(`clicked`, () => {
+            this.menu.toggle();
+        });
+
+        const boxLayout = new St.BoxLayout({
+            style_class: `clipman-toolbuttonnpanel`,
+        });
+        boxLayout.add(pinButton);
+        boxLayout.add(deleteButton);
+        boxLayout.add(toggleSubMenuButton);
+        this.add_child(boxLayout);
 
         const clickAction = new Clutter.ClickAction({
             enabled: this._activatable,
@@ -313,12 +383,6 @@ class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
             }
         });
         this.add_action(clickAction);
-
-        this._topMenu.connect(`open-state-changed`, (...[, open]) => {
-            if (!open) {
-                this.menu.close();
-            }
-        });
     }
 
     _getTopMenu() {
@@ -466,80 +530,25 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _createMenuItem(text, pinned = false, timestamp = Date.now()) {
-        const menuItemText = text.replace(/^\s+|\s+$/g, (match) => {
-            return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
-        }).replaceAll(/\s+/g, ` `);
-
-        const menuItem = new HistoryMenuItem(menuItemText, this.menu);
-        menuItem.pinned = pinned;
-        menuItem.text = text;
-        menuItem.timestamp = timestamp;
-        menuItem.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        const menuItem = new HistoryMenuItem(text, pinned, timestamp, this.menu);
         menuItem.connect(`activate`, () => {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
+        });
+        menuItem.connect(`togglePin`, () => {
+            menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
+        });
+        menuItem.connect(`delete`, () => {
+            if (this._historyMenuSection.section.numMenuItems === 1) {
+                this.menu.close();
+            }
+            this._destroyMenuItem(menuItem);
         });
         menuItem.connect(`destroy`, () => {
             if (this._currentMenuItem === menuItem) {
                 this._currentMenuItem = null;
             }
         });
-
-        const expander = new St.Bin({
-            style_class: `popup-menu-item-expander`,
-            x_expand: true,
-        });
-        menuItem.add_child(expander);
-
-        menuItem.pinIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: menuItem.pinned ? `starred-symbolic` : `non-starred-symbolic` }),
-            style_class: `system-status-icon`,
-        });
-        const pinButton = new St.Button({
-            can_focus: true,
-            child: menuItem.pinIcon,
-            style_class: `clipman-toolbutton`,
-        });
-        pinButton.connect(`clicked`, () => {
-            menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
-        });
-
-        const deleteButton = new St.Button({
-            can_focus: true,
-            child: new St.Icon({
-                gicon: new Gio.ThemedIcon({ name: `edit-delete-symbolic` }),
-                style_class: `system-status-icon`,
-            }),
-            style_class: `clipman-toolbutton`,
-        });
-        deleteButton.connect(`clicked`, () => {
-            if (this._historyMenuSection.section.numMenuItems === 1) {
-                this.menu.close();
-            }
-            this._destroyMenuItem(menuItem);
-        });
-
-        menuItem.menu._arrow = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: `pan-end-symbolic` }),
-            pivot_point: new Graphene.Point({ x: 0.5, y: 0.6 }),
-            style_class: `system-status-icon`,
-        });
-        const toggleSubMenuButton = new St.Button({
-            can_focus: true,
-            child: menuItem.menu._arrow,
-            style_class: `clipman-toolbutton`,
-        });
-        toggleSubMenuButton.connect(`clicked`, () => {
-            menuItem.menu.toggle();
-        });
-
-        const boxLayout = new St.BoxLayout({
-            style_class: `clipman-toolbuttonnpanel`,
-        });
-        boxLayout.add(pinButton);
-        boxLayout.add(deleteButton);
-        boxLayout.add(toggleSubMenuButton);
-        menuItem.add_child(boxLayout);
 
         this._populateSubMenu(menuItem);
 
