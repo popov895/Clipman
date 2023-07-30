@@ -393,6 +393,21 @@ const HistoryMenuItem = GObject.registerClass({
         this.emit(`activate`, event);
     }
 
+    vfunc_key_press_event(event) {
+        switch (event.keyval) {
+            case Clutter.KEY_Delete:
+            case Clutter.KEY_KP_Delete:
+                this.emit(`delete`);
+                return Clutter.EVENT_STOP;
+            case Clutter.KEY_asterisk:
+            case Clutter.KEY_KP_Multiply:
+                this.emit(`togglePin`);
+                return Clutter.EVENT_STOP;
+        }
+
+        return super.vfunc_key_press_event(event);
+    }
+
     vfunc_button_press_event() {
         return Clutter.EVENT_PROPAGATE;
     }
@@ -561,6 +576,18 @@ class PanelIndicator extends PanelMenu.Button {
         }
         if (menuItem.pinned) {
             --this._pinnedCount;
+        }
+        if (global.stage.get_key_focus() === menuItem) {
+            const menuItems = this._historyMenuSection.section._getMenuItems();
+            if (menuItems.length > 1) {
+                let nextMenuItemIndex = menuItems.indexOf(menuItem);
+                if (nextMenuItemIndex < menuItems.length - 1) {
+                    ++nextMenuItemIndex;
+                } else {
+                    --nextMenuItemIndex;
+                }
+                global.stage.set_key_focus(menuItems[nextMenuItemIndex]);
+            }
         }
         menuItem.destroy();
     }
