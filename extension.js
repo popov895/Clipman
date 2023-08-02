@@ -12,9 +12,8 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
 const Preferences = Me.imports.libs.preferences.Preferences;
-const SearchEngines = Me.imports.libs.searchengines;
 const Validator = Me.imports.libs.validator.validator;
-const { _, log, ColorParser } = Me.imports.libs.utils;
+const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -397,7 +396,7 @@ const HistoryMenuItem = GObject.registerClass({
     _generateColorPreview(color) {
         let image;
         try {
-            const rgba = ColorParser.parse(color.trim().toLowerCase());
+            const rgba = ColorParser.parse(color);
             if (rgba) {
                 const bytesPerPixel = 4; // RGBA
                 const iconSize = 16;
@@ -438,13 +437,17 @@ const HistoryMenuItem = GObject.registerClass({
     vfunc_key_press_event(event) {
         switch (event.keyval) {
             case Clutter.KEY_Delete:
-            case Clutter.KEY_KP_Delete:
+            case Clutter.KEY_KP_Delete: {
                 this.emit(`delete`);
                 return Clutter.EVENT_STOP;
+            }
             case Clutter.KEY_asterisk:
-            case Clutter.KEY_KP_Multiply:
+            case Clutter.KEY_KP_Multiply: {
                 this.emit(`togglePin`);
                 return Clutter.EVENT_STOP;
+            }
+            default:
+                break;
         }
 
         return super.vfunc_key_press_event(event);
@@ -793,7 +796,7 @@ class PanelIndicator extends PanelMenu.Button {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
         } catch {
-            Main.notify(_(`Failed to launch URI "%s"`).format(uri));
+            notifyError(_(`Failed to launch URI "%s"`).format(uri));
         }
     }
 
@@ -802,7 +805,7 @@ class PanelIndicator extends PanelMenu.Button {
         const currentEngine = searchEngines.find(this._preferences.webSearchEngine);
 
         if (!currentEngine) {
-            log(`Unknown search engine`);
+            notifyError(`Unknown search engine`);
             return;
         }
 
@@ -815,7 +818,7 @@ class PanelIndicator extends PanelMenu.Button {
                 require_protocol: true,
             };
             if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
-                Main.notify(_(`Invalid search URL "%s"`).format(currentEngine.url));
+                notifyError(_(`Invalid search URL "%s"`).format(currentEngine.url));
                 return;
             }
         }
@@ -915,6 +918,10 @@ const panelIndicator = {
         privateMode: false
     }
 };
+
+function notifyError(error) {
+    Main.notifyError(Me.metadata.name, error);
+}
 
 function init() {
     ExtensionUtils.initTranslations(Me.uuid);
