@@ -14,7 +14,7 @@ const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
 const Preferences = Me.imports.libs.preferences.Preferences;
 const SearchEngines = Me.imports.libs.searchengines;
 const Validator = Me.imports.libs.validator.validator;
-const { _, log } = Me.imports.libs.utils;
+const { _, log, ColorParser } = Me.imports.libs.utils;
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -293,7 +293,7 @@ const HistoryMenuItem = GObject.registerClass({
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
     constructor(text, pinned, timestamp, topMenu) {
-        super(``);
+        super(``, true);
 
         this.text = text;
         this.pinned = pinned;
@@ -303,6 +303,11 @@ const HistoryMenuItem = GObject.registerClass({
         this.label.text = this.text.replace(/^\s+|\s+$/g, (match) => {
             return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
         }).replaceAll(/\s+/g, ` `);
+
+        this.icon.gicon = this._generateColorPreview(this.text.trim()) ?? null;
+        if (!this.icon.gicon) {
+            this.icon.visible = false;
+        }
 
         // disable animation on opening and closing
         this.menu.open = this.menu.open.bind(this.menu, false);
@@ -387,6 +392,43 @@ const HistoryMenuItem = GObject.registerClass({
 
     _getTopMenu() {
         return this._topMenu;
+    }
+
+    _generateColorPreview(color) {
+        let image;
+        try {
+            const rgba = ColorParser.parse(color.trim().toLowerCase());
+            if (rgba) {
+                const bytesPerPixel = 4; // RGBA
+                const iconSize = 16;
+                const data = new Uint8Array(iconSize * iconSize * bytesPerPixel);
+                for (let y = 0; y < iconSize; ++y) {
+                    for (let x = 0; x < iconSize; ++x) {
+                        const i = iconSize * bytesPerPixel * y + bytesPerPixel * x;
+                        data[i] = rgba[0];             // R
+                        data[i + 1] = rgba[1];         // G
+                        data[i + 2] = rgba[2];         // B
+                        data[i + 3] = rgba[3] ?? 0xff; // A
+                    }
+                }
+
+                image = new St.ImageContent({
+                    preferred_height: iconSize,
+                    preferred_width: iconSize,
+                });
+                image.set_bytes(
+                    new GLib.Bytes(data),
+                    Cogl.PixelFormat.RGBA_8888,
+                    iconSize,
+                    iconSize,
+                    iconSize * bytesPerPixel
+                );
+            }
+        } catch (error) {
+            log(error);
+        }
+
+        return image;
     }
 
     activate(event) {
