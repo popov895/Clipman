@@ -6,8 +6,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const Preferences = Me.imports.libs.preferences.Preferences;
-const SearchEngines = Me.imports.libs.searchengines;
-const { _ } = Me.imports.libs.utils;
+const { _, SearchEngines } = Me.imports.libs.utils;
 
 const KeybindingWindow = GObject.registerClass(
 class KeybindingWindow extends Adw.Window {
@@ -23,41 +22,32 @@ class KeybindingWindow extends Adw.Window {
             width_request: 450,
         });
 
-        this._keybinding = undefined;
+        this._keybinding = null;
 
         const keyController = new Gtk.EventControllerKey();
         keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
             switch (keyval) {
-                case Gdk.KEY_Alt_L:
-                case Gdk.KEY_Alt_R:
-                case Gdk.KEY_Control_L:
-                case Gdk.KEY_Control_R:
-                case Gdk.KEY_Hyper_L:
-                case Gdk.KEY_Hyper_R:
-                case Gdk.KEY_Meta_L:
-                case Gdk.KEY_Meta_R:
-                case Gdk.KEY_Shift_L:
-                case Gdk.KEY_Shift_R:
-                case Gdk.KEY_Super_L:
-                case Gdk.KEY_Super_R:
-                case Gdk.KEY_Tab:
-                    break;
-                case Gdk.KEY_Escape:
+                case Gdk.KEY_Escape: {
                     this.close();
                     return Gdk.EVENT_STOP;
-                case Gdk.KEY_BackSpace:
+                }
+                case Gdk.KEY_BackSpace: {
                     this._keybinding = ``;
                     this.close();
                     return Gdk.EVENT_STOP;
-                default:
+                }
+                default: {
                     const mask = state & Gtk.accelerator_get_default_mod_mask();
-                    const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
-                    if (accelerator.length > 0) {
-                        this._keybinding = accelerator;
-                        this.close();
-                        return Gdk.EVENT_STOP;
+                    if (mask && Gtk.accelerator_valid(keyval, mask)) {
+                        const accelerator = Gtk.accelerator_name_with_keycode(null, keyval, keycode, mask);
+                        if (accelerator.length > 0) {
+                            this._keybinding = accelerator;
+                            this.close();
+                            return Gdk.EVENT_STOP;
+                        }
                     }
                     break;
+                }
             }
             return Gdk.EVENT_PROPAGATE;
         });
@@ -97,7 +87,7 @@ class ShortcutRow extends Adw.ActionRow {
         const window = new KeybindingWindow(this.get_root());
         window.connect(`close-request`, () => {
             const shortcut = window.keybinding;
-            if (shortcut !== undefined) {
+            if (shortcut !== null) {
                 this._preferences.setShortcut(this._preferencesKey, shortcut);
             }
             window.destroy();
