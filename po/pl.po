@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-30 15:58+0300\n"
+"POT-Creation-Date: 2023-08-05 11:12+0300\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -19,186 +19,186 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: libs/searchengines.js:13
-msgid "DuckDuckGo"
+#: extension.js:115
+msgid "Failed to generate QR code"
+msgstr "Nie udało się wygenerować kodu QR"
+
+#: extension.js:122
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zamknij"
+
+#: extension.js:181
+msgid "Type to search..."
+msgstr "Szukaj..."
+
+#: extension.js:200
+msgid "No Matches"
+msgstr "Brak wyników"
+
+#: extension.js:522
+msgid "Private Mode is On"
+msgstr "Tryb prywatny jest włączony"
+
+#: extension.js:527
+msgid "History is Empty"
+msgstr "Historia jest pusta"
+
+#: extension.js:543
+msgid "Clear History"
+msgstr "Wyczyść historię"
+
+#: extension.js:552
+msgid "Private Mode"
+msgstr "Tryb prywatny"
+
+#: extension.js:577
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: extension.js:712 extension.js:736
+msgctxt "Open URL"
+msgid "Open"
 msgstr ""
 
-#: libs/searchengines.js:14
-msgctxt "Brave search engine"
-msgid "Brave"
+#: extension.js:742
+msgid "Compose an Email"
 msgstr ""
 
-#: libs/searchengines.js:15
-msgid "Google"
+#: extension.js:748 extension.js:752
+msgid "Make a Call"
 msgstr ""
 
-#: libs/searchengines.js:16
-msgid "Bing"
+#: extension.js:771
+msgid "Search the Web"
 msgstr ""
 
-#: libs/searchengines.js:17
-msgctxt "Baidu search engine"
-msgid "Baidu"
+#: extension.js:776
+msgid "Send via Email"
 msgstr ""
 
-#: libs/searchengines.js:18
-msgid "Yahoo"
+#: extension.js:781
+msgid "Show QR Code"
 msgstr ""
 
-#: libs/searchengines.js:19
-msgctxt "Ecosia search engine"
-msgid "Ecosia"
+#: extension.js:799
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: libs/searchengines.js:20
-msgctxt "Ask.com search engine"
-msgid "Ask"
+#: extension.js:821
+#, javascript-format
+msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: libs/searchengines.js:21
-msgctxt "AOL search engine"
-msgid "AOL"
-msgstr ""
-
-#: libs/searchengines.js:22
-msgctxt "Naver search engine"
-msgid "Naver"
-msgstr ""
-
-#: libs/searchengines.js:30
-msgctxt "Other search engine"
-msgid "Other"
-msgstr ""
-
-#: prefs.js:17
+#: prefs.js:16
 msgid "Press Backspace to clear shortcut or Esc to cancel"
 msgstr ""
 
-#: prefs.js:18
+#: prefs.js:17
 msgid "Enter a new shortcut"
 msgstr "Wprowadź nowy skrót"
 
-#: prefs.js:84
+#: prefs.js:74
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Wyłączony"
 
-#: prefs.js:136
+#: prefs.js:126
 msgid "History size"
 msgstr "Rozmiar historii"
 
-#: prefs.js:141
+#: prefs.js:131
 #, fuzzy
 msgctxt "General options"
 msgid "General"
 msgstr "Ogólne"
 
-#: prefs.js:146
+#: prefs.js:136
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr ""
 
-#: prefs.js:159
+#: prefs.js:149
 msgid "Search URL"
 msgstr ""
 
-#: prefs.js:198
+#: prefs.js:188
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:203
+#: prefs.js:193
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:209
+#: prefs.js:199
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiaturowe"
 
-#: prefs.js:212
+#: prefs.js:202
 msgid "Toggle menu"
 msgstr "Pokaż/ukryj menu"
 
-#: prefs.js:217
+#: prefs.js:207
 #, fuzzy
 msgid "Toggle private mode"
 msgstr "Tryb prywatny"
 
-#: prefs.js:222
+#: prefs.js:212
 #, fuzzy
 msgid "Clear history"
 msgstr "Wyczyść historię"
 
-#: extension.js:116
-msgid "Failed to generate QR code"
-msgstr "Nie udało się wygenerować kodu QR"
-
-#: extension.js:123
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zamknij"
-
-#: extension.js:182
-msgid "Type to search..."
-msgstr "Szukaj..."
-
-#: extension.js:201
-msgid "No Matches"
-msgstr "Brak wyników"
-
-#: extension.js:477
-msgid "Private Mode is On"
-msgstr "Tryb prywatny jest włączony"
-
-#: extension.js:482
-msgid "History is Empty"
-msgstr "Historia jest pusta"
-
-#: extension.js:498
-msgid "Clear History"
-msgstr "Wyczyść historię"
-
-#: extension.js:507
-msgid "Private Mode"
-msgstr "Tryb prywatny"
-
-#: extension.js:532
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Ustawienia"
-
-#: extension.js:667 extension.js:691
-msgctxt "Open URL"
-msgid "Open"
+#: libs/utils.js:230
+msgid "DuckDuckGo"
 msgstr ""
 
-#: extension.js:697
-msgid "Compose an Email"
+#: libs/utils.js:231
+msgctxt "Brave search engine"
+msgid "Brave"
 msgstr ""
 
-#: extension.js:703 extension.js:707
-msgid "Make a Call"
+#: libs/utils.js:232
+msgid "Google"
 msgstr ""
 
-#: extension.js:726
-msgid "Search the Web"
+#: libs/utils.js:233
+msgid "Bing"
 msgstr ""
 
-#: extension.js:731
-msgid "Send via Email"
+#: libs/utils.js:234
+msgctxt "Baidu search engine"
+msgid "Baidu"
 msgstr ""
 
-#: extension.js:736
-msgid "Show QR Code"
+#: libs/utils.js:235
+msgid "Yahoo"
 msgstr ""
 
-#: extension.js:754
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
+#: libs/utils.js:236
+msgctxt "Ecosia search engine"
+msgid "Ecosia"
 msgstr ""
 
-#: extension.js:776
-#, javascript-format
-msgid "Invalid search URL \"%s\""
+#: libs/utils.js:237
+msgctxt "Ask.com search engine"
+msgid "Ask"
+msgstr ""
+
+#: libs/utils.js:238
+msgctxt "AOL search engine"
+msgid "AOL"
+msgstr ""
+
+#: libs/utils.js:239
+msgctxt "Naver search engine"
+msgid "Naver"
+msgstr ""
+
+#: libs/utils.js:247
+msgctxt "Other search engine"
+msgid "Other"
 msgstr ""
 
 #~ msgctxt "Change current shortcut"
