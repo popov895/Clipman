@@ -129,13 +129,23 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
     _generateQrCodeImage(text) {
         let image;
         try {
-            const minContentSize = 200;
             const bytesPerPixel = 3; // RGB
+            const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+            const minPixelsPerModule = 3;
+            const maxPixelsPerModule = 10;
+            const maxQuietZoneSize = 4 * maxPixelsPerModule;
+            const maxIconSize = Math.round(Math.min(global.screen_width, global.screen_height) * 0.9 / scaleFactor);
             const qrCode = QrCode.encodeText(text, QrCode.Ecc.MEDIUM);
-            const pixelsPerModule = Math.max(10, Math.round(minContentSize / qrCode.size));
-            const quietZoneSize = 4 * pixelsPerModule;
-            const finalIconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
-            const data = new Uint8Array(finalIconSize * finalIconSize * pixelsPerModule * bytesPerPixel);
+            const pixelsPerModule = Math.min(
+                Math.round((maxIconSize - 2 * maxQuietZoneSize) / qrCode.size),
+                maxPixelsPerModule
+            );
+            if (pixelsPerModule < minPixelsPerModule) {
+                throw new Error(`QR code is too large`);
+            }
+            const quietZoneSize = Math.min(4 * pixelsPerModule, maxQuietZoneSize);
+            const iconSize = qrCode.size * pixelsPerModule + 2 * quietZoneSize;
+            const data = new Uint8Array(iconSize * iconSize * pixelsPerModule * bytesPerPixel);
             data.fill(255);
             for (let qrCodeY = 0; qrCodeY < qrCode.size; ++qrCodeY) {
                 for (let i = 0; i < pixelsPerModule; ++i) {
@@ -144,7 +154,7 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
                         const color = qrCode.getModule(qrCodeX, qrCodeY) ? 0x00 : 0xff;
                         for (let j = 0; j < pixelsPerModule; ++j) {
                             const dataX = quietZoneSize + qrCodeX * pixelsPerModule + j;
-                            const dataI = finalIconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
+                            const dataI = iconSize * bytesPerPixel * dataY + bytesPerPixel * dataX;
                             data[dataI] = color;     // R
                             data[dataI + 1] = color; // G
                             data[dataI + 2] = color; // B
@@ -154,15 +164,15 @@ class QrCodeDialog extends ModalDialog.ModalDialog {
             }
 
             image = new St.ImageContent({
-                preferred_height: finalIconSize,
-                preferred_width: finalIconSize,
+                preferred_height: iconSize,
+                preferred_width: iconSize,
             });
             image.set_bytes(
                 new GLib.Bytes(data),
                 Cogl.PixelFormat.RGB_888,
-                finalIconSize,
-                finalIconSize,
-                finalIconSize * bytesPerPixel
+                iconSize,
+                iconSize,
+                iconSize * bytesPerPixel
             );
         } catch (error) {
             log(error);
