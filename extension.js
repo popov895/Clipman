@@ -41,6 +41,8 @@ const ClipboardManager = GObject.registerClass({
 
     destroy() {
         this._selection.disconnect(this._selectionOwnerChangedId);
+
+        super.destroy();
     }
 
     getText(callback) {
@@ -248,6 +250,8 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 
     destroy() {
         this.section.box.disconnect(this._sectionActorRemovedId);
+
+        super.destroy();
     }
 
     _onEntryTextChanged() {
@@ -302,7 +306,7 @@ const HistoryMenuItem = GObject.registerClass({
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
     constructor(text, pinned, timestamp, topMenu) {
-        super(``, true);
+        super(``);
 
         this.text = text;
         this.pinned = pinned;
@@ -313,9 +317,13 @@ const HistoryMenuItem = GObject.registerClass({
             return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
         }).replaceAll(/\s+/g, ` `);
 
-        this.icon.gicon = this._generateColorPreview(this.text.trim()) ?? null;
-        if (!this.icon.gicon) {
-            this.icon.visible = false;
+        const colorPreview = this._generateColorPreview(this.text);
+        if (colorPreview) {
+            this.colorPreviewIcon = new St.Icon({
+                gicon: colorPreview,
+                style_class: `clipman-colorpreview`,
+            });
+            this.insert_child_at_index(this.colorPreviewIcon, 1);
         }
 
         // disable animation on opening and closing

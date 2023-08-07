@@ -169,7 +169,7 @@ var ColorParser = {
             return null;
         }
 
-        color = color.toLowerCase();
+        color = color.trim().toLowerCase();
 
         const matchedKnownColor = knownColors.find((knownColor) => {
             return knownColor.name === color;
