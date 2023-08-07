@@ -10,8 +10,8 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const QrCode = Me.imports.libs.qrcodegen.qrcodegen.QrCode;
-const Preferences = Me.imports.libs.preferences.Preferences;
+const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
+const { Preferences } = Me.imports.libs.preferences;
 const Validator = Me.imports.libs.validator.validator;
 const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
 
@@ -28,7 +28,7 @@ const ClipboardManager = GObject.registerClass({
         ];
 
         this._clipboard = St.Clipboard.get_default();
-        this._selection = Shell.Global.get().get_display().get_selection();
+        this._selection = global.get_display().get_selection();
         this._selectionOwnerChangedId = this._selection.connect(
             `owner-changed`,
             (...[, selectionType]) => {
@@ -41,6 +41,8 @@ const ClipboardManager = GObject.registerClass({
 
     destroy() {
         this._selection.disconnect(this._selectionOwnerChangedId);
+
+        this.run_dispose();
     }
 
     getText(callback) {
@@ -67,35 +69,25 @@ const ClipboardManager = GObject.registerClass({
 });
 
 const PlaceholderMenuItem = class extends PopupMenu.PopupMenuSection {
-    constructor() {
+    constructor(text, icon) {
         super();
 
         this.actor.add_style_class_name(`popup-menu-item`);
-
-        this._icon = new St.Icon({
-            x_align: Clutter.ActorAlign.CENTER,
-        });
-
-        this._label = new St.Label({
-            x_align: Clutter.ActorAlign.CENTER,
-        });
 
         const boxLayout = new St.BoxLayout({
             style_class: `clipman-placeholderpanel`,
             vertical: true,
             x_expand: true,
         });
-        boxLayout.add(this._icon);
-        boxLayout.add(this._label);
+        boxLayout.add(new St.Icon({
+            gicon: icon,
+            x_align: Clutter.ActorAlign.CENTER,
+        }));
+        boxLayout.add(new St.Label({
+            text: text,
+            x_align: Clutter.ActorAlign.CENTER,
+        }));
         this.actor.add(boxLayout);
-    }
-
-    setIcon(icon) {
-        this._icon.gicon = icon;
-    }
-
-    setText(text) {
-        this._label.text = text;
     }
 };
 
@@ -248,6 +240,8 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 
     destroy() {
         this.section.box.disconnect(this._sectionActorRemovedId);
+
+        super.destroy();
     }
 
     _onEntryTextChanged() {
@@ -302,7 +296,7 @@ const HistoryMenuItem = GObject.registerClass({
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
     constructor(text, pinned, timestamp, topMenu) {
-        super(``, true);
+        super(``);
 
         this.text = text;
         this.pinned = pinned;
@@ -313,9 +307,12 @@ const HistoryMenuItem = GObject.registerClass({
             return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
         }).replaceAll(/\s+/g, ` `);
 
-        this.icon.gicon = this._generateColorPreview(this.text.trim()) ?? null;
-        if (!this.icon.gicon) {
-            this.icon.visible = false;
+        const colorPreview = this._generateColorPreview(this.text);
+        if (colorPreview) {
+            this.insert_child_at_index(new St.Icon({
+                gicon: colorPreview,
+                style_class: `clipman-colorpreview`,
+            }), 1);
         }
 
         // disable animation on opening and closing
@@ -335,7 +332,7 @@ const HistoryMenuItem = GObject.registerClass({
         }));
 
         this.pinIcon = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: this.pinned ? `starred-symbolic` : `non-starred-symbolic` }),
+            icon_name: this.pinned ? `starred-symbolic` : `non-starred-symbolic`,
             style_class: `system-status-icon`,
         });
         const pinButton = new St.Button({
@@ -350,7 +347,7 @@ const HistoryMenuItem = GObject.registerClass({
         const deleteButton = new St.Button({
             can_focus: true,
             child: new St.Icon({
-                gicon: new Gio.ThemedIcon({ name: `edit-delete-symbolic` }),
+                icon_name: `edit-delete-symbolic`,
                 style_class: `system-status-icon`,
             }),
             style_class: `clipman-toolbutton`,
@@ -362,7 +359,7 @@ const HistoryMenuItem = GObject.registerClass({
         this._triangleBin.hide();
 
         this.menu._arrow = new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: `pan-end-symbolic` }),
+            icon_name: `pan-end-symbolic`,
             pivot_point: new Graphene.Point({ x: 0.5, y: 0.6 }),
             style_class: `system-status-icon`,
         });
@@ -489,7 +486,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._pinnedCount = 0;
 
         this._clipboard = new ClipboardManager();
-        this._clipboardChangedId = this._clipboard.connect(`changed`, () => {
+        this._clipboard.connect(`changed`, () => {
             if (!this._privateModeMenuItem.state) {
                 this._clipboard.getText((text) => {
                     this._onClipboardTextChanged(text);
@@ -510,31 +507,33 @@ class PanelIndicator extends PanelMenu.Button {
         this._saveState();
         this._removeKeybindings();
 
+        this._preferences.destroy();
+        this._clipboard.destroy();
+
         this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
         this._historyMenuSection.destroy();
-
-        this._clipboard.disconnect(this._clipboardChangedId);
-        this._clipboard.destroy();
 
         super.destroy();
     }
 
     _buildIcon() {
         this.add_child(new St.Icon({
-            gicon: new Gio.ThemedIcon({ name: `edit-copy-symbolic` }),
+            icon_name: `edit-copy-symbolic`,
             style_class: `system-status-icon`,
         }));
     }
 
     _buildMenu() {
-        this._privateModePlaceholder = new PlaceholderMenuItem();
-        this._privateModePlaceholder.setIcon(Gio.icon_new_for_string(`${Me.path}/icons/private-mode-symbolic.svg`));
-        this._privateModePlaceholder.setText(_(`Private Mode is On`));
+        this._privateModePlaceholder = new PlaceholderMenuItem(
+            _(`Private Mode is On`),
+            Gio.icon_new_for_string(`${Me.path}/icons/private-mode-symbolic.svg`)
+        );
         this.menu.addMenuItem(this._privateModePlaceholder);
 
-        this._emptyPlaceholder = new PlaceholderMenuItem();
-        this._emptyPlaceholder.setIcon(Gio.icon_new_for_string(`${Me.path}/icons/clipboard-symbolic.svg`));
-        this._emptyPlaceholder.setText(_(`History is Empty`));
+        this._emptyPlaceholder = new PlaceholderMenuItem(
+            _(`History is Empty`),
+            Gio.icon_new_for_string(`${Me.path}/icons/clipboard-symbolic.svg`)
+        );
         this.menu.addMenuItem(this._emptyPlaceholder);
 
         this._historyMenuSection = new HistoryMenuSection();
@@ -649,7 +648,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _pinMenuItem(menuItem) {
         menuItem.pinned = true;
-        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: `starred-symbolic` });
+        menuItem.pinIcon.icon_name = `starred-symbolic`;
         this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
 
         this._updateUi();
@@ -666,7 +665,7 @@ class PanelIndicator extends PanelMenu.Button {
             this._destroyMenuItem(lastMenuItem);
         }
         menuItem.pinned = false;
-        menuItem.pinIcon.gicon = new Gio.ThemedIcon({ name: `non-starred-symbolic` });
+        menuItem.pinIcon.icon_name = `non-starred-symbolic`;
         let indexToMove = menuItems.length;
         for (let i = this._pinnedCount; i < menuItems.length; ++i) {
             if (menuItems[i].timestamp < menuItem.timestamp) {

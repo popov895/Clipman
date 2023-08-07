@@ -1,11 +1,10 @@
 'use strict';
 
 const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
-
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const Preferences = Me.imports.libs.preferences.Preferences;
+const { Preferences } = Me.imports.libs.preferences;
 const { _, SearchEngines } = Me.imports.libs.utils;
 
 const KeybindingWindow = GObject.registerClass(
@@ -115,7 +114,7 @@ function fillPreferencesWindow(window) {
         valign: Gtk.Align.CENTER,
     });
     preferences.bind(
-        `history-size`,
+        preferences._keyHistorySize,
         historySizeSpinBox,
         `value`,
         Gio.SettingsBindFlags.DEFAULT
@@ -138,7 +137,7 @@ function fillPreferencesWindow(window) {
     });
     customSearchUrlEntry.set_size_request(300, -1);
     preferences.bind(
-        `custom-web-search-url`,
+        preferences._keyCustomWebSearchUrl,
         customSearchUrlEntry,
         `text`,
         Gio.SettingsBindFlags.DEFAULT
@@ -220,4 +219,7 @@ function fillPreferencesWindow(window) {
     page.add(keybindingGroup);
 
     window.add(page);
+    window.connect(`destroy`, () => {
+        preferences.destroy();
+    });
 }

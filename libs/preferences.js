@@ -1,6 +1,6 @@
 'use strict';
 
-const GObject = imports.gi.GObject;
+const { GObject } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 var Preferences = GObject.registerClass({
@@ -23,21 +23,32 @@ var Preferences = GObject.registerClass({
         this._keyClearHistoryShortcut = `clear-history-shortcut`;
 
         this._settings = ExtensionUtils.getSettings();
-        this._settings.connect(`changed::${this._keyHistorySize}`, () => {
-            this.emit(`historySizeChanged`);
+        this._settings.connect(`changed`, (...[, key]) => {
+            switch (key) {
+                case this._keyHistorySize: {
+                    this.emit(`historySizeChanged`);
+                    break;
+                }
+                case this._keyWebSearchEngine: {
+                    this.emit(`webSearchEngineChanged`);
+                    break;
+                }
+                case this._keyToggleMenuShortcut:
+                case this._keyTogglePrivateModeShortcut:
+                case this._keyClearHistoryShortcut: {
+                    this.emit(`shortcutChanged`, key);
+                    break;
+                }
+                default:
+                    break;
+            }
         });
-        this._settings.connect(`changed::${this._keyWebSearchEngine}`, () => {
-            this.emit(`webSearchEngineChanged`);
-        });
-        this._settings.connect(`changed::${this._keyToggleMenuShortcut}`, () => {
-            this.emit(`shortcutChanged`, this._keyToggleMenuShortcut);
-        });
-        this._settings.connect(`changed::${this._keyTogglePrivateModeShortcut}`, () => {
-            this.emit(`shortcutChanged`, this._keyTogglePrivateModeShortcut);
-        });
-        this._settings.connect(`changed::${this._keyClearHistoryShortcut}`, () => {
-            this.emit(`shortcutChanged`, this._keyClearHistoryShortcut);
-        });
+    }
+
+    destroy() {
+        this._settings.run_dispose();
+
+        this.run_dispose();
     }
 
     get historySize() {

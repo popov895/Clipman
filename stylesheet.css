@@ -28,6 +28,10 @@
     padding: 2px;
 }
 
+.clipman-colorpreview {
+    icon-size: 16px;
+}
+
 .clipman-toolbutton .system-status-icon {
     icon-size: 16px;
 }

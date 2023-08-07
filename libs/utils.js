@@ -169,7 +169,7 @@ var ColorParser = {
             return null;
         }
 
-        color = color.toLowerCase();
+        color = color.trim().toLowerCase();
 
         const matchedKnownColor = knownColors.find((knownColor) => {
             return knownColor.name === color;
@@ -225,7 +225,8 @@ var ColorParser = {
 const predefinedSearchEngines = [];
 
 var SearchEngines = {
-    get: function(preferences) {
+    get(preferences) {
+        // use lazy loading to ensure that translations are initialized
         if (predefinedSearchEngines.length === 0) {
             predefinedSearchEngines.push(
                 { name: `duckduckgo`, title: _(`DuckDuckGo`),                     url: `https://duckduckgo.com/?q=%s` },
@@ -272,5 +273,5 @@ var SearchEngines = {
         }.bind(searchEngines);
 
         return searchEngines;
-    }
+    },
 };
