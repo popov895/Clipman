@@ -11,6 +11,7 @@ var log = function(text) {
     console.log(`${Me.uuid}: ${text}`);
 };
 
+// https://htmlcolorcodes.com/color-names/
 const knownColors = [
     { name: `aliceblue`,            value: [240, 248, 255] },
     { name: `antiquewhite`,         value: [250, 235, 215] },
@@ -46,7 +47,7 @@ const knownColors = [
     { name: `darkorchid`,           value: [153, 50, 204] },
     { name: `darkred`,              value: [139, 0, 0] },
     { name: `darksalmon`,           value: [233, 150, 122] },
-    { name: `darkseagreen`,         value: [143, 188, 143] },
+    { name: `darkseagreen`,         value: [143, 188, 139] },
     { name: `darkslateblue`,        value: [72, 61, 139] },
     { name: `darkslategray`,        value: [47, 79, 79] },
     { name: `darkslategrey`,        value: [47, 79, 79] },
@@ -159,7 +160,7 @@ const knownColors = [
     { name: `white`,                value: [255, 255, 255] },
     { name: `whitesmoke`,           value: [245, 245, 245] },
     { name: `yellow`,               value: [255, 255, 0] },
-    { name: `yellowgreen`,          value: [153, 170, 204, 221] },
+    { name: `yellowgreen`,          value: [154, 205, 50] },
 ];
 
 var ColorParser = {
