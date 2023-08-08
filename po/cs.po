@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 11:12+0300\n"
-"PO-Revision-Date: 2023-07-02 16:52+0200\n"
+"POT-Creation-Date: 2023-08-05 15:11+0300\n"
+"PO-Revision-Date: 2023-08-08 10:30+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -84,16 +84,16 @@ msgstr "Zobrazit QR kód"
 #: extension.js:799
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
-msgstr ""
+msgstr "Nepodařilo se spustit URI \"%s\""
 
 #: extension.js:821
 #, javascript-format
 msgid "Invalid search URL \"%s\""
-msgstr ""
+msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
 #: prefs.js:16
 msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
+msgstr "Stisknutím klávesy Backspace zkratku vymažete nebo klávesou Esc zrušíte"
 
 #: prefs.js:17
 msgid "Enter a new shortcut"
@@ -109,7 +109,6 @@ msgid "History size"
 msgstr "Velikost historie"
 
 #: prefs.js:131
-#, fuzzy
 msgctxt "General options"
 msgid "General"
 msgstr "Obecné"
@@ -120,13 +119,12 @@ msgid "URL with %s in place of query"
 msgstr "Adresa URL s %s na místě dotazu"
 
 #: prefs.js:149
-#, fuzzy
 msgid "Search URL"
-msgstr "Vyhledávání na webu"
+msgstr "Hledat URL"
 
 #: prefs.js:188
 msgid "Search Engine"
-msgstr ""
+msgstr "Vyhledávač"
 
 #: prefs.js:193
 msgid "Web Search"
@@ -141,65 +139,63 @@ msgid "Toggle menu"
 msgstr "Skrýt/Zobrazit nabídku"
 
 #: prefs.js:207
-#, fuzzy
 msgid "Toggle private mode"
-msgstr "Soukromý režim"
+msgstr "Přepnout soukromý režim"
 
 #: prefs.js:212
-#, fuzzy
 msgid "Clear history"
 msgstr "Vymazat historii"
 
 #: libs/utils.js:230
 msgid "DuckDuckGo"
-msgstr ""
+msgstr "DuckDuckGo"
 
 #: libs/utils.js:231
 msgctxt "Brave search engine"
 msgid "Brave"
-msgstr ""
+msgstr "Brave"
 
 #: libs/utils.js:232
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: libs/utils.js:233
 msgid "Bing"
-msgstr ""
+msgstr "Bing"
 
 #: libs/utils.js:234
 msgctxt "Baidu search engine"
 msgid "Baidu"
-msgstr ""
+msgstr "Baidu"
 
 #: libs/utils.js:235
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: libs/utils.js:236
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
-msgstr ""
+msgstr "Ecosia"
 
 #: libs/utils.js:237
 msgctxt "Ask.com search engine"
 msgid "Ask"
-msgstr ""
+msgstr "Ask"
 
 #: libs/utils.js:238
 msgctxt "AOL search engine"
 msgid "AOL"
-msgstr ""
+msgstr "AOL"
 
 #: libs/utils.js:239
 msgctxt "Naver search engine"
 msgid "Naver"
-msgstr ""
+msgstr "Naver"
 
 #: libs/utils.js:247
 msgctxt "Other search engine"
 msgid "Other"
-msgstr ""
+msgstr "Jiný"
 
 #~ msgctxt "Change current shortcut"
 #~ msgid "Change"
