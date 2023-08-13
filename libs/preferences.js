@@ -16,6 +16,8 @@ var Preferences = GObject.registerClass({
         super();
 
         this._keyHistorySize = `history-size`;
+        this._keyShowSurroundingWhitespace = `show-surrounding-whitespace`;
+        this._keyShowColorPreview = `show-color-preview`;
         this._keyWebSearchEngine = `web-search-engine`;
         this._keyCustomWebSearchUrl = `custom-web-search-url`;
         this._keyToggleMenuShortcut = `toggle-menu-shortcut`;

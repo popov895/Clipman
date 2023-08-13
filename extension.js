@@ -290,6 +290,18 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
 };
 
 const HistoryMenuItem = GObject.registerClass({
+    Properties: {
+        'showSurroundingWhitespace': GObject.ParamSpec.boolean(
+            `showSurroundingWhitespace`, ``, ``,
+            GObject.ParamFlags.WRITABLE,
+            true
+        ),
+        'showColorPreview': GObject.ParamSpec.boolean(
+            `showColorPreview`, ``, ``,
+            GObject.ParamFlags.WRITABLE,
+            true
+        ),
+    },
     Signals: {
         'delete': {},
         'togglePin': {},
@@ -301,18 +313,15 @@ const HistoryMenuItem = GObject.registerClass({
         this.text = text;
         this.pinned = pinned;
         this.timestamp = timestamp;
-
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-        this.label.text = this.text.replace(/^\s+|\s+$/g, (match) => {
-            return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
-        }).replaceAll(/\s+/g, ` `);
 
         const colorPreview = this._generateColorPreview(this.text);
         if (colorPreview) {
-            this.insert_child_at_index(new St.Icon({
+            this._colorPreviewIcon = new St.Icon({
                 gicon: colorPreview,
                 style_class: `clipman-colorpreview`,
-            }), 1);
+            });
+            this.insert_child_at_index(this._colorPreviewIcon, 1);
         }
 
         // disable animation on opening and closing
@@ -394,6 +403,24 @@ const HistoryMenuItem = GObject.registerClass({
             }
         });
         this.add_action(clickAction);
+    }
+
+    set showSurroundingWhitespace(showSurroundingWhitespace) {
+        let text;
+        if (showSurroundingWhitespace) {
+            text = this.text.replace(/^\s+|\s+$/g, (match) => {
+                return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
+            });
+        } else {
+            text = this.text.trim();
+        }
+        this.label.text = text.replaceAll(/\s+/g, ` `);
+    }
+
+    set showColorPreview(showColorPreview) {
+        if (this._colorPreviewIcon) {
+            this._colorPreviewIcon.visible = showColorPreview;
+        }
     }
 
     _getTopMenu() {
@@ -600,6 +627,18 @@ class PanelIndicator extends PanelMenu.Button {
 
     _createMenuItem(text, pinned = false, timestamp = Date.now()) {
         const menuItem = new HistoryMenuItem(text, pinned, timestamp, this.menu);
+        this._preferences.bind(
+            this._preferences._keyShowSurroundingWhitespace,
+            menuItem,
+            `showSurroundingWhitespace`,
+            Gio.SettingsBindFlags.GET
+        );
+        this._preferences.bind(
+            this._preferences._keyShowColorPreview,
+            menuItem,
+            `showColorPreview`,
+            Gio.SettingsBindFlags.GET
+        );
         menuItem.connect(`activate`, () => {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
@@ -614,6 +653,8 @@ class PanelIndicator extends PanelMenu.Button {
             this._destroyMenuItem(menuItem);
         });
         menuItem.connect(`destroy`, () => {
+            Gio.Settings.unbind(menuItem, `showColorPreview`);
+            Gio.Settings.unbind(menuItem, `showSurroundingWhitespace`);
             if (this._currentMenuItem === menuItem) {
                 this._currentMenuItem = null;
             }

@@ -126,10 +126,44 @@ function fillPreferencesWindow(window) {
     });
     historySizeRow.add_suffix(historySizeSpinBox);
 
+    const surroundingWhitespaceSwitch = new Gtk.Switch({
+        valign: Gtk.Align.CENTER,
+    });
+    preferences.bind(
+        preferences._keyShowSurroundingWhitespace,
+        surroundingWhitespaceSwitch,
+        `active`,
+        Gio.SettingsBindFlags.DEFAULT
+    );
+
+    const surroundingWhitespaceRow = new Adw.ActionRow({
+        activatable_widget: surroundingWhitespaceSwitch,
+        title: _(`Show leading and trailing whitespace`),
+    });
+    surroundingWhitespaceRow.add_suffix(surroundingWhitespaceSwitch);
+
+    const colorPreviewSwitch = new Gtk.Switch({
+        valign: Gtk.Align.CENTER,
+    });
+    preferences.bind(
+        preferences._keyShowColorPreview,
+        colorPreviewSwitch,
+        `active`,
+        Gio.SettingsBindFlags.DEFAULT
+    );
+
+    const colorPreviewRow = new Adw.ActionRow({
+        activatable_widget: colorPreviewSwitch,
+        title: _(`Show color preview`),
+    });
+    colorPreviewRow.add_suffix(colorPreviewSwitch);
+
     const generalGroup = new Adw.PreferencesGroup({
         title: _(`General`, `General options`),
     });
     generalGroup.add(historySizeRow);
+    generalGroup.add(surroundingWhitespaceRow);
+    generalGroup.add(colorPreviewRow);
 
     const customSearchUrlEntry = new Gtk.Entry({
         placeholder_text: _(`URL with %s in place of query`),

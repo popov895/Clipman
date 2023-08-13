@@ -5,6 +5,12 @@
             <default>15</default>
             <range min="1" max="500"/>
         </key>
+        <key name="show-surrounding-whitespace" type="b">
+            <default>true</default>
+        </key>
+        <key name="show-color-preview" type="b">
+            <default>true</default>
+        </key>
         <key name="web-search-engine" type="s">
             <choices>
                 <choice value="duckduckgo"/>
