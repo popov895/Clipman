@@ -41,8 +41,6 @@ const ClipboardManager = GObject.registerClass({
 
     destroy() {
         this._selection.disconnect(this._selectionOwnerChangedId);
-
-        this.run_dispose();
     }
 
     getText(callback) {
@@ -304,6 +302,7 @@ const HistoryMenuItem = GObject.registerClass({
     },
     Signals: {
         'delete': {},
+        'submenuAboutToOpen': {},
         'togglePin': {},
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
@@ -317,15 +316,20 @@ const HistoryMenuItem = GObject.registerClass({
 
         const colorPreview = this._generateColorPreview(this.text);
         if (colorPreview) {
-            this._colorPreviewIcon = new St.Icon({
+            this.colorPreviewIcon = new St.Icon({
                 gicon: colorPreview,
                 style_class: `clipman-colorpreview`,
             });
-            this.insert_child_at_index(this._colorPreviewIcon, 1);
+            this.insert_child_at_index(this.colorPreviewIcon, 1);
         }
 
         // disable animation on opening and closing
-        this.menu.open = this.menu.open.bind(this.menu, false);
+        this.menu.open = function() {
+            if (!this.menu.isOpen) {
+                this.emit(`submenuAboutToOpen`);
+                Object.getPrototypeOf(this.menu).open.call(this.menu, false);
+            }
+        }.bind(this);
         this.menu.close = this.menu.close.bind(this.menu, false);
 
         this._topMenu = topMenu;
@@ -418,8 +422,8 @@ const HistoryMenuItem = GObject.registerClass({
     }
 
     set showColorPreview(showColorPreview) {
-        if (this._colorPreviewIcon) {
-            this._colorPreviewIcon.visible = showColorPreview;
+        if (this.colorPreviewIcon) {
+            this.colorPreviewIcon.visible = showColorPreview;
         }
     }
 
@@ -511,6 +515,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildMenu();
 
         this._pinnedCount = 0;
+        this._qrCodeDialog = null;
 
         this._clipboard = new ClipboardManager();
         this._clipboard.connect(`changed`, () => {
@@ -643,6 +648,11 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             this._clipboard.setText(menuItem.text);
         });
+        menuItem.connect(`submenuAboutToOpen`, () => {
+            if (menuItem.menu.isEmpty()) {
+                this._populateSubMenu(menuItem);
+            }
+        });
         menuItem.connect(`togglePin`, () => {
             menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
         });
@@ -660,8 +670,6 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
 
-        this._populateSubMenu(menuItem);
-
         return menuItem;
     }
 
@@ -675,13 +683,12 @@ class PanelIndicator extends PanelMenu.Button {
         if (global.stage.get_key_focus() === menuItem) {
             const menuItems = this._historyMenuSection.section._getMenuItems();
             if (menuItems.length > 1) {
-                let nextMenuItemIndex = menuItems.indexOf(menuItem);
-                if (nextMenuItemIndex < menuItems.length - 1) {
-                    ++nextMenuItemIndex;
-                } else {
-                    --nextMenuItemIndex;
-                }
-                global.stage.set_key_focus(menuItems[nextMenuItemIndex]);
+                const isLast = menuItems.indexOf(menuItem) === menuItems.length - 1;
+                this._historyMenuSection.section.box.navigate_focus(
+                    menuItem,
+                    isLast ? St.DirectionType.UP : St.DirectionType.DOWN,
+                    false
+                );
             }
         }
         menuItem.destroy();
@@ -757,64 +764,66 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _populateSubMenu(menuItem) {
-        const actions = [
-            {
-                title: _(`Open`, `Open URL`),
-                validator: Validator.isURL,
-                validatorOptions: {
-                    protocols: [
-                        `http`,
-                        `https`,
-                        `ftp`,
-                        `sftp`,
-                        `ssh`,
-                        `smb`,
-                        `telnet`,
-                        `gopher`,
-                        `vnc`,
-                        `irc`,
-                        `irc6`,
-                        `ircs`,
-                        `git`,
-                        `rsync`,
-                        `feed`,
-                    ],
-                    require_protocol: true,
+        if (!menuItem.colorPreviewIcon) {
+            const actions = [
+                {
+                    title: _(`Open`, `Open URL`),
+                    validator: Validator.isURL,
+                    validatorOptions: {
+                        protocols: [
+                            `http`,
+                            `https`,
+                            `ftp`,
+                            `sftp`,
+                            `ssh`,
+                            `smb`,
+                            `telnet`,
+                            `gopher`,
+                            `vnc`,
+                            `irc`,
+                            `irc6`,
+                            `ircs`,
+                            `git`,
+                            `rsync`,
+                            `feed`,
+                        ],
+                        require_protocol: true,
+                    },
                 },
-            },
-            {
-                title: _(`Open`, `Open URL`),
-                validator: Validator.isMagnetURI,
-            },
-            {
-                prefix: `mailto:`,
-                regExp: /^mailto:/i,
-                title: _(`Compose an Email`),
-                validator: Validator.isEmail,
-            },
-            {
-                prefix: `tel:+`,
-                regExp: /^(tel:)?\+/i,
-                title: _(`Make a Call`),
-                validator: Validator.isMobilePhone,
-            },
-            {
-                title: _(`Make a Call`),
-                validator: (str) => {
-                    return str.match(/^callto:\S+/i);
+                {
+                    title: _(`Open`, `Open URL`),
+                    validator: Validator.isMagnetURI,
                 },
-            },
-        ];
+                {
+                    prefix: `mailto:`,
+                    regExp: /^mailto:/i,
+                    title: _(`Compose an Email`),
+                    validator: Validator.isEmail,
+                },
+                {
+                    prefix: `tel:+`,
+                    regExp: /^(tel:)?\+/i,
+                    title: _(`Make a Call`),
+                    validator: Validator.isMobilePhone,
+                },
+                {
+                    title: _(`Make a Call`),
+                    validator: (str) => {
+                        return str.match(/^callto:\S+/i);
+                    },
+                },
+            ];
 
-        const trimmedText = menuItem.text.trim();
-        for (const action of actions) {
-            const capturedText = action.regExp ? trimmedText.replace(action.regExp, ``) : trimmedText;
-            if (action.validator(capturedText, action.validatorOptions)) {
-                menuItem.menu.addAction(action.title, () => {
-                    this.menu.close();
-                    this._launchUri((action.prefix ?? ``) + capturedText);
-                });
-                break;
+            const trimmedText = menuItem.text.trim();
+            for (const action of actions) {
+                const capturedText = action.regExp ? trimmedText.replace(action.regExp, ``) : trimmedText;
+                if (action.validator(capturedText, action.validatorOptions)) {
+                    menuItem.menu.addAction(action.title, () => {
+                        this.menu.close();
+                        this._launchUri((action.prefix ?? ``) + capturedText);
+                    });
+                    break;
+                }
             }
         }
 

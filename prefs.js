@@ -100,9 +100,10 @@ function init() {
 }
 
 function fillPreferencesWindow(window) {
-    const preferences = new Preferences();
-    preferences.connect(`webSearchEngineChanged`, () => {
-        searchEngineDropDown.selected = searchEngines.findIndex(preferences.webSearchEngine);
+    window._preferences = new Preferences();
+    window.connect(`close-request`, () => {
+        window._preferences.destroy();
+        window.destroy();
     });
 
     const historySizeSpinBox = new Gtk.SpinButton({
@@ -113,8 +114,8 @@ function fillPreferencesWindow(window) {
         }),
         valign: Gtk.Align.CENTER,
     });
-    preferences.bind(
-        preferences._keyHistorySize,
+    window._preferences.bind(
+        window._preferences._keyHistorySize,
         historySizeSpinBox,
         `value`,
         Gio.SettingsBindFlags.DEFAULT
@@ -129,8 +130,8 @@ function fillPreferencesWindow(window) {
     const surroundingWhitespaceSwitch = new Gtk.Switch({
         valign: Gtk.Align.CENTER,
     });
-    preferences.bind(
-        preferences._keyShowSurroundingWhitespace,
+    window._preferences.bind(
+        window._preferences._keyShowSurroundingWhitespace,
         surroundingWhitespaceSwitch,
         `active`,
         Gio.SettingsBindFlags.DEFAULT
@@ -145,8 +146,8 @@ function fillPreferencesWindow(window) {
     const colorPreviewSwitch = new Gtk.Switch({
         valign: Gtk.Align.CENTER,
     });
-    preferences.bind(
-        preferences._keyShowColorPreview,
+    window._preferences.bind(
+        window._preferences._keyShowColorPreview,
         colorPreviewSwitch,
         `active`,
         Gio.SettingsBindFlags.DEFAULT
@@ -170,8 +171,8 @@ function fillPreferencesWindow(window) {
         valign: Gtk.Align.CENTER,
     });
     customSearchUrlEntry.set_size_request(300, -1);
-    preferences.bind(
-        preferences._keyCustomWebSearchUrl,
+    window._preferences.bind(
+        window._preferences._keyCustomWebSearchUrl,
         customSearchUrlEntry,
         `text`,
         Gio.SettingsBindFlags.DEFAULT
@@ -188,7 +189,7 @@ function fillPreferencesWindow(window) {
         }
     });
 
-    const searchEngines = SearchEngines.get(preferences);
+    const searchEngines = SearchEngines.get(window._preferences);
     searchEngines.sort();
 
     const searchEngineDropDown = new Gtk.DropDown({
@@ -212,9 +213,12 @@ function fillPreferencesWindow(window) {
         null
     );
     searchEngineDropDown.connect(`notify::selected`, () => {
-        preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
+        window._preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
     });
-    searchEngineDropDown.selected = searchEngines.findIndex(preferences.webSearchEngine);
+    searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
+    window._preferences.connect(`webSearchEngineChanged`, () => {
+        searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
+    });
 
     const searchEngineRow = new Adw.ActionRow({
         activatable_widget: searchEngineDropDown,
@@ -233,18 +237,18 @@ function fillPreferencesWindow(window) {
     });
     keybindingGroup.add(new ShortcutRow(
         _(`Toggle menu`),
-        preferences,
-        preferences._keyToggleMenuShortcut
+        window._preferences,
+        window._preferences._keyToggleMenuShortcut
     ));
     keybindingGroup.add(new ShortcutRow(
         _(`Toggle private mode`),
-        preferences,
-        preferences._keyTogglePrivateModeShortcut
+        window._preferences,
+        window._preferences._keyTogglePrivateModeShortcut
     ));
     keybindingGroup.add(new ShortcutRow(
         _(`Clear history`),
-        preferences,
-        preferences._keyClearHistoryShortcut
+        window._preferences,
+        window._preferences._keyClearHistoryShortcut
     ));
 
     const page = new Adw.PreferencesPage();
@@ -253,7 +257,4 @@ function fillPreferencesWindow(window) {
     page.add(keybindingGroup);
 
     window.add(page);
-    window.connect(`destroy`, () => {
-        preferences.destroy();
-    });
 }

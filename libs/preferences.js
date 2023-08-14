@@ -25,7 +25,7 @@ var Preferences = GObject.registerClass({
         this._keyClearHistoryShortcut = `clear-history-shortcut`;
 
         this._settings = ExtensionUtils.getSettings();
-        this._settings.connect(`changed`, (...[, key]) => {
+        this._settingsChangedId = this._settings.connect(`changed`, (...[, key]) => {
             switch (key) {
                 case this._keyHistorySize: {
                     this.emit(`historySizeChanged`);
@@ -48,9 +48,7 @@ var Preferences = GObject.registerClass({
     }
 
     destroy() {
-        this._settings.run_dispose();
-
-        this.run_dispose();
+        this._settings.disconnect(this._settingsChangedId);
     }
 
     get historySize() {
