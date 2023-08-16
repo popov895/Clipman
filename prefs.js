@@ -103,7 +103,6 @@ function fillPreferencesWindow(window) {
     window._preferences = new Preferences();
     window.connect(`close-request`, () => {
         window._preferences.destroy();
-        window.destroy();
     });
 
     const historySizeSpinBox = new Gtk.SpinButton({
