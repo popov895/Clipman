@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 16:49+0300\n"
+"POT-Creation-Date: 2023-08-16 20:19+0300\n"
 "PO-Revision-Date: 2023-08-13 14:07+0000\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
@@ -18,82 +18,83 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: extension.js:107
+#: extension.js:106
 msgid "Failed to generate QR code"
 msgstr "Не вдалося створити QR-код"
 
-#: extension.js:114
+#: extension.js:113
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Закрити"
 
-#: extension.js:183
+#: extension.js:182
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:202
+#: extension.js:201
 msgid "No Matches"
 msgstr "Немає збігів"
 
-#: extension.js:555
+#: extension.js:561
 msgid "Private Mode is On"
 msgstr "Приватний режим увімкнено"
 
-#: extension.js:561
+#: extension.js:567
 msgid "History is Empty"
 msgstr "Історія порожня"
 
-#: extension.js:579
+#: extension.js:582
 msgid "Clear History"
 msgstr "Очистити історію"
 
-#: extension.js:588
+#: extension.js:591
 msgid "Private Mode"
 msgstr "Приватний режим"
 
-#: extension.js:613
+#: extension.js:616
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Налаштування"
 
-#: extension.js:762 extension.js:786
+#: extension.js:770 extension.js:794
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Відкрити"
 
-#: extension.js:792
+#: extension.js:800
 msgid "Compose an Email"
 msgstr "Створити електронний лист"
 
-#: extension.js:798 extension.js:802
+#: extension.js:806 extension.js:810
 msgid "Make a Call"
 msgstr "Зателефонувати"
 
-#: extension.js:821
+#: extension.js:830
 msgid "Search the Web"
 msgstr "Шукати в Інтернеті"
 
-#: extension.js:826
+#: extension.js:835
 msgid "Send via Email"
 msgstr "Надіслати електронною поштою"
 
-#: extension.js:831
+#: extension.js:840
 msgid "Show QR Code"
 msgstr "Показати QR-код"
 
-#: extension.js:849
+#: extension.js:858
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "Не вдалося запустити URI \"%s\""
 
-#: extension.js:871
+#: extension.js:880
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Неправильна URL-адреса для пошуку \"%s\""
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr "Натисніть Backspace, щоб очистити поєднання клавіш, або Esc, щоб скасувати"
+msgstr ""
+"Натисніть Backspace, щоб очистити поєднання клавіш, або Esc, щоб скасувати"
 
 #: prefs.js:16
 msgid "Enter a new shortcut"
@@ -104,53 +105,53 @@ msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: prefs.js:125
+#: prefs.js:126
 msgid "History size"
 msgstr "Розмір історії"
 
-#: prefs.js:141
+#: prefs.js:142
 msgid "Show leading and trailing whitespace"
 msgstr "Показувати початкові та кінцеві пробіли"
 
-#: prefs.js:157
+#: prefs.js:158
 msgid "Show color preview"
 msgstr "Показати попередній перегляд кольорів"
 
-#: prefs.js:162
+#: prefs.js:163
 msgctxt "General options"
 msgid "General"
 msgstr "Загальне"
 
-#: prefs.js:169
+#: prefs.js:170
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr "URL-адреса з %s замість запиту"
 
-#: prefs.js:182
+#: prefs.js:183
 msgid "Search URL"
 msgstr "URL-адреса для пошуку"
 
-#: prefs.js:221
+#: prefs.js:225
 msgid "Search Engine"
 msgstr "Пошукова система"
 
-#: prefs.js:226
+#: prefs.js:230
 msgid "Web Search"
 msgstr "Пошук в Інтернеті"
 
-#: prefs.js:232
+#: prefs.js:236
 msgid "Keyboard Shortcuts"
 msgstr "Поєднання клавіш"
 
-#: prefs.js:235
+#: prefs.js:239
 msgid "Toggle menu"
 msgstr "Переключити меню"
 
-#: prefs.js:240
+#: prefs.js:244
 msgid "Toggle private mode"
 msgstr "Переключити приватний режим"
 
-#: prefs.js:245
+#: prefs.js:249
 msgid "Clear history"
 msgstr "Очистити історію"
 

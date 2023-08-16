@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 16:49+0300\n"
+"POT-Creation-Date: 2023-08-16 20:19+0300\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -19,75 +19,75 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: extension.js:107
+#: extension.js:106
 msgid "Failed to generate QR code"
 msgstr "Nie udało się wygenerować kodu QR"
 
-#: extension.js:114
+#: extension.js:113
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Zamknij"
 
-#: extension.js:183
+#: extension.js:182
 msgid "Type to search..."
 msgstr "Szukaj..."
 
-#: extension.js:202
+#: extension.js:201
 msgid "No Matches"
 msgstr "Brak wyników"
 
-#: extension.js:555
+#: extension.js:561
 msgid "Private Mode is On"
 msgstr "Tryb prywatny jest włączony"
 
-#: extension.js:561
+#: extension.js:567
 msgid "History is Empty"
 msgstr "Historia jest pusta"
 
-#: extension.js:579
+#: extension.js:582
 msgid "Clear History"
 msgstr "Wyczyść historię"
 
-#: extension.js:588
+#: extension.js:591
 msgid "Private Mode"
 msgstr "Tryb prywatny"
 
-#: extension.js:613
+#: extension.js:616
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: extension.js:762 extension.js:786
+#: extension.js:770 extension.js:794
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:792
+#: extension.js:800
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:798 extension.js:802
+#: extension.js:806 extension.js:810
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:821
+#: extension.js:830
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:826
+#: extension.js:835
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:831
+#: extension.js:840
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:849
+#: extension.js:858
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:871
+#: extension.js:880
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
@@ -105,55 +105,55 @@ msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Wyłączony"
 
-#: prefs.js:125
+#: prefs.js:126
 msgid "History size"
 msgstr "Rozmiar historii"
 
-#: prefs.js:141
+#: prefs.js:142
 msgid "Show leading and trailing whitespace"
 msgstr ""
 
-#: prefs.js:157
+#: prefs.js:158
 msgid "Show color preview"
 msgstr ""
 
-#: prefs.js:162
+#: prefs.js:163
 #, fuzzy
 msgctxt "General options"
 msgid "General"
 msgstr "Ogólne"
 
-#: prefs.js:169
+#: prefs.js:170
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr ""
 
-#: prefs.js:182
+#: prefs.js:183
 msgid "Search URL"
 msgstr ""
 
-#: prefs.js:221
+#: prefs.js:225
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:226
+#: prefs.js:230
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:232
+#: prefs.js:236
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiaturowe"
 
-#: prefs.js:235
+#: prefs.js:239
 msgid "Toggle menu"
 msgstr "Pokaż/ukryj menu"
 
-#: prefs.js:240
+#: prefs.js:244
 #, fuzzy
 msgid "Toggle private mode"
 msgstr "Tryb prywatny"
 
-#: prefs.js:245
+#: prefs.js:249
 #, fuzzy
 msgid "Clear history"
 msgstr "Wyczyść historię"
