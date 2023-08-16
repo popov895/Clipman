@@ -29,18 +29,19 @@ const ClipboardManager = GObject.registerClass({
 
         this._clipboard = St.Clipboard.get_default();
         this._selection = global.get_display().get_selection();
-        this._selectionOwnerChangedId = this._selection.connect(
+        this._selection.connectObject(
             `owner-changed`,
             (...[, selectionType]) => {
                 if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
                     this.emit(`changed`);
                 }
-            }
+            },
+            this
         );
     }
 
     destroy() {
-        this._selection.disconnect(this._selectionOwnerChangedId);
+        this._selection.disconnectObject(this);
     }
 
     getText(callback) {
@@ -182,7 +183,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             style_class: `clipman-popupsearchmenuitem`,
             x_expand: true,
         });
-        this.entry.clutter_text.connect(`text-changed`, this._onEntryTextChanged.bind(this));
+        this.entry.clutter_text.connectObject(`text-changed`, this._onEntryTextChanged.bind(this));
         const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
             can_focus: false,
             reactive: false,
@@ -215,10 +216,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
                 this.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
             }
         }.bind(this.section);
-        this.section.box.connect(`actor-added`, this._onMenuItemAdded.bind(this));
-        this._sectionActorRemovedId = this.section.box.connect(
-            `actor-removed`,
-            this._onMenuItemRemoved.bind(this)
+        this.section.box.connectObject(
+            `actor-added`, this._onMenuItemAdded.bind(this),
+            `actor-removed`, this._onMenuItemRemoved.bind(this),
+            this
         );
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
@@ -226,7 +227,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         });
         this.scrollView.hscrollbar_policy = St.PolicyType.NEVER;
         this.scrollView.add_actor(this.section.actor);
-        this.scrollView.vscroll.adjustment.connect(`changed`, () => {
+        this.scrollView.vscroll.adjustment.connectObject(`changed`, () => {
             Promise.resolve().then(() => {
                 this.scrollView.overlay_scrollbars = !this.scrollView.vscrollbar_visible;
             });
@@ -237,7 +238,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     }
 
     destroy() {
-        this.section.box.disconnect(this._sectionActorRemovedId);
+        this.section.box.disconnectObject(this);
 
         super.destroy();
     }
@@ -270,7 +271,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
                 this._placeholderMenuItem.actor.visible = false;
             }
         }
-        menuItem.connect(`key-focus-in`, () => {
+        menuItem.connectObject(`key-focus-in`, () => {
             Util.ensureActorVisibleInScrollView(this.scrollView, menuItem);
         });
     }
@@ -333,7 +334,7 @@ const HistoryMenuItem = GObject.registerClass({
         this.menu.close = this.menu.close.bind(this.menu, false);
 
         this._topMenu = topMenu;
-        this._topMenu.connect(`open-state-changed`, (...[, open]) => {
+        this._topMenu.connectObject(`open-state-changed`, (...[, open]) => {
             if (!open) {
                 this.menu.close();
             }
@@ -353,7 +354,7 @@ const HistoryMenuItem = GObject.registerClass({
             child: this.pinIcon,
             style_class: `clipman-toolbutton`,
         });
-        pinButton.connect(`clicked`, () => {
+        pinButton.connectObject(`clicked`, () => {
             this.emit(`togglePin`);
         });
 
@@ -365,7 +366,7 @@ const HistoryMenuItem = GObject.registerClass({
             }),
             style_class: `clipman-toolbutton`,
         });
-        deleteButton.connect(`clicked`, () => {
+        deleteButton.connectObject(`clicked`, () => {
             this.emit(`delete`);
         });
 
@@ -381,7 +382,7 @@ const HistoryMenuItem = GObject.registerClass({
             child: this.menu._arrow,
             style_class: `clipman-toolbutton`,
         });
-        toggleSubMenuButton.connect(`clicked`, () => {
+        toggleSubMenuButton.connectObject(`clicked`, () => {
             this.menu.toggle();
         });
 
@@ -396,10 +397,10 @@ const HistoryMenuItem = GObject.registerClass({
         const clickAction = new Clutter.ClickAction({
             enabled: this._activatable,
         });
-        clickAction.connect(`clicked`, () => {
+        clickAction.connectObject(`clicked`, () => {
             this.activate(Clutter.get_current_event());
         });
-        clickAction.connect(`notify::pressed`, () => {
+        clickAction.connectObject(`notify::pressed`, () => {
             if (clickAction.pressed) {
                 this.add_style_pseudo_class(`active`);
             } else {
@@ -518,7 +519,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._qrCodeDialog = null;
 
         this._clipboard = new ClipboardManager();
-        this._clipboard.connect(`changed`, () => {
+        this._clipboard.connectObject(`changed`, () => {
             if (!this._privateModeMenuItem.state) {
                 this._clipboard.getText((text) => {
                     this._onClipboardTextChanged(text);
@@ -527,7 +528,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
 
         this._preferences = new Preferences();
-        this._preferences.connect(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
+        this._preferences.connectObject(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
 
         this._loadState();
         this._addKeybindings();
@@ -542,7 +543,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._preferences.destroy();
         this._clipboard.destroy();
 
-        this._historyMenuSection.section.box.disconnect(this._historySectionActorRemovedId);
+        this._historyMenuSection.section.box.disconnectObject(this);
         this._historyMenuSection.destroy();
 
         super.destroy();
@@ -569,13 +570,10 @@ class PanelIndicator extends PanelMenu.Button {
         this.menu.addMenuItem(this._emptyPlaceholder);
 
         this._historyMenuSection = new HistoryMenuSection();
-        this._historyMenuSection.section.box.connect(
-            `actor-added`,
-            this._updateUi.bind(this)
-        );
-        this._historySectionActorRemovedId = this._historyMenuSection.section.box.connect(
-            `actor-removed`,
-            this._updateUi.bind(this)
+        this._historyMenuSection.section.box.connectObject(
+            `actor-added`, this._updateUi.bind(this),
+            `actor-removed`, this._updateUi.bind(this),
+            this
         );
         this.menu.addMenuItem(this._historyMenuSection);
 
@@ -593,7 +591,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_(`Private Mode`), false, {
             reactive: true,
         });
-        this._privateModeMenuItem.connect(`toggled`, (...[, state]) => {
+        this._privateModeMenuItem.connectObject(`toggled`, (...[, state]) => {
             this.menu.close();
             if (!state) {
                 this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
@@ -619,7 +617,7 @@ class PanelIndicator extends PanelMenu.Button {
             ExtensionUtils.openPrefs();
         });
 
-        this.menu.connect(`open-state-changed`, (...[, open]) => {
+        this.menu.connectObject(`open-state-changed`, (...[, open]) => {
             if (open) {
                 this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
                 this._historyMenuSection.entry.text = ``;
@@ -644,31 +642,33 @@ class PanelIndicator extends PanelMenu.Button {
             `showColorPreview`,
             Gio.SettingsBindFlags.GET
         );
-        menuItem.connect(`activate`, () => {
-            this.menu.close();
-            this._clipboard.setText(menuItem.text);
-        });
-        menuItem.connect(`submenuAboutToOpen`, () => {
-            if (menuItem.menu.isEmpty()) {
-                this._populateSubMenu(menuItem);
-            }
-        });
-        menuItem.connect(`togglePin`, () => {
-            menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
-        });
-        menuItem.connect(`delete`, () => {
-            if (this._historyMenuSection.section.numMenuItems === 1) {
+        menuItem.connectObject(
+            `activate`, () => {
                 this.menu.close();
+                this._clipboard.setText(menuItem.text);
+            },
+            `submenuAboutToOpen`, () => {
+                if (menuItem.menu.isEmpty()) {
+                    this._populateSubMenu(menuItem);
+                }
+            },
+            `togglePin`, () => {
+                menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
+            },
+            `delete`, () => {
+                if (this._historyMenuSection.section.numMenuItems === 1) {
+                    this.menu.close();
+                }
+                this._destroyMenuItem(menuItem);
+            },
+            `destroy`, () => {
+                Gio.Settings.unbind(menuItem, `showColorPreview`);
+                Gio.Settings.unbind(menuItem, `showSurroundingWhitespace`);
+                if (this._currentMenuItem === menuItem) {
+                    this._currentMenuItem = null;
+                }
             }
-            this._destroyMenuItem(menuItem);
-        });
-        menuItem.connect(`destroy`, () => {
-            Gio.Settings.unbind(menuItem, `showColorPreview`);
-            Gio.Settings.unbind(menuItem, `showSurroundingWhitespace`);
-            if (this._currentMenuItem === menuItem) {
-                this._currentMenuItem = null;
-            }
-        });
+        );
 
         return menuItem;
     }
@@ -845,7 +845,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _showQrCode(text) {
         this._qrCodeDialog = new QrCodeDialog(text);
-        this._qrCodeDialog.connect(`destroy`, () => {
+        this._qrCodeDialog.connectObject(`destroy`, () => {
             this._qrCodeDialog = null;
         });
         this._qrCodeDialog.open();
