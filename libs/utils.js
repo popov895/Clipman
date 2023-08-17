@@ -1,5 +1,6 @@
 'use strict';
 
+const { GObject } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
@@ -273,5 +274,105 @@ var SearchEngines = {
         }.bind(searchEngines);
 
         return searchEngines;
+    },
+};
+
+var Connectable = {
+    makeConnectable(object) {
+        if (object._connectableData) {
+            return;
+        }
+
+        object._connectableData = {
+            bindings: [],
+            registry: new FinalizationRegistry((heldValue) => {
+                if (!object._connectableData) {
+                    return;
+                }
+                for (let i = 0; i < object._connectableData.bindings.length; ++i) {
+                    if (object._connectableData.bindings[i].heldValue === heldValue) {
+                        object._connectableData.bindings.splice(i, 1);
+                        break;
+                    }
+                }
+            }),
+        };
+
+        object.connectTo = function(sender, signal, callback, after = false) {
+            try {
+                const id = after ? sender.connect_after(signal, callback) : sender.connect(signal, callback);
+                // const func = after && sender instanceof GObject.Object ? `connect_after` : `connect`;
+                // const id = Object.getPrototypeOf(sender)[func].call(sender, signal, callback);
+                if (!id) {
+                    return;
+                }
+                let binding = this._connectableData.bindings.find((binding) => {
+                    return binding.target.deref() === sender;
+                });
+                if (!binding) {
+                    binding = {
+                        target: new WeakRef(sender),
+                        heldValue: Symbol(),
+                        handlers: [],
+                    };
+                    this._connectableData.bindings.push(binding);
+                    this._connectableData.registry.register(sender, binding.heldValue);
+                    if (sender !== this) {
+                        this.connectTo(sender, `destroy`, () => {
+                            this.disconnectFrom(sender);
+                        }, true);
+                    }
+                }
+                binding.handlers.push({ signal, id });
+            } catch (error) {
+                log(error);
+            }
+        }.bind(object);
+        object.disconnectFrom = function(sender, signal) {
+            const bindingIndex = this._connectableData.bindings.findIndex((binding) => {
+                return binding.target.deref() === sender;
+            });
+            if (bindingIndex === -1) {
+                return;
+            }
+            const binding = this._connectableData.bindings[bindingIndex];
+            for (let i = binding.handlers.length - 1; i >= 0; --i) {
+                const handler = binding.handlers[i];
+                if (!signal || handler.signal === signal) {
+                    try {
+                        sender.disconnect(handler.id);
+                    } catch (error) {
+                        log(error);
+                    }
+                    binding.handlers.splice(i, 1);
+                }
+            }
+            if (binding.handlers.length === 0) {
+                this._connectableData.registry.unregister(sender);
+                this._connectableData.bindings.splice(bindingIndex, 1);
+            }
+        }.bind(object);
+        object.disconnectFromAll = function() {
+            for (const binding of this._connectableData.bindings) {
+                const sender = binding.target.deref();
+                if (!sender) {
+                    continue;
+                }
+                this._connectableData.registry.unregister(sender);
+                for (const { id } of binding.handlers) {
+                    try {
+                        sender.disconnect(id);
+                    } catch (error) {
+                        log(error);
+                    }
+                }
+            }
+            this._connectableData.bindings.length = 0;
+        }.bind(object);
+
+        object.connectTo(object, `destroy`, () => {
+            object.disconnectFromAll();
+            delete object._connectableData;
+        }, true);
     },
 };
