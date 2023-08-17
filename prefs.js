@@ -5,7 +5,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const { Preferences } = Me.imports.libs.preferences;
-const { _, SearchEngines } = Me.imports.libs.utils;
+const { _, Connectable, SearchEngines } = Me.imports.libs.utils;
 
 const KeybindingWindow = GObject.registerClass(
 class KeybindingWindow extends Adw.Window {
@@ -21,10 +21,12 @@ class KeybindingWindow extends Adw.Window {
             width_request: 450,
         });
 
+        Connectable.makeConnectable(this);
+
         this._keybinding = null;
 
         const keyController = new Gtk.EventControllerKey();
-        keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
+        this.connectTo(keyController, `key-pressed`, (...[, keyval, keycode, state]) => {
             switch (keyval) {
                 case Gdk.KEY_Escape: {
                     this.close();
@@ -65,6 +67,8 @@ class ShortcutRow extends Adw.ActionRow {
             title: title,
         });
 
+        Connectable.makeConnectable(this);
+
         this._preferences = preferences;
         this._preferencesKey = preferencesKey;
 
@@ -75,7 +79,7 @@ class ShortcutRow extends Adw.ActionRow {
         });
         this.add_suffix(this.activatable_widget);
 
-        this._preferences.connect(`shortcutChanged`, (...[, key]) => {
+        this.connectTo(this._preferences, `shortcutChanged`, (...[, key]) => {
             if (key === this._preferencesKey) {
                 this.activatable_widget.accelerator = this._preferences.getShortcut(key);
             }
@@ -84,7 +88,7 @@ class ShortcutRow extends Adw.ActionRow {
 
     vfunc_activate() {
         const window = new KeybindingWindow(this.get_root());
-        window.connect(`close-request`, () => {
+        this.connectTo(window, `close-request`, () => {
             const shortcut = window.keybinding;
             if (shortcut !== null) {
                 this._preferences.setShortcut(this._preferencesKey, shortcut);
@@ -100,8 +104,10 @@ function init() {
 }
 
 function fillPreferencesWindow(window) {
+    Connectable.makeConnectable(window);
+
     window._preferences = new Preferences();
-    window.connect(`close-request`, () => {
+    window.connectTo(window, `close-request`, () => {
         window._preferences.destroy();
     });
 
@@ -182,7 +188,7 @@ function fillPreferencesWindow(window) {
         title: _(`Search URL`),
     });
     customSearchUrlRow.add_suffix(customSearchUrlEntry);
-    customSearchUrlRow.connect(`notify::visible`, () => {
+    window.connectTo(customSearchUrlRow, `notify::visible`, () => {
         if (customSearchUrlRow.visible) {
             customSearchUrlEntry.grab_focus();
         }
@@ -211,11 +217,11 @@ function fillPreferencesWindow(window) {
         },
         null
     );
-    searchEngineDropDown.connect(`notify::selected`, () => {
+    window.connectTo(searchEngineDropDown, `notify::selected`, () => {
         window._preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
     });
     searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
-    window._preferences.connect(`webSearchEngineChanged`, () => {
+    window.connectTo(window._preferences, `webSearchEngineChanged`, () => {
         searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
     });
 

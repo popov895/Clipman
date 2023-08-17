@@ -1,10 +1,15 @@
 'use strict';
 
 const { GObject } = imports.gi;
+
 const ExtensionUtils = imports.misc.extensionUtils;
+
+const Me = ExtensionUtils.getCurrentExtension();
+const { Connectable } = Me.imports.libs.utils;
 
 var Preferences = GObject.registerClass({
     Signals: {
+        'destroy': {},
         'historySizeChanged': {},
         'webSearchEngineChanged': {},
         'shortcutChanged': {
@@ -14,6 +19,8 @@ var Preferences = GObject.registerClass({
 }, class Preferences extends GObject.Object {
     constructor() {
         super();
+
+        Connectable.makeConnectable(this);
 
         this._keyHistorySize = `history-size`;
         this._keyShowSurroundingWhitespace = `show-surrounding-whitespace`;
@@ -25,7 +32,7 @@ var Preferences = GObject.registerClass({
         this._keyClearHistoryShortcut = `clear-history-shortcut`;
 
         this._settings = ExtensionUtils.getSettings();
-        this._settingsChangedId = this._settings.connect(`changed`, (...[, key]) => {
+        this.connectTo(this._settings, `changed`, (...[, key]) => {
             switch (key) {
                 case this._keyHistorySize: {
                     this.emit(`historySizeChanged`);
@@ -48,7 +55,7 @@ var Preferences = GObject.registerClass({
     }
 
     destroy() {
-        this._settings.disconnect(this._settingsChangedId);
+        this.emit(`destroy`);
     }
 
     get historySize() {
