@@ -8,6 +8,7 @@ const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const SignalTracker = imports.misc.signalTracker;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
@@ -18,6 +19,7 @@ const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
 const ClipboardManager = GObject.registerClass({
     Signals: {
         'changed': {},
+        'destroy': {},
     },
 }, class ClipboardManager extends GObject.Object {
     constructor() {
@@ -41,7 +43,7 @@ const ClipboardManager = GObject.registerClass({
     }
 
     destroy() {
-        this._selection.disconnectObject(this);
+        this.emit(`destroy`);
     }
 
     getText(callback) {
@@ -217,9 +219,16 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             }
         }.bind(this.section);
         this.section.box.connectObject(
-            `actor-added`, this._onMenuItemAdded.bind(this),
-            `actor-removed`, this._onMenuItemRemoved.bind(this),
-            this
+            `actor-added`, (...[, actor]) => {
+                if (actor instanceof HistoryMenuItem) {
+                    this._onMenuItemAdded(actor);
+                }
+            },
+            `actor-removed`, (...[, actor]) => {
+                if (actor instanceof HistoryMenuItem) {
+                    this._onMenuItemRemoved();
+                }
+            }
         );
         this.scrollView = new St.ScrollView({
             overlay_scrollbars: true,
@@ -235,12 +244,6 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         const menuSection = new PopupMenu.PopupMenuSection();
         menuSection.actor.add_actor(this.scrollView);
         this.addMenuItem(menuSection);
-    }
-
-    destroy() {
-        this.section.box.disconnectObject(this);
-
-        super.destroy();
     }
 
     _onEntryTextChanged() {
@@ -263,7 +266,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         }
     }
 
-    _onMenuItemAdded(...[, menuItem]) {
+    _onMenuItemAdded(menuItem) {
         const searchText = this.entry.text.toLowerCase();
         if (searchText.length > 0) {
             menuItem.actor.visible = menuItem.text.toLowerCase().includes(searchText);
@@ -315,16 +318,7 @@ const HistoryMenuItem = GObject.registerClass({
         this.timestamp = timestamp;
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
 
-        const colorPreview = this._generateColorPreview(this.text);
-        if (colorPreview) {
-            this.colorPreviewIcon = new St.Icon({
-                gicon: colorPreview,
-                style_class: `clipman-colorpreview`,
-            });
-            this.insert_child_at_index(this.colorPreviewIcon, 1);
-        }
-
-        // disable animation on opening and closing
+        // disable animation on opening and closing to avoid flickering
         this.menu.open = function() {
             if (!this.menu.isOpen) {
                 this.emit(`submenuAboutToOpen`);
@@ -423,8 +417,21 @@ const HistoryMenuItem = GObject.registerClass({
     }
 
     set showColorPreview(showColorPreview) {
-        if (this.colorPreviewIcon) {
-            this.colorPreviewIcon.visible = showColorPreview;
+        if (showColorPreview) {
+            // use lazy loadiing for color preview
+            if (this._colorPreview === undefined) {
+                this._colorPreview = this._generateColorPreview(this.text) ?? null;
+                if (this._colorPreview) {
+                    this.colorPreviewIcon = new St.Icon({
+                        gicon: this._colorPreview,
+                        style_class: `clipman-colorpreview`,
+                    });
+                    this.insert_child_at_index(this.colorPreviewIcon, 1);
+                }
+            }
+            this.colorPreviewIcon?.show();
+        } else {
+            this.colorPreviewIcon?.hide();
         }
     }
 
@@ -516,7 +523,6 @@ class PanelIndicator extends PanelMenu.Button {
         this._buildMenu();
 
         this._pinnedCount = 0;
-        this._qrCodeDialog = null;
 
         this._clipboard = new ClipboardManager();
         this._clipboard.connectObject(`changed`, () => {
@@ -543,9 +549,6 @@ class PanelIndicator extends PanelMenu.Button {
         this._preferences.destroy();
         this._clipboard.destroy();
 
-        this._historyMenuSection.section.box.disconnectObject(this);
-        this._historyMenuSection.destroy();
-
         super.destroy();
     }
 
@@ -571,9 +574,16 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._historyMenuSection = new HistoryMenuSection();
         this._historyMenuSection.section.box.connectObject(
-            `actor-added`, this._updateUi.bind(this),
-            `actor-removed`, this._updateUi.bind(this),
-            this
+            `actor-added`, (...[, actor]) => {
+                if (actor instanceof HistoryMenuItem) {
+                    this._updateUi();
+                }
+            },
+            `actor-removed`, (...[, actor]) => {
+                if (actor instanceof HistoryMenuItem) {
+                    this._updateUi();
+                }
+            }
         );
         this.menu.addMenuItem(this._historyMenuSection);
 
@@ -595,7 +605,7 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             if (!state) {
                 this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
-                this._currentMenuItem = null;
+                delete this._currentMenuItem;
                 this._clipboard.getText((text) => {
                     if (text && text.length > 0) {
                         const menuItems = this._historyMenuSection.section._getMenuItems();
@@ -648,6 +658,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._clipboard.setText(menuItem.text);
             },
             `submenuAboutToOpen`, () => {
+                // use lazy loadiing for submenu
                 if (menuItem.menu.isEmpty()) {
                     this._populateSubMenu(menuItem);
                 }
@@ -665,7 +676,7 @@ class PanelIndicator extends PanelMenu.Button {
                 Gio.Settings.unbind(menuItem, `showColorPreview`);
                 Gio.Settings.unbind(menuItem, `showSurroundingWhitespace`);
                 if (this._currentMenuItem === menuItem) {
-                    this._currentMenuItem = null;
+                    delete this._currentMenuItem;
                 }
             }
         );
@@ -846,7 +857,7 @@ class PanelIndicator extends PanelMenu.Button {
     _showQrCode(text) {
         this._qrCodeDialog = new QrCodeDialog(text);
         this._qrCodeDialog.connectObject(`destroy`, () => {
-            this._qrCodeDialog = null;
+            delete this._qrCodeDialog;
         });
         this._qrCodeDialog.open();
     }
@@ -983,6 +994,9 @@ function notifyError(error) {
 }
 
 function init() {
+    SignalTracker.registerDestroyableType(ClipboardManager);
+    SignalTracker.registerDestroyableType(Preferences);
+
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
@@ -993,5 +1007,5 @@ function enable() {
 
 function disable() {
     panelIndicator.instance.destroy();
-    panelIndicator.instance = null;
+    delete panelIndicator.instance;
 }

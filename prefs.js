@@ -21,8 +21,6 @@ class KeybindingWindow extends Adw.Window {
             width_request: 450,
         });
 
-        this._keybinding = null;
-
         const keyController = new Gtk.EventControllerKey();
         keyController.connect(`key-pressed`, (...[, keyval, keycode, state]) => {
             switch (keyval) {
@@ -86,7 +84,7 @@ class ShortcutRow extends Adw.ActionRow {
         const window = new KeybindingWindow(this.get_root());
         window.connect(`close-request`, () => {
             const shortcut = window.keybinding;
-            if (shortcut !== null) {
+            if (shortcut !== undefined) {
                 this._preferences.setShortcut(this._preferencesKey, shortcut);
             }
             window.destroy();

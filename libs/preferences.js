@@ -5,6 +5,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 var Preferences = GObject.registerClass({
     Signals: {
+        'destroy': {},
         'historySizeChanged': {},
         'webSearchEngineChanged': {},
         'shortcutChanged': {
@@ -49,6 +50,8 @@ var Preferences = GObject.registerClass({
 
     destroy() {
         this._settings.disconnect(this._settingsChangedId);
+
+        this.emit(`destroy`);
     }
 
     get historySize() {
