@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:19+0300\n"
+"POT-Creation-Date: 2023-08-20 11:20+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -18,75 +18,75 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: extension.js:106
+#: extension.js:108
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:113
+#: extension.js:115
 msgctxt "Close dialog"
 msgid "Close"
 msgstr ""
 
-#: extension.js:182
+#: extension.js:184
 msgid "Type to search..."
 msgstr "Digita per cercare..."
 
-#: extension.js:201
+#: extension.js:203
 msgid "No Matches"
 msgstr "Nessuna Corrispondenza"
 
-#: extension.js:561
+#: extension.js:564
 msgid "Private Mode is On"
 msgstr ""
 
-#: extension.js:567
+#: extension.js:570
 msgid "History is Empty"
 msgstr "Cronologia vuota"
 
-#: extension.js:582
+#: extension.js:592
 msgid "Clear History"
 msgstr "Cancella Cronologia"
 
-#: extension.js:591
+#: extension.js:601
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:616
+#: extension.js:626
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: extension.js:770 extension.js:794
+#: extension.js:781 extension.js:805
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:800
+#: extension.js:811
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:806 extension.js:810
+#: extension.js:817 extension.js:821
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:830
+#: extension.js:841
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:835
+#: extension.js:846
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:840
+#: extension.js:851
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:858
+#: extension.js:869
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:880
+#: extension.js:891
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
@@ -99,109 +99,109 @@ msgstr ""
 msgid "Enter a new shortcut"
 msgstr "Inserisci la nuova scorciatoia"
 
-#: prefs.js:73
+#: prefs.js:71
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Disabilitato"
 
-#: prefs.js:126
+#: prefs.js:123
 msgid "History size"
 msgstr "Dimensione della Cronologia"
 
-#: prefs.js:142
+#: prefs.js:139
 msgid "Show leading and trailing whitespace"
 msgstr ""
 
-#: prefs.js:158
+#: prefs.js:155
 msgid "Show color preview"
 msgstr ""
 
-#: prefs.js:163
+#: prefs.js:160
 msgctxt "General options"
 msgid "General"
 msgstr ""
 
-#: prefs.js:170
+#: prefs.js:167
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr ""
 
-#: prefs.js:183
+#: prefs.js:180
 msgid "Search URL"
 msgstr ""
 
-#: prefs.js:225
+#: prefs.js:222
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:230
+#: prefs.js:227
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:236
+#: prefs.js:233
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: prefs.js:239
+#: prefs.js:236
 msgid "Toggle menu"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:241
 msgid "Toggle private mode"
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:246
 #, fuzzy
 msgid "Clear history"
 msgstr "Cancella Cronologia"
 
-#: libs/utils.js:232
+#: libs/utils.js:230
 msgid "DuckDuckGo"
 msgstr ""
 
-#: libs/utils.js:233
+#: libs/utils.js:231
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr ""
 
-#: libs/utils.js:234
+#: libs/utils.js:232
 msgid "Google"
 msgstr ""
 
-#: libs/utils.js:235
+#: libs/utils.js:233
 msgid "Bing"
 msgstr ""
 
-#: libs/utils.js:236
+#: libs/utils.js:234
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr ""
 
-#: libs/utils.js:237
+#: libs/utils.js:235
 msgid "Yahoo"
 msgstr ""
 
-#: libs/utils.js:238
+#: libs/utils.js:236
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr ""
 
-#: libs/utils.js:239
+#: libs/utils.js:237
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr ""
 
-#: libs/utils.js:240
+#: libs/utils.js:238
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr ""
 
-#: libs/utils.js:241
+#: libs/utils.js:239
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr ""
 
-#: libs/utils.js:249
+#: libs/utils.js:247
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""

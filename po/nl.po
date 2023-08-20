@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:19+0300\n"
+"POT-Creation-Date: 2023-08-20 11:20+0300\n"
 "PO-Revision-Date: 2023-08-16 10:34+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -17,75 +17,75 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: extension.js:106
+#: extension.js:108
 msgid "Failed to generate QR code"
 msgstr "De QR-code kan niet worden aangemaakt"
 
-#: extension.js:113
+#: extension.js:115
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Sluiten"
 
-#: extension.js:182
+#: extension.js:184
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:201
+#: extension.js:203
 msgid "No Matches"
 msgstr "Er zijn geen overeenkomsten"
 
-#: extension.js:561
+#: extension.js:564
 msgid "Private Mode is On"
 msgstr "De incognitomodus is ingeschakeld"
 
-#: extension.js:567
+#: extension.js:570
 msgid "History is Empty"
 msgstr "De geschiedenis is blanco"
 
-#: extension.js:582
+#: extension.js:592
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:591
+#: extension.js:601
 msgid "Private Mode"
 msgstr "Incognitomodus"
 
-#: extension.js:616
+#: extension.js:626
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: extension.js:770 extension.js:794
+#: extension.js:781 extension.js:805
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Openen"
 
-#: extension.js:800
+#: extension.js:811
 msgid "Compose an Email"
 msgstr "E-mail opstellen"
 
-#: extension.js:806 extension.js:810
+#: extension.js:817 extension.js:821
 msgid "Make a Call"
 msgstr "Gesprek starten"
 
-#: extension.js:830
+#: extension.js:841
 msgid "Search the Web"
 msgstr "Zoeken op internet"
 
-#: extension.js:835
+#: extension.js:846
 msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
-#: extension.js:840
+#: extension.js:851
 msgid "Show QR Code"
 msgstr "QR-code tonen"
 
-#: extension.js:858
+#: extension.js:869
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "‘%s’ kan niet worden geopend"
 
-#: extension.js:880
+#: extension.js:891
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Ongeldige zoekurl: ‘%s’"
@@ -98,108 +98,108 @@ msgstr "Druk op backspace om de sneltoets te wissen of esc om te annuleren"
 msgid "Enter a new shortcut"
 msgstr "Druk op een nieuwe sneltoets"
 
-#: prefs.js:73
+#: prefs.js:71
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: prefs.js:126
+#: prefs.js:123
 msgid "History size"
 msgstr "Geschiedenisomvang"
 
-#: prefs.js:142
+#: prefs.js:139
 msgid "Show leading and trailing whitespace"
 msgstr "Witruimte aan begin en einde tonen"
 
-#: prefs.js:158
+#: prefs.js:155
 msgid "Show color preview"
 msgstr "Kleuren voorvertonen"
 
-#: prefs.js:163
+#: prefs.js:160
 msgctxt "General options"
 msgid "General"
 msgstr "Algemeen"
 
-#: prefs.js:170
+#: prefs.js:167
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr "De url, met %s op de plaats van de zoekopdracht"
 
-#: prefs.js:183
+#: prefs.js:180
 msgid "Search URL"
 msgstr "Zoekurl"
 
-#: prefs.js:225
+#: prefs.js:222
 msgid "Search Engine"
 msgstr "Zoekmachine"
 
-#: prefs.js:230
+#: prefs.js:227
 msgid "Web Search"
 msgstr "Zoeken op internet"
 
-#: prefs.js:236
+#: prefs.js:233
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
-#: prefs.js:239
+#: prefs.js:236
 msgid "Toggle menu"
 msgstr "Menu tonen/verbergen"
 
-#: prefs.js:244
+#: prefs.js:241
 msgid "Toggle private mode"
 msgstr "Incognitomodus aan/uit"
 
-#: prefs.js:249
+#: prefs.js:246
 msgid "Clear history"
 msgstr "Geschiedenis wissen"
 
-#: libs/utils.js:232
+#: libs/utils.js:230
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
-#: libs/utils.js:233
+#: libs/utils.js:231
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr "Brave"
 
-#: libs/utils.js:234
+#: libs/utils.js:232
 msgid "Google"
 msgstr "Google"
 
-#: libs/utils.js:235
+#: libs/utils.js:233
 msgid "Bing"
 msgstr "Bing"
 
-#: libs/utils.js:236
+#: libs/utils.js:234
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr "Baidu"
 
-#: libs/utils.js:237
+#: libs/utils.js:235
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: libs/utils.js:238
+#: libs/utils.js:236
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr "Ecosia"
 
-#: libs/utils.js:239
+#: libs/utils.js:237
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr "Ask"
 
-#: libs/utils.js:240
+#: libs/utils.js:238
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr "AOL"
 
-#: libs/utils.js:241
+#: libs/utils.js:239
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr "Naver"
 
-#: libs/utils.js:249
+#: libs/utils.js:247
 msgctxt "Other search engine"
 msgid "Other"
 msgstr "Andere"
