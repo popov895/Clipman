@@ -405,15 +405,19 @@ const HistoryMenuItem = GObject.registerClass({
     }
 
     set showSurroundingWhitespace(showSurroundingWhitespace) {
-        let text;
         if (showSurroundingWhitespace) {
-            text = this.text.replace(/^\s+|\s+$/g, (match) => {
-                return match.replace(/ /g, `␣`).replace(/\t/g, `⇥`).replace(/\n/g, `↵`);
-            });
+            const text = GLib.markup_escape_text(this.text, -1).replaceAll(/^\s+|\s+$/g, (match1) => {
+                for (const [regExp, str] of [[/ +/g, `␣`], [/\t+/g, `⇥`], [/\n+/g, `↵`]]) {
+                    match1 = match1.replaceAll(regExp, (match2) => {
+                        return `<span alpha='35%'>${str.repeat(match2.length)}</span>`;
+                    });
+                }
+                return match1;
+            }).replaceAll(/\s+/g, ` `);
+            this.label.clutter_text.set_markup(text);
         } else {
-            text = this.text.trim();
+            this.label.text = this.text.trim().replaceAll(/\s+/g, ` `);
         }
-        this.label.text = text.replaceAll(/\s+/g, ` `);
     }
 
     set showColorPreview(showColorPreview) {
