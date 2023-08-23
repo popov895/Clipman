@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-20 11:20+0300\n"
+"POT-Creation-Date: 2023-08-23 14:06+0300\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -36,58 +36,58 @@ msgstr "Szukaj..."
 msgid "No Matches"
 msgstr "Brak wyników"
 
-#: extension.js:564
+#: extension.js:568
 msgid "Private Mode is On"
 msgstr "Tryb prywatny jest włączony"
 
-#: extension.js:570
+#: extension.js:574
 msgid "History is Empty"
 msgstr "Historia jest pusta"
 
-#: extension.js:592
+#: extension.js:596
 msgid "Clear History"
 msgstr "Wyczyść historię"
 
-#: extension.js:601
+#: extension.js:605
 msgid "Private Mode"
 msgstr "Tryb prywatny"
 
-#: extension.js:626
+#: extension.js:630
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: extension.js:781 extension.js:805
+#: extension.js:785 extension.js:809
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:811
+#: extension.js:815
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:817 extension.js:821
+#: extension.js:821 extension.js:825
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:841
+#: extension.js:845
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:846
+#: extension.js:850
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:851
+#: extension.js:855
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:869
+#: extension.js:873
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:891
+#: extension.js:895
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
