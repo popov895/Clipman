@@ -2,7 +2,7 @@
     "uuid": "clipman@popov895.ukr.net",
     "name": "Clipman",
     "description": "Simple but powerful clipboard manager.",
-    "version": 45,
+    "version": 46,
     "settings-schema": "org.gnome.shell.extensions.clipman",
     "shell-version": [
         "42",
