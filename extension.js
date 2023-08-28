@@ -231,10 +231,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             }
         );
         this.scrollView = new St.ScrollView({
+            hscrollbar_policy: St.PolicyType.NEVER,
             overlay_scrollbars: true,
             style_class: `clipman-historyscrollview`,
         });
-        this.scrollView.hscrollbar_policy = St.PolicyType.NEVER;
         this.scrollView.add_actor(this.section.actor);
         this.scrollView.vscroll.adjustment.connectObject(`changed`, () => {
             Promise.resolve().then(() => {
@@ -407,11 +407,11 @@ const HistoryMenuItem = GObject.registerClass({
     set showSurroundingWhitespace(showSurroundingWhitespace) {
         if (showSurroundingWhitespace) {
             const text = GLib.markup_escape_text(this.text, -1).replaceAll(/^\s+|\s+$/g, (match1) => {
-                for (const [regExp, str] of [[/ +/g, `␣`], [/\t+/g, `⇥`], [/\n+/g, `↵`]]) {
+                [[/ +/g, `␣`], [/\t+/g, `⇥`], [/\n+/g, `↵`]].forEach(([regExp, str]) => {
                     match1 = match1.replaceAll(regExp, (match2) => {
                         return `<span alpha='35%'>${str.repeat(match2.length)}</span>`;
                     });
-                }
+                });
                 return match1;
             }).replaceAll(/\s+/g, ` `);
             this.label.clutter_text.set_markup(text);
@@ -695,7 +695,7 @@ class PanelIndicator extends PanelMenu.Button {
         if (menuItem.pinned) {
             --this._pinnedCount;
         }
-        if (global.stage.get_key_focus() === menuItem) {
+        if (global.stage.key_focus === menuItem) {
             const menuItems = this._historyMenuSection.section._getMenuItems();
             if (menuItems.length > 1) {
                 const isLast = menuItems.indexOf(menuItem) === menuItems.length - 1;
@@ -783,48 +783,55 @@ class PanelIndicator extends PanelMenu.Button {
             const actions = [
                 {
                     title: _(`Open`, `Open URL`),
-                    validator: Validator.isURL,
-                    validatorOptions: {
-                        protocols: [
-                            `http`,
-                            `https`,
-                            `ftp`,
-                            `sftp`,
-                            `ssh`,
-                            `smb`,
-                            `telnet`,
-                            `gopher`,
-                            `vnc`,
-                            `irc`,
-                            `irc6`,
-                            `ircs`,
-                            `git`,
-                            `rsync`,
-                            `feed`,
-                        ],
-                        require_protocol: true,
+                    validator: (text) => {
+                        return Validator.isURL(text, {
+                            protocols: [
+                                `http`,
+                                `https`,
+                                `ftp`,
+                                `sftp`,
+                                `ssh`,
+                                `smb`,
+                                `telnet`,
+                                `gopher`,
+                                `vnc`,
+                                `irc`,
+                                `irc6`,
+                                `ircs`,
+                                `git`,
+                                `rsync`,
+                                `feed`,
+                            ],
+                            require_protocol: true,
+                        });
                     },
                 },
                 {
                     title: _(`Open`, `Open URL`),
-                    validator: Validator.isMagnetURI,
+                    validator: (text) => {
+                        return Validator.isMagnetURI(text);
+                    },
                 },
                 {
                     prefix: `mailto:`,
                     regExp: /^mailto:/i,
                     title: _(`Compose an Email`),
-                    validator: Validator.isEmail,
+                    validator: (text) => {
+                        return Validator.isEmail(text);
+                    },
                 },
                 {
                     prefix: `tel:+`,
                     regExp: /^(tel:)?\+/i,
                     title: _(`Make a Call`),
-                    validator: Validator.isMobilePhone,
+                    validator: (text) => {
+                        return Validator.isMobilePhone(text);
+                    },
                 },
                 {
                     title: _(`Make a Call`),
-                    validator: (str) => {
-                        return str.match(/^callto:\S+/i);
+                    validator: (text) => {
+                        return text.match(/^callto:\S+/i);
                     },
                 },
             ];
@@ -832,7 +839,7 @@ class PanelIndicator extends PanelMenu.Button {
             const trimmedText = menuItem.text.trim();
             for (const action of actions) {
                 const capturedText = action.regExp ? trimmedText.replace(action.regExp, ``) : trimmedText;
-                if (action.validator(capturedText, action.validatorOptions)) {
+                if (action.validator(capturedText)) {
                     menuItem.menu.addAction(action.title, () => {
                         this.menu.close();
                         this._launchUri((action.prefix ?? ``) + capturedText);
@@ -930,8 +937,8 @@ class PanelIndicator extends PanelMenu.Button {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         panelIndicator.state.history = menuItems.map((menuItem) => {
             return {
-                pinned: menuItem.pinned,
                 text: menuItem.text,
+                pinned: menuItem.pinned,
                 timestamp: menuItem.timestamp
             };
         });
