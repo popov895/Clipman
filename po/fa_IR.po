@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 14:06+0300\n"
+"POT-Creation-Date: 2023-09-06 21:31+0300\n"
 "PO-Revision-Date: 2023-07-03 13:44+0300\n"
 "Last-Translator: MohammadSaleh Kamyab <mskf1383@protonmail.com>\n"
 "Language-Team: \n"
@@ -35,58 +35,58 @@ msgstr "نوشتن برای جست‌وجو…"
 msgid "No Matches"
 msgstr "بدون نتیجه"
 
-#: extension.js:568
+#: extension.js:571
 msgid "Private Mode is On"
 msgstr ""
 
-#: extension.js:574
+#: extension.js:577
 msgid "History is Empty"
 msgstr "تاریخچه خالی است"
 
-#: extension.js:596
+#: extension.js:599
 msgid "Clear History"
 msgstr "پاک‌سازی تاریخچه"
 
-#: extension.js:605
+#: extension.js:608
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:630
+#: extension.js:633
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: extension.js:785 extension.js:809
+#: extension.js:789 extension.js:814
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:815
+#: extension.js:822
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:821 extension.js:825
+#: extension.js:830 extension.js:836
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:845
+#: extension.js:856
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:850
+#: extension.js:861
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:855
+#: extension.js:866
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:873
+#: extension.js:884
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:895
+#: extension.js:906
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
@@ -155,53 +155,53 @@ msgstr ""
 msgid "Clear history"
 msgstr "پاک‌سازی تاریخچه"
 
-#: libs/utils.js:230
+#: libs/utils.js:232
 msgid "DuckDuckGo"
 msgstr ""
 
-#: libs/utils.js:231
+#: libs/utils.js:233
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr ""
 
-#: libs/utils.js:232
+#: libs/utils.js:234
 msgid "Google"
 msgstr ""
 
-#: libs/utils.js:233
+#: libs/utils.js:235
 msgid "Bing"
 msgstr ""
 
-#: libs/utils.js:234
+#: libs/utils.js:236
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr ""
 
-#: libs/utils.js:235
+#: libs/utils.js:237
 msgid "Yahoo"
 msgstr ""
 
-#: libs/utils.js:236
+#: libs/utils.js:238
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr ""
 
-#: libs/utils.js:237
+#: libs/utils.js:239
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr ""
 
-#: libs/utils.js:238
+#: libs/utils.js:240
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr ""
 
-#: libs/utils.js:239
+#: libs/utils.js:241
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr ""
 
-#: libs/utils.js:247
+#: libs/utils.js:249
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""
