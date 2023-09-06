@@ -715,7 +715,8 @@ class PanelIndicator extends PanelMenu.Button {
     _pinMenuItem(menuItem) {
         menuItem.pinned = true;
         menuItem.pinIcon.icon_name = `starred-symbolic`;
-        this._historyMenuSection.section.moveMenuItem(menuItem, this._pinnedCount++);
+        this._historyMenuSection.section.moveMenuItem(menuItem, 0);
+        ++this._pinnedCount;
 
         this._updateUi();
     }
