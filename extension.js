@@ -232,13 +232,17 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         );
         this.scrollView = new St.ScrollView({
             hscrollbar_policy: St.PolicyType.NEVER,
-            overlay_scrollbars: true,
             style_class: `clipman-historyscrollview`,
+            vscrollbar_policy: St.PolicyType.EXTERNAL,
         });
         this.scrollView.add_actor(this.section.actor);
         this.scrollView.vscroll.adjustment.connectObject(`changed`, () => {
             Promise.resolve().then(() => {
-                this.scrollView.overlay_scrollbars = !this.scrollView.vscrollbar_visible;
+                if (Math.floor(this.scrollView.vscroll.adjustment.upper) > this.scrollView.vscroll.adjustment.page_size) {
+                    this.scrollView.vscrollbar_policy = St.PolicyType.ALWAYS;
+                } else {
+                    this.scrollView.vscrollbar_policy = St.PolicyType.EXTERNAL;
+                }
             });
         });
         const menuSection = new PopupMenu.PopupMenuSection();
@@ -319,14 +323,12 @@ const HistoryMenuItem = GObject.registerClass({
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this.menu.actor.enable_mouse_scrolling = false;
 
-        // disable animation on opening and closing to avoid flickering
-        this.menu.open = function() {
+        this.menu.open = function(animate) {
             if (!this.menu.isOpen) {
                 this.emit(`submenuAboutToOpen`);
-                Object.getPrototypeOf(this.menu).open.call(this.menu, false);
+                Object.getPrototypeOf(this.menu).open.call(this.menu, animate);
             }
         }.bind(this);
-        this.menu.close = this.menu.close.bind(this.menu, false);
 
         this._topMenu = topMenu;
         this._topMenu.connectObject(`open-state-changed`, (...[, open]) => {
