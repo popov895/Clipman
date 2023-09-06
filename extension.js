@@ -317,6 +317,7 @@ const HistoryMenuItem = GObject.registerClass({
         this.pinned = pinned;
         this.timestamp = timestamp;
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        this.menu.actor.enable_mouse_scrolling = false;
 
         // disable animation on opening and closing to avoid flickering
         this.menu.open = function() {
