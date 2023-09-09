@@ -1,9 +1,8 @@
 'use strict';
 
-const { GObject } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
+import GObject from 'gi://GObject';
 
-var Preferences = GObject.registerClass({
+export const Preferences = GObject.registerClass({
     Signals: {
         'destroy': {},
         'historySizeChanged': {},
@@ -13,7 +12,7 @@ var Preferences = GObject.registerClass({
         },
     },
 }, class Preferences extends GObject.Object {
-    constructor() {
+    constructor(settings) {
         super();
 
         this._keyHistorySize = `history-size`;
@@ -25,7 +24,7 @@ var Preferences = GObject.registerClass({
         this._keyTogglePrivateModeShortcut = `toggle-private-mode-shortcut`;
         this._keyClearHistoryShortcut = `clear-history-shortcut`;
 
-        this._settings = ExtensionUtils.getSettings();
+        this._settings = settings;
         this._settingsChangedId = this._settings.connect(`changed`, (...[, key]) => {
             switch (key) {
                 case this._keyHistorySize: {

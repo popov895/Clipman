@@ -1,19 +1,20 @@
 'use strict';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import GLib from 'gi://GLib';
 
-var _ = function(text, context) {
-    return context ? ExtensionUtils.pgettext(context, text) : ExtensionUtils.gettext(text);
+const uuid = `clipman@popov895.ukr.net`;
+
+export const _ = function(text, context) {
+    return context ? GLib.dpgettext2(uuid, context, text) : GLib.dgettext(uuid, text);
 };
 
-var log = function(text) {
-    console.log(`${Me.uuid}: ${text}`);
+export const log = function(text) {
+    console.log(`${uuid}: ${text}`);
 };
 
 const knownColors = new Map();
 
-var ColorParser = {
+export const ColorParser = {
     parse(color) {
         if (!color) {
             return null;
@@ -224,7 +225,7 @@ var ColorParser = {
 
 const predefinedSearchEngines = [];
 
-var SearchEngines = {
+export const SearchEngines = {
     get(preferences) {
         // use lazy loading to ensure that translations are initialized
         if (predefinedSearchEngines.length === 0) {

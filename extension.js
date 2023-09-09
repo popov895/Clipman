@@ -1,20 +1,29 @@
 'use strict';
 
-const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, St } = imports.gi;
+import Clutter from 'gi://Clutter';
+import Cogl from 'gi://Cogl';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Graphene from 'gi://Graphene';
+import Meta from 'gi://Meta';
+import Pango from 'gi://Pango';
+import Shell from 'gi://Shell';
+import St from 'gi://St';
 
-const Util = imports.misc.util;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
-const ModalDialog = imports.ui.modalDialog;
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-const SignalTracker = imports.misc.signalTracker;
+import * as AnimationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as SignalTracker from 'resource:///org/gnome/shell/misc/signalTracker.js';
 
-const Me = ExtensionUtils.getCurrentExtension();
-const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
-const { Preferences } = Me.imports.libs.preferences;
-const Validator = Me.imports.libs.validator.validator;
-const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+
+import { default as QrCode } from './libs/qrcodegen.js';
+import { default as Validator } from './libs/validator.js';
+import { Preferences } from './libs/preferences.js';
+import { _, log, ColorParser, SearchEngines } from './libs/utils.js';
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -191,7 +200,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             reactive: false,
             style_class: `clipman-searchmenuitem`,
         });
-        searchMenuItem._ornamentLabel.visible = false;
+        searchMenuItem._ornamentIcon.visible = false;
         searchMenuItem.add(this.entry);
         this.addMenuItem(searchMenuItem);
 
@@ -279,7 +288,7 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             }
         }
         menuItem.connectObject(`key-focus-in`, () => {
-            Util.ensureActorVisibleInScrollView(this.scrollView, menuItem);
+            AnimationUtils.ensureActorVisibleInScrollView(this.scrollView, menuItem);
         });
     }
 
@@ -521,15 +530,16 @@ const HistoryMenuItem = GObject.registerClass({
 
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
-    constructor() {
+    constructor(extension) {
         super(0);
+
+        this._extension = extension;
+        this._pinnedCount = 0;
 
         this.menu.actor.add_style_class_name(`clipman-panelmenu-button`);
 
         this._buildIcon();
         this._buildMenu();
-
-        this._pinnedCount = 0;
 
         this._clipboard = new ClipboardManager();
         this._clipboard.connectObject(`changed`, () => {
@@ -540,7 +550,7 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
 
-        this._preferences = new Preferences();
+        this._preferences = new Preferences(this._extension.getSettings());
         this._preferences.connectObject(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
 
         this._loadState();
@@ -569,13 +579,13 @@ class PanelIndicator extends PanelMenu.Button {
     _buildMenu() {
         this._privateModePlaceholder = new PlaceholderMenuItem(
             _(`Private Mode is On`),
-            Gio.icon_new_for_string(`${Me.path}/icons/private-mode-symbolic.svg`)
+            Gio.icon_new_for_string(`${this._extension.path}/icons/private-mode-symbolic.svg`)
         );
         this.menu.addMenuItem(this._privateModePlaceholder);
 
         this._emptyPlaceholder = new PlaceholderMenuItem(
             _(`History is Empty`),
-            Gio.icon_new_for_string(`${Me.path}/icons/clipboard-symbolic.svg`)
+            Gio.icon_new_for_string(`${this._extension.path}/icons/clipboard-symbolic.svg`)
         );
         this.menu.addMenuItem(this._emptyPlaceholder);
 
@@ -631,7 +641,7 @@ class PanelIndicator extends PanelMenu.Button {
         this.menu.addMenuItem(this._privateModeMenuItem);
 
         this.menu.addAction(_(`Settings`, `Open settings`), () => {
-            ExtensionUtils.openPrefs();
+            this._extension.openPreferences();
         });
 
         this.menu.connectObject(`open-state-changed`, (...[, open]) => {
@@ -881,7 +891,7 @@ class PanelIndicator extends PanelMenu.Button {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
         } catch {
-            notifyError(_(`Failed to launch URI "%s"`).format(uri));
+            this._notifyError(_(`Failed to launch URI "%s"`).format(uri));
         }
     }
 
@@ -890,7 +900,7 @@ class PanelIndicator extends PanelMenu.Button {
         const currentEngine = searchEngines.find(this._preferences.webSearchEngine);
 
         if (!currentEngine) {
-            notifyError(`Unknown search engine`);
+            this._notifyError(`Unknown search engine`);
             return;
         }
 
@@ -903,12 +913,16 @@ class PanelIndicator extends PanelMenu.Button {
                 require_protocol: true,
             };
             if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
-                notifyError(_(`Invalid search URL "%s"`).format(currentEngine.url));
+                this._notifyError(_(`Invalid search URL "%s"`).format(currentEngine.url));
                 return;
             }
         }
 
         this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
+    }
+
+    _notifyError(error) {
+        Main.notifyError(this._extension.metadata.name, error);
     }
 
     _loadState() {
@@ -1004,23 +1018,20 @@ const panelIndicator = {
     }
 };
 
-function notifyError(error) {
-    Main.notifyError(Me.metadata.name, error);
-}
+export default class ClipmanExtension extends Extension
+{
+    static {
+        SignalTracker.registerDestroyableType(ClipboardManager);
+        SignalTracker.registerDestroyableType(Preferences);
+    }
 
-function init() {
-    SignalTracker.registerDestroyableType(ClipboardManager);
-    SignalTracker.registerDestroyableType(Preferences);
+    enable() {
+        panelIndicator.instance = new PanelIndicator(this);
+        Main.panel.addToStatusArea(`${this.metadata.name}`, panelIndicator.instance);
+    }
 
-    ExtensionUtils.initTranslations(Me.uuid);
-}
-
-function enable() {
-    panelIndicator.instance = new PanelIndicator();
-    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator.instance);
-}
-
-function disable() {
-    panelIndicator.instance.destroy();
-    delete panelIndicator.instance;
+    disable() {
+        panelIndicator.instance.destroy();
+        delete panelIndicator.instance;
+    }
 }

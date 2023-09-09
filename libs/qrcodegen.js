@@ -835,3 +835,4 @@ var qrcodegen;
         QrSegment.Mode = Mode;
     })(QrSegment = qrcodegen.QrSegment || (qrcodegen.QrSegment = {}));
 })(qrcodegen || (qrcodegen = {}));
+export default qrcodegen.QrCode;

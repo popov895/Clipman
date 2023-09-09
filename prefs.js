@@ -1,11 +1,15 @@
 'use strict';
 
-const { Adw, Gdk, Gio, GObject, Gtk } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
+import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const Me = ExtensionUtils.getCurrentExtension();
-const { Preferences } = Me.imports.libs.preferences;
-const { _, SearchEngines } = Me.imports.libs.utils;
+import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+import { Preferences } from './libs/preferences.js';
+import { _, SearchEngines } from './libs/utils.js';
 
 const KeybindingWindow = GObject.registerClass(
 class KeybindingWindow extends Adw.Window {
@@ -93,165 +97,164 @@ class ShortcutRow extends Adw.ActionRow {
     }
 });
 
-function init() {
-    ExtensionUtils.initTranslations(Me.uuid);
-}
+export default class ClipmanExtensionPreferences extends ExtensionPreferences
+{
+    fillPreferencesWindow(window) {
+        window._preferences = new Preferences(this.getSettings());
+        window.connect(`close-request`, () => {
+            window._preferences.destroy();
+        });
 
-function fillPreferencesWindow(window) {
-    window._preferences = new Preferences();
-    window.connect(`close-request`, () => {
-        window._preferences.destroy();
-    });
+        const historySizeSpinBox = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 1,
+                upper: 500,
+                step_increment: 1,
+            }),
+            valign: Gtk.Align.CENTER,
+        });
+        window._preferences.bind(
+            window._preferences._keyHistorySize,
+            historySizeSpinBox,
+            `value`,
+            Gio.SettingsBindFlags.DEFAULT
+        );
 
-    const historySizeSpinBox = new Gtk.SpinButton({
-        adjustment: new Gtk.Adjustment({
-            lower: 1,
-            upper: 500,
-            step_increment: 1,
-        }),
-        valign: Gtk.Align.CENTER,
-    });
-    window._preferences.bind(
-        window._preferences._keyHistorySize,
-        historySizeSpinBox,
-        `value`,
-        Gio.SettingsBindFlags.DEFAULT
-    );
+        const historySizeRow = new Adw.ActionRow({
+            activatable_widget: historySizeSpinBox,
+            title: _(`History size`),
+        });
+        historySizeRow.add_suffix(historySizeSpinBox);
 
-    const historySizeRow = new Adw.ActionRow({
-        activatable_widget: historySizeSpinBox,
-        title: _(`History size`),
-    });
-    historySizeRow.add_suffix(historySizeSpinBox);
+        const surroundingWhitespaceSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        window._preferences.bind(
+            window._preferences._keyShowSurroundingWhitespace,
+            surroundingWhitespaceSwitch,
+            `active`,
+            Gio.SettingsBindFlags.DEFAULT
+        );
 
-    const surroundingWhitespaceSwitch = new Gtk.Switch({
-        valign: Gtk.Align.CENTER,
-    });
-    window._preferences.bind(
-        window._preferences._keyShowSurroundingWhitespace,
-        surroundingWhitespaceSwitch,
-        `active`,
-        Gio.SettingsBindFlags.DEFAULT
-    );
+        const surroundingWhitespaceRow = new Adw.ActionRow({
+            activatable_widget: surroundingWhitespaceSwitch,
+            title: _(`Show leading and trailing whitespace`),
+        });
+        surroundingWhitespaceRow.add_suffix(surroundingWhitespaceSwitch);
 
-    const surroundingWhitespaceRow = new Adw.ActionRow({
-        activatable_widget: surroundingWhitespaceSwitch,
-        title: _(`Show leading and trailing whitespace`),
-    });
-    surroundingWhitespaceRow.add_suffix(surroundingWhitespaceSwitch);
+        const colorPreviewSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        window._preferences.bind(
+            window._preferences._keyShowColorPreview,
+            colorPreviewSwitch,
+            `active`,
+            Gio.SettingsBindFlags.DEFAULT
+        );
 
-    const colorPreviewSwitch = new Gtk.Switch({
-        valign: Gtk.Align.CENTER,
-    });
-    window._preferences.bind(
-        window._preferences._keyShowColorPreview,
-        colorPreviewSwitch,
-        `active`,
-        Gio.SettingsBindFlags.DEFAULT
-    );
+        const colorPreviewRow = new Adw.ActionRow({
+            activatable_widget: colorPreviewSwitch,
+            title: _(`Show color preview`),
+        });
+        colorPreviewRow.add_suffix(colorPreviewSwitch);
 
-    const colorPreviewRow = new Adw.ActionRow({
-        activatable_widget: colorPreviewSwitch,
-        title: _(`Show color preview`),
-    });
-    colorPreviewRow.add_suffix(colorPreviewSwitch);
+        const generalGroup = new Adw.PreferencesGroup({
+            title: _(`General`, `General options`),
+        });
+        generalGroup.add(historySizeRow);
+        generalGroup.add(surroundingWhitespaceRow);
+        generalGroup.add(colorPreviewRow);
 
-    const generalGroup = new Adw.PreferencesGroup({
-        title: _(`General`, `General options`),
-    });
-    generalGroup.add(historySizeRow);
-    generalGroup.add(surroundingWhitespaceRow);
-    generalGroup.add(colorPreviewRow);
+        const customSearchUrlEntry = new Gtk.Entry({
+            placeholder_text: _(`URL with %s in place of query`),
+            valign: Gtk.Align.CENTER,
+        });
+        customSearchUrlEntry.set_size_request(300, -1);
+        window._preferences.bind(
+            window._preferences._keyCustomWebSearchUrl,
+            customSearchUrlEntry,
+            `text`,
+            Gio.SettingsBindFlags.DEFAULT
+        );
 
-    const customSearchUrlEntry = new Gtk.Entry({
-        placeholder_text: _(`URL with %s in place of query`),
-        valign: Gtk.Align.CENTER,
-    });
-    customSearchUrlEntry.set_size_request(300, -1);
-    window._preferences.bind(
-        window._preferences._keyCustomWebSearchUrl,
-        customSearchUrlEntry,
-        `text`,
-        Gio.SettingsBindFlags.DEFAULT
-    );
+        const customSearchUrlRow = new Adw.ActionRow({
+            activatable_widget: customSearchUrlEntry,
+            title: _(`Search URL`),
+        });
+        customSearchUrlRow.add_suffix(customSearchUrlEntry);
+        customSearchUrlRow.connect(`notify::visible`, () => {
+            if (customSearchUrlRow.visible) {
+                customSearchUrlEntry.grab_focus();
+            }
+        });
 
-    const customSearchUrlRow = new Adw.ActionRow({
-        activatable_widget: customSearchUrlEntry,
-        title: _(`Search URL`),
-    });
-    customSearchUrlRow.add_suffix(customSearchUrlEntry);
-    customSearchUrlRow.connect(`notify::visible`, () => {
-        if (customSearchUrlRow.visible) {
-            customSearchUrlEntry.grab_focus();
-        }
-    });
+        const searchEngines = SearchEngines.get(window._preferences);
+        searchEngines.sort();
 
-    const searchEngines = SearchEngines.get(window._preferences);
-    searchEngines.sort();
-
-    const searchEngineDropDown = new Gtk.DropDown({
-        model: Gtk.StringList.new(searchEngines.map((engine) => {
-            return engine.title;
-        })),
-        selected: -1,
-        valign: Gtk.Align.CENTER,
-    });
-    searchEngineDropDown.bind_property_full(
-        `selected`,
-        customSearchUrlRow,
-        `visible`,
-        GObject.BindingFlags.DEFAULT,
-        () => {
-            return [
-                true,
-                searchEngines[searchEngineDropDown.selected].name === `custom`,
-            ];
-        },
-        null
-    );
-    searchEngineDropDown.connect(`notify::selected`, () => {
-        window._preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
-    });
-    searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
-    window._preferences.connect(`webSearchEngineChanged`, () => {
+        const searchEngineDropDown = new Gtk.DropDown({
+            model: Gtk.StringList.new(searchEngines.map((engine) => {
+                return engine.title;
+            })),
+            selected: -1,
+            valign: Gtk.Align.CENTER,
+        });
+        searchEngineDropDown.bind_property_full(
+            `selected`,
+            customSearchUrlRow,
+            `visible`,
+            GObject.BindingFlags.DEFAULT,
+            () => {
+                return [
+                    true,
+                    searchEngines[searchEngineDropDown.selected].name === `custom`,
+                ];
+            },
+            null
+        );
+        searchEngineDropDown.connect(`notify::selected`, () => {
+            window._preferences.webSearchEngine = searchEngines[searchEngineDropDown.selected].name;
+        });
         searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
-    });
+        window._preferences.connect(`webSearchEngineChanged`, () => {
+            searchEngineDropDown.selected = searchEngines.findIndex(window._preferences.webSearchEngine);
+        });
 
-    const searchEngineRow = new Adw.ActionRow({
-        activatable_widget: searchEngineDropDown,
-        title: _(`Search Engine`),
-    });
-    searchEngineRow.add_suffix(searchEngineDropDown);
+        const searchEngineRow = new Adw.ActionRow({
+            activatable_widget: searchEngineDropDown,
+            title: _(`Search Engine`),
+        });
+        searchEngineRow.add_suffix(searchEngineDropDown);
 
-    const webSearchGroup = new Adw.PreferencesGroup({
-        title: _(`Web Search`),
-    });
-    webSearchGroup.add(searchEngineRow);
-    webSearchGroup.add(customSearchUrlRow);
+        const webSearchGroup = new Adw.PreferencesGroup({
+            title: _(`Web Search`),
+        });
+        webSearchGroup.add(searchEngineRow);
+        webSearchGroup.add(customSearchUrlRow);
 
-    const keybindingGroup = new Adw.PreferencesGroup({
-        title: _(`Keyboard Shortcuts`),
-    });
-    keybindingGroup.add(new ShortcutRow(
-        _(`Toggle menu`),
-        window._preferences,
-        window._preferences._keyToggleMenuShortcut
-    ));
-    keybindingGroup.add(new ShortcutRow(
-        _(`Toggle private mode`),
-        window._preferences,
-        window._preferences._keyTogglePrivateModeShortcut
-    ));
-    keybindingGroup.add(new ShortcutRow(
-        _(`Clear history`),
-        window._preferences,
-        window._preferences._keyClearHistoryShortcut
-    ));
+        const keybindingGroup = new Adw.PreferencesGroup({
+            title: _(`Keyboard Shortcuts`),
+        });
+        keybindingGroup.add(new ShortcutRow(
+            _(`Toggle menu`),
+            window._preferences,
+            window._preferences._keyToggleMenuShortcut
+        ));
+        keybindingGroup.add(new ShortcutRow(
+            _(`Toggle private mode`),
+            window._preferences,
+            window._preferences._keyTogglePrivateModeShortcut
+        ));
+        keybindingGroup.add(new ShortcutRow(
+            _(`Clear history`),
+            window._preferences,
+            window._preferences._keyClearHistoryShortcut
+        ));
 
-    const page = new Adw.PreferencesPage();
-    page.add(generalGroup);
-    page.add(webSearchGroup);
-    page.add(keybindingGroup);
+        const page = new Adw.PreferencesPage();
+        page.add(generalGroup);
+        page.add(webSearchGroup);
+        page.add(keybindingGroup);
 
-    window.add(page);
+        window.add(page);
+    }
 }
