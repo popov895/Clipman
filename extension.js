@@ -1,6 +1,6 @@
 'use strict';
 
-const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, St } = imports.gi;
+const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, Soup, St } = imports.gi;
 
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -14,7 +14,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
 const { Preferences } = Me.imports.libs.preferences;
 const Validator = Me.imports.libs.validator.validator;
-const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
+const { _, log, textFromBytes, ColorParser, SearchEngines } = Me.imports.libs.utils;
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -863,6 +863,11 @@ class PanelIndicator extends PanelMenu.Button {
             this._launchUri(`mailto:?body=${encodeURIComponent(menuItem.text)}`);
         });
 
+        menuItem.menu.addAction(_(`Paste to Pastebin`), () => {
+            this.menu.close();
+            this._pasteToPastebin(menuItem.text);
+        });
+
         menuItem.menu.addAction(_(`Show QR Code`), () => {
             this.menu.close();
             this._showQrCode(menuItem.text);
@@ -909,6 +914,50 @@ class PanelIndicator extends PanelMenu.Button {
         }
 
         this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
+    }
+
+    _pasteToPastebin(text) {
+        const formData = {
+            content: text,
+            expiry_days: this._preferences.expiryDays.toString(),
+        };
+
+        const message = Soup.Message.new(`POST`, `https://dpaste.com/api/v2/`);
+        message.set_request_body_from_bytes(
+            Soup.FORM_MIME_TYPE_URLENCODED,
+            new GLib.Bytes(Soup.form_encode_hash(formData))
+        );
+
+        if (!this._pastebinSession) {
+            this._pastebinSession = new Soup.Session();
+        }
+
+        this._pastebinSession.send_and_read_async(
+            message,
+            GLib.PRIORITY_DEFAULT,
+            null,
+            (session, result) => {
+                if (!panelIndicator.instance || this._privateModeMenuItem.state) {
+                    return;
+                }
+                if (message.status_code !== Soup.Status.CREATED) {
+                    notifyError(message.reason_phrase);
+                } else {
+                    if (Soup.get_major_version() < 3) {
+                        session.send_and_read_finish = (message) => {
+                            return message.response_body.flatten().get_as_bytes();
+                        };
+                    }
+                    try {
+                        const uri = textFromBytes(session.send_and_read_finish(result).get_data());
+                        this._clipboard.setText(uri);
+                        notify(uri);
+                    } catch (error) {
+                        notifyError(error.message);
+                    }
+                }
+            }
+        );
     }
 
     _loadState() {
@@ -1003,6 +1052,10 @@ const panelIndicator = {
         privateMode: false
     }
 };
+
+function notify(text) {
+    Main.notify(Me.metadata.name, text);
+}
 
 function notifyError(error) {
     Main.notifyError(Me.metadata.name, error);

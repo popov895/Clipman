@@ -21,6 +21,7 @@ var Preferences = GObject.registerClass({
         this._keyShowColorPreview = `show-color-preview`;
         this._keyWebSearchEngine = `web-search-engine`;
         this._keyCustomWebSearchUrl = `custom-web-search-url`;
+        this._keyExpiryDays = `expiry-days`;
         this._keyToggleMenuShortcut = `toggle-menu-shortcut`;
         this._keyTogglePrivateModeShortcut = `toggle-private-mode-shortcut`;
         this._keyClearHistoryShortcut = `clear-history-shortcut`;
@@ -68,6 +69,10 @@ var Preferences = GObject.registerClass({
 
     get customWebSearchUrl() {
         return this._settings.get_string(this._keyCustomWebSearchUrl);
+    }
+
+    get expiryDays() {
+        return this._settings.get_int(this._keyExpiryDays);
     }
 
     bind(key, object, property, flags) {
