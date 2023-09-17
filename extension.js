@@ -9,6 +9,7 @@ import Graphene from 'gi://Graphene';
 import Meta from 'gi://Meta';
 import Pango from 'gi://Pango';
 import Shell from 'gi://Shell';
+import Soup from 'gi://Soup';
 import St from 'gi://St';
 
 import * as AnimationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
@@ -23,7 +24,7 @@ import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import { default as QrCode } from './libs/qrcodegen.js';
 import { default as Validator } from './libs/validator.js';
 import { Preferences } from './libs/preferences.js';
-import { _, log, ColorParser, SearchEngines } from './libs/utils.js';
+import { _, log, textFromBytes, ColorParser, SearchEngines } from './libs/utils.js';
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -873,6 +874,11 @@ class PanelIndicator extends PanelMenu.Button {
             this._launchUri(`mailto:?body=${encodeURIComponent(menuItem.text)}`);
         });
 
+        menuItem.menu.addAction(_(`Paste to Pastebin`), () => {
+            this.menu.close();
+            this._pasteToPastebin(menuItem.text);
+        });
+
         menuItem.menu.addAction(_(`Show QR Code`), () => {
             this.menu.close();
             this._showQrCode(menuItem.text);
@@ -919,6 +925,50 @@ class PanelIndicator extends PanelMenu.Button {
         }
 
         this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
+    }
+
+    _pasteToPastebin(text) {
+        const formData = {
+            content: text,
+            expiry_days: this._preferences.expiryDays.toString(),
+        };
+
+        const message = Soup.Message.new(`POST`, `https://dpaste.com/api/v2/`);
+        message.set_request_body_from_bytes(
+            Soup.FORM_MIME_TYPE_URLENCODED,
+            new GLib.Bytes(Soup.form_encode_hash(formData))
+        );
+
+        if (!this._pastebinSession) {
+            this._pastebinSession = new Soup.Session();
+        }
+
+        this._pastebinSession.send_and_read_async(
+            message,
+            GLib.PRIORITY_DEFAULT,
+            null,
+            (session, result) => {
+                if (!panelIndicator.instance || this._privateModeMenuItem.state) {
+                    return;
+                }
+                if (message.status_code !== Soup.Status.CREATED) {
+                    this._notifyError(message.reason_phrase);
+                } else {
+                    try {
+                        const bytes = session.send_and_read_finish(result);
+                        const uri = textFromBytes(bytes.get_data());
+                        this._clipboard.setText(uri);
+                        this._notify(uri);
+                    } catch (error) {
+                        this._notifyError(error.message);
+                    }
+                }
+            }
+        );
+    }
+
+    _notify(text) {
+        Main.notify(this._extension.metadata.name, text);
     }
 
     _notifyError(error) {

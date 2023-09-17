@@ -30,6 +30,10 @@
         <key name="custom-web-search-url" type="s">
             <default>""</default>
         </key>
+        <key name="expiry-days" type="i">
+            <default>7</default>
+            <range min="1" max="365"/>
+        </key>
         <key name="toggle-menu-shortcut" type="as">
             <default><![CDATA[['<Super>Z']]]></default>
         </key>
