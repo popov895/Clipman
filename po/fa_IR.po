@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 21:31+0300\n"
+"POT-Creation-Date: 2023-09-18 12:01+0300\n"
 "PO-Revision-Date: 2023-07-03 13:44+0300\n"
 "Last-Translator: MohammadSaleh Kamyab <mskf1383@protonmail.com>\n"
 "Language-Team: \n"
@@ -18,192 +18,206 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr ""
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr ""
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr "نوشتن برای جست‌وجو…"
-
-#: extension.js:203
-msgid "No Matches"
-msgstr "بدون نتیجه"
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr ""
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr "تاریخچه خالی است"
-
-#: extension.js:599
-msgid "Clear History"
-msgstr "پاک‌سازی تاریخچه"
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr ""
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "تنظیمات"
-
-#: extension.js:789 extension.js:814
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:822
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:830 extension.js:836
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:856
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:861
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:866
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:884
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:906
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
-
-#: prefs.js:15
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
-
-#: prefs.js:16
-msgid "Enter a new shortcut"
-msgstr "یک میان‌بر جدید وارد کنید"
-
-#: prefs.js:71
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "از کار افتاده است"
-
-#: prefs.js:123
-msgid "History size"
-msgstr "اندازهٔ تاریخچه"
-
-#: prefs.js:139
-msgid "Show leading and trailing whitespace"
-msgstr ""
-
-#: prefs.js:155
-msgid "Show color preview"
-msgstr ""
-
-#: prefs.js:160
-msgctxt "General options"
-msgid "General"
-msgstr ""
-
-#: prefs.js:167
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr ""
-
-#: prefs.js:180
-msgid "Search URL"
-msgstr ""
-
-#: prefs.js:222
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:227
-msgid "Web Search"
-msgstr ""
-
-#: prefs.js:233
-msgid "Keyboard Shortcuts"
-msgstr ""
-
-#: prefs.js:236
-msgid "Toggle menu"
-msgstr ""
-
-#: prefs.js:241
-msgid "Toggle private mode"
-msgstr ""
-
-#: prefs.js:246
-#, fuzzy
-msgid "Clear history"
-msgstr "پاک‌سازی تاریخچه"
-
-#: libs/utils.js:232
+#: libs/utils.js:239
 msgid "DuckDuckGo"
 msgstr ""
 
-#: libs/utils.js:233
+#: libs/utils.js:240
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr ""
 
-#: libs/utils.js:234
+#: libs/utils.js:241
 msgid "Google"
 msgstr ""
 
-#: libs/utils.js:235
+#: libs/utils.js:242
 msgid "Bing"
 msgstr ""
 
-#: libs/utils.js:236
+#: libs/utils.js:243
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr ""
 
-#: libs/utils.js:237
+#: libs/utils.js:244
 msgid "Yahoo"
 msgstr ""
 
-#: libs/utils.js:238
+#: libs/utils.js:245
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr ""
 
-#: libs/utils.js:239
+#: libs/utils.js:246
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr ""
 
-#: libs/utils.js:240
+#: libs/utils.js:247
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr ""
 
-#: libs/utils.js:241
+#: libs/utils.js:248
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr ""
 
-#: libs/utils.js:249
+#: libs/utils.js:256
 msgctxt "Other search engine"
 msgid "Other"
+msgstr ""
+
+#: prefs.js:19
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:20
+msgid "Enter a new shortcut"
+msgstr "یک میان‌بر جدید وارد کنید"
+
+#: prefs.js:75
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "از کار افتاده است"
+
+#: prefs.js:125
+msgid "History size"
+msgstr "اندازهٔ تاریخچه"
+
+#: prefs.js:141
+msgid "Show leading and trailing whitespace"
+msgstr ""
+
+#: prefs.js:157
+msgid "Show color preview"
+msgstr ""
+
+#: prefs.js:162
+msgctxt "General options"
+msgid "General"
+msgstr ""
+
+#: prefs.js:169
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:182
+msgid "Search URL"
+msgstr ""
+
+#: prefs.js:224
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:229
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:251
+msgctxt "The number of days the paste will expire"
+msgid "Days the paste will expire"
+msgstr ""
+
+#: prefs.js:256
+msgctxt "Pastebin options"
+msgid "Pastebin"
+msgstr ""
+
+#: prefs.js:261
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: prefs.js:264
+msgid "Toggle menu"
+msgstr ""
+
+#: prefs.js:269
+msgid "Toggle private mode"
+msgstr ""
+
+#: prefs.js:274
+#, fuzzy
+msgid "Clear history"
+msgstr "پاک‌سازی تاریخچه"
+
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr ""
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr ""
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr "نوشتن برای جست‌وجو…"
+
+#: extension.js:213
+msgid "No Matches"
+msgstr "بدون نتیجه"
+
+#: extension.js:582
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:588
+msgid "History is Empty"
+msgstr "تاریخچه خالی است"
+
+#: extension.js:610
+msgid "Clear History"
+msgstr "پاک‌سازی تاریخچه"
+
+#: extension.js:619
+msgid "Private Mode"
+msgstr ""
+
+#: extension.js:644
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: extension.js:800 extension.js:825
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:833
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:841 extension.js:847
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:867
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:872
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:877
+msgid "Paste to Pastebin"
+msgstr ""
+
+#: extension.js:882
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:900
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:922
+#, javascript-format
+msgid "Invalid search URL \"%s\""
 msgstr ""
 
 #~ msgctxt "Change current shortcut"

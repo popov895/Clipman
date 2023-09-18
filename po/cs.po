@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 21:31+0300\n"
+"POT-Creation-Date: 2023-09-18 12:01+0300\n"
 "PO-Revision-Date: 2023-07-02 16:52+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -18,195 +18,209 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.3.1\n"
 
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr "Vygenerování QR kódu se nezdařilo"
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zavřít"
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr "Pište pro vyhledávání ..."
-
-#: extension.js:203
-msgid "No Matches"
-msgstr "Žádné shody"
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr "Soukromý režim je zapnutý"
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr "Historie je prázdná"
-
-#: extension.js:599
-msgid "Clear History"
-msgstr "Vymazat historii"
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr "Soukromý režim"
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Nastavení"
-
-#: extension.js:789 extension.js:814
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Otevřít"
-
-#: extension.js:822
-msgid "Compose an Email"
-msgstr "Napsat e-mail"
-
-#: extension.js:830 extension.js:836
-msgid "Make a Call"
-msgstr "Zavolat"
-
-#: extension.js:856
-msgid "Search the Web"
-msgstr "Prohledat internet"
-
-#: extension.js:861
-msgid "Send via Email"
-msgstr "Odeslat e-mailem"
-
-#: extension.js:866
-msgid "Show QR Code"
-msgstr "Zobrazit QR kód"
-
-#: extension.js:884
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
+#: libs/utils.js:239
+msgid "DuckDuckGo"
 msgstr ""
 
-#: extension.js:906
-#, javascript-format
-msgid "Invalid search URL \"%s\""
+#: libs/utils.js:240
+msgctxt "Brave search engine"
+msgid "Brave"
 msgstr ""
 
-#: prefs.js:15
+#: libs/utils.js:241
+msgid "Google"
+msgstr ""
+
+#: libs/utils.js:242
+msgid "Bing"
+msgstr ""
+
+#: libs/utils.js:243
+msgctxt "Baidu search engine"
+msgid "Baidu"
+msgstr ""
+
+#: libs/utils.js:244
+msgid "Yahoo"
+msgstr ""
+
+#: libs/utils.js:245
+msgctxt "Ecosia search engine"
+msgid "Ecosia"
+msgstr ""
+
+#: libs/utils.js:246
+msgctxt "Ask.com search engine"
+msgid "Ask"
+msgstr ""
+
+#: libs/utils.js:247
+msgctxt "AOL search engine"
+msgid "AOL"
+msgstr ""
+
+#: libs/utils.js:248
+msgctxt "Naver search engine"
+msgid "Naver"
+msgstr ""
+
+#: libs/utils.js:256
+msgctxt "Other search engine"
+msgid "Other"
+msgstr ""
+
+#: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
 msgstr ""
 
-#: prefs.js:16
+#: prefs.js:20
 msgid "Enter a new shortcut"
 msgstr "Zadejte novou zkratku"
 
-#: prefs.js:71
+#: prefs.js:75
 msgctxt "Keyboard shortcut is disabled"
 msgid "Disabled"
 msgstr "Vypnuto"
 
-#: prefs.js:123
+#: prefs.js:125
 msgid "History size"
 msgstr "Velikost historie"
 
-#: prefs.js:139
+#: prefs.js:141
 msgid "Show leading and trailing whitespace"
 msgstr ""
 
-#: prefs.js:155
+#: prefs.js:157
 msgid "Show color preview"
 msgstr ""
 
-#: prefs.js:160
+#: prefs.js:162
 #, fuzzy
 msgctxt "General options"
 msgid "General"
 msgstr "Obecné"
 
-#: prefs.js:167
+#: prefs.js:169
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr "Adresa URL s %s na místě dotazu"
 
-#: prefs.js:180
+#: prefs.js:182
 #, fuzzy
 msgid "Search URL"
 msgstr "Vyhledávání na webu"
 
-#: prefs.js:222
+#: prefs.js:224
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:227
+#: prefs.js:229
 msgid "Web Search"
 msgstr "Vyhledávání na webu"
 
-#: prefs.js:233
+#: prefs.js:251
+msgctxt "The number of days the paste will expire"
+msgid "Days the paste will expire"
+msgstr ""
+
+#: prefs.js:256
+msgctxt "Pastebin options"
+msgid "Pastebin"
+msgstr ""
+
+#: prefs.js:261
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
 
-#: prefs.js:236
+#: prefs.js:264
 msgid "Toggle menu"
 msgstr "Skrýt/Zobrazit nabídku"
 
-#: prefs.js:241
+#: prefs.js:269
 #, fuzzy
 msgid "Toggle private mode"
 msgstr "Soukromý režim"
 
-#: prefs.js:246
+#: prefs.js:274
 #, fuzzy
 msgid "Clear history"
 msgstr "Vymazat historii"
 
-#: libs/utils.js:232
-msgid "DuckDuckGo"
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr "Vygenerování QR kódu se nezdařilo"
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zavřít"
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr "Pište pro vyhledávání ..."
+
+#: extension.js:213
+msgid "No Matches"
+msgstr "Žádné shody"
+
+#: extension.js:582
+msgid "Private Mode is On"
+msgstr "Soukromý režim je zapnutý"
+
+#: extension.js:588
+msgid "History is Empty"
+msgstr "Historie je prázdná"
+
+#: extension.js:610
+msgid "Clear History"
+msgstr "Vymazat historii"
+
+#: extension.js:619
+msgid "Private Mode"
+msgstr "Soukromý režim"
+
+#: extension.js:644
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Nastavení"
+
+#: extension.js:800 extension.js:825
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Otevřít"
+
+#: extension.js:833
+msgid "Compose an Email"
+msgstr "Napsat e-mail"
+
+#: extension.js:841 extension.js:847
+msgid "Make a Call"
+msgstr "Zavolat"
+
+#: extension.js:867
+msgid "Search the Web"
+msgstr "Prohledat internet"
+
+#: extension.js:872
+msgid "Send via Email"
+msgstr "Odeslat e-mailem"
+
+#: extension.js:877
+msgid "Paste to Pastebin"
 msgstr ""
 
-#: libs/utils.js:233
-msgctxt "Brave search engine"
-msgid "Brave"
+#: extension.js:882
+msgid "Show QR Code"
+msgstr "Zobrazit QR kód"
+
+#: extension.js:900
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: libs/utils.js:234
-msgid "Google"
-msgstr ""
-
-#: libs/utils.js:235
-msgid "Bing"
-msgstr ""
-
-#: libs/utils.js:236
-msgctxt "Baidu search engine"
-msgid "Baidu"
-msgstr ""
-
-#: libs/utils.js:237
-msgid "Yahoo"
-msgstr ""
-
-#: libs/utils.js:238
-msgctxt "Ecosia search engine"
-msgid "Ecosia"
-msgstr ""
-
-#: libs/utils.js:239
-msgctxt "Ask.com search engine"
-msgid "Ask"
-msgstr ""
-
-#: libs/utils.js:240
-msgctxt "AOL search engine"
-msgid "AOL"
-msgstr ""
-
-#: libs/utils.js:241
-msgctxt "Naver search engine"
-msgid "Naver"
-msgstr ""
-
-#: libs/utils.js:249
-msgctxt "Other search engine"
-msgid "Other"
+#: extension.js:922
+#, javascript-format
+msgid "Invalid search URL \"%s\""
 msgstr ""
 
 #~ msgctxt "Change current shortcut"
