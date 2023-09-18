@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-18 12:01+0300\n"
-"PO-Revision-Date: 2023-08-16 17:26+0000\n"
+"PO-Revision-Date: 2023-09-18 12:03+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: libs/utils.js:239
 msgid "DuckDuckGo"
@@ -119,7 +119,7 @@ msgstr "Пошук в Інтернеті"
 #: prefs.js:251
 msgctxt "The number of days the paste will expire"
 msgid "Days the paste will expire"
-msgstr ""
+msgstr "Скільки днів зберігати вставку"
 
 #: prefs.js:256
 msgctxt "Pastebin options"
@@ -203,7 +203,7 @@ msgstr "Надіслати електронною поштою"
 
 #: extension.js:877
 msgid "Paste to Pastebin"
-msgstr ""
+msgstr "Вставити в Pastebin"
 
 #: extension.js:882
 msgid "Show QR Code"
