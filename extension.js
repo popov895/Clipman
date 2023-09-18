@@ -222,12 +222,12 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         this.addMenuItem(this._placeholderMenuItem);
 
         this.section = new PopupMenu.PopupMenuSection();
-        this.section.moveMenuItem = function(menuItem, position) {
-            Object.getPrototypeOf(this).moveMenuItem.call(this, menuItem, position);
+        this.section.moveMenuItem = (menuItem, position) => {
+            Object.getPrototypeOf(this.section).moveMenuItem.call(this.section, menuItem, position);
             if (menuItem instanceof PopupMenu.PopupSubMenuMenuItem) {
-                this.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
+                this.section.box.set_child_above_sibling(menuItem.menu.actor, menuItem.actor);
             }
-        }.bind(this.section);
+        };
         this.section.box.connectObject(
             `actor-added`, (...[, actor]) => {
                 if (actor instanceof HistoryMenuItem) {
@@ -333,12 +333,12 @@ const HistoryMenuItem = GObject.registerClass({
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this.menu.actor.enable_mouse_scrolling = false;
 
-        this.menu.open = function(animate) {
+        this.menu.open = (animate) => {
             if (!this.menu.isOpen) {
                 this.emit(`submenuAboutToOpen`);
                 Object.getPrototypeOf(this.menu).open.call(this.menu, animate);
             }
-        }.bind(this);
+        };
 
         this._topMenu = topMenu;
         this._topMenu.connectObject(`open-state-changed`, (...[, open]) => {
