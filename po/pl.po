@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 21:31+0300\n"
+"POT-Creation-Date: 2023-09-18 11:28+0300\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -79,15 +79,19 @@ msgid "Send via Email"
 msgstr ""
 
 #: extension.js:866
+msgid "Paste to Pastebin"
+msgstr ""
+
+#: extension.js:871
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:884
+#: extension.js:889
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:906
+#: extension.js:911
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
@@ -140,71 +144,81 @@ msgstr ""
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:233
+#: prefs.js:249
+msgctxt "The number of days the paste will expire"
+msgid "Days the paste will expire"
+msgstr ""
+
+#: prefs.js:254
+msgctxt "Pastebin options"
+msgid "Pastebin"
+msgstr ""
+
+#: prefs.js:259
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiaturowe"
 
-#: prefs.js:236
+#: prefs.js:262
 msgid "Toggle menu"
 msgstr "Pokaż/ukryj menu"
 
-#: prefs.js:241
+#: prefs.js:267
 #, fuzzy
 msgid "Toggle private mode"
 msgstr "Tryb prywatny"
 
-#: prefs.js:246
+#: prefs.js:272
 #, fuzzy
 msgid "Clear history"
 msgstr "Wyczyść historię"
 
-#: libs/utils.js:232
+#: libs/utils.js:238
 msgid "DuckDuckGo"
 msgstr ""
 
-#: libs/utils.js:233
+#: libs/utils.js:239
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr ""
 
-#: libs/utils.js:234
+#: libs/utils.js:240
 msgid "Google"
 msgstr ""
 
-#: libs/utils.js:235
+#: libs/utils.js:241
 msgid "Bing"
 msgstr ""
 
-#: libs/utils.js:236
+#: libs/utils.js:242
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr ""
 
-#: libs/utils.js:237
+#: libs/utils.js:243
 msgid "Yahoo"
 msgstr ""
 
-#: libs/utils.js:238
+#: libs/utils.js:244
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr ""
 
-#: libs/utils.js:239
+#: libs/utils.js:245
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr ""
 
-#: libs/utils.js:240
+#: libs/utils.js:246
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr ""
 
-#: libs/utils.js:241
+#: libs/utils.js:247
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr ""
 
-#: libs/utils.js:249
+#: libs/utils.js:255
 msgctxt "Other search engine"
 msgid "Other"
 msgstr ""

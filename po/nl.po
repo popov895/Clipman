@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 21:31+0300\n"
+"POT-Creation-Date: 2023-09-18 11:28+0300\n"
 "PO-Revision-Date: 2023-08-16 10:34+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -77,15 +77,19 @@ msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
 #: extension.js:866
+msgid "Paste to Pastebin"
+msgstr ""
+
+#: extension.js:871
 msgid "Show QR Code"
 msgstr "QR-code tonen"
 
-#: extension.js:884
+#: extension.js:889
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "‘%s’ kan niet worden geopend"
 
-#: extension.js:906
+#: extension.js:911
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Ongeldige zoekurl: ‘%s’"
@@ -137,69 +141,79 @@ msgstr "Zoekmachine"
 msgid "Web Search"
 msgstr "Zoeken op internet"
 
-#: prefs.js:233
+#: prefs.js:249
+msgctxt "The number of days the paste will expire"
+msgid "Days the paste will expire"
+msgstr ""
+
+#: prefs.js:254
+msgctxt "Pastebin options"
+msgid "Pastebin"
+msgstr ""
+
+#: prefs.js:259
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
-#: prefs.js:236
+#: prefs.js:262
 msgid "Toggle menu"
 msgstr "Menu tonen/verbergen"
 
-#: prefs.js:241
+#: prefs.js:267
 msgid "Toggle private mode"
 msgstr "Incognitomodus aan/uit"
 
-#: prefs.js:246
+#: prefs.js:272
 msgid "Clear history"
 msgstr "Geschiedenis wissen"
 
-#: libs/utils.js:232
+#: libs/utils.js:238
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
-#: libs/utils.js:233
+#: libs/utils.js:239
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr "Brave"
 
-#: libs/utils.js:234
+#: libs/utils.js:240
 msgid "Google"
 msgstr "Google"
 
-#: libs/utils.js:235
+#: libs/utils.js:241
 msgid "Bing"
 msgstr "Bing"
 
-#: libs/utils.js:236
+#: libs/utils.js:242
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr "Baidu"
 
-#: libs/utils.js:237
+#: libs/utils.js:243
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: libs/utils.js:238
+#: libs/utils.js:244
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr "Ecosia"
 
-#: libs/utils.js:239
+#: libs/utils.js:245
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr "Ask"
 
-#: libs/utils.js:240
+#: libs/utils.js:246
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr "AOL"
 
-#: libs/utils.js:241
+#: libs/utils.js:247
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr "Naver"
 
-#: libs/utils.js:249
+#: libs/utils.js:255
 msgctxt "Other search engine"
 msgid "Other"
 msgstr "Andere"
