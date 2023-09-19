@@ -119,11 +119,11 @@ msgstr "Пошук в Інтернеті"
 #: prefs.js:249
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
-msgstr ""
+msgstr "Скільки днів зберігати поширений текст"
 
 #: prefs.js:254
 msgid "Sharing Online"
-msgstr ""
+msgstr "Поширення в Інтернеті"
 
 #: prefs.js:259
 msgid "Keyboard Shortcuts"
@@ -202,7 +202,7 @@ msgstr "Надіслати електронною поштою"
 
 #: extension.js:866
 msgid "Share Online"
-msgstr ""
+msgstr "Поширити в Інтернеті"
 
 #: extension.js:871
 msgid "Show QR Code"
