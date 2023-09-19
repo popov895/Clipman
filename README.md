@@ -23,6 +23,8 @@ This extension uses the following libraries:
 - [QR Code generator library](https://github.com/nayuki/QR-Code-generator)
 - [validator.js](https://github.com/validatorjs/validator.js/)
 
+This extension uses [dpaste.com](https://dpaste.com) to share text online.
+
 ### Support
 
 [![Support via Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://www.buymeacoffee.com/popov895a)
