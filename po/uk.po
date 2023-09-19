@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-18 12:01+0300\n"
+"POT-Creation-Date: 2023-09-19 11:47+0300\n"
 "PO-Revision-Date: 2023-09-18 12:03+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
@@ -18,53 +18,53 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: libs/utils.js:239
+#: libs/utils.js:233
 msgid "DuckDuckGo"
 msgstr ""
 
-#: libs/utils.js:240
+#: libs/utils.js:234
 msgctxt "Brave search engine"
 msgid "Brave"
 msgstr ""
 
-#: libs/utils.js:241
+#: libs/utils.js:235
 msgid "Google"
 msgstr ""
 
-#: libs/utils.js:242
+#: libs/utils.js:236
 msgid "Bing"
 msgstr ""
 
-#: libs/utils.js:243
+#: libs/utils.js:237
 msgctxt "Baidu search engine"
 msgid "Baidu"
 msgstr ""
 
-#: libs/utils.js:244
+#: libs/utils.js:238
 msgid "Yahoo"
 msgstr ""
 
-#: libs/utils.js:245
+#: libs/utils.js:239
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
 msgstr ""
 
-#: libs/utils.js:246
+#: libs/utils.js:240
 msgctxt "Ask.com search engine"
 msgid "Ask"
 msgstr ""
 
-#: libs/utils.js:247
+#: libs/utils.js:241
 msgctxt "AOL search engine"
 msgid "AOL"
 msgstr ""
 
-#: libs/utils.js:248
+#: libs/utils.js:242
 msgctxt "Naver search engine"
 msgid "Naver"
 msgstr ""
 
-#: libs/utils.js:256
+#: libs/utils.js:250
 msgctxt "Other search engine"
 msgid "Other"
 msgstr "Інша"
@@ -117,13 +117,12 @@ msgid "Web Search"
 msgstr "Пошук в Інтернеті"
 
 #: prefs.js:251
-msgctxt "The number of days the paste will expire"
-msgid "Days the paste will expire"
-msgstr "Скільки днів зберігати вставку"
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr ""
 
 #: prefs.js:256
-msgctxt "Pastebin options"
-msgid "Pastebin"
+msgid "Sharing Online"
 msgstr ""
 
 #: prefs.js:261
@@ -202,8 +201,8 @@ msgid "Send via Email"
 msgstr "Надіслати електронною поштою"
 
 #: extension.js:877
-msgid "Paste to Pastebin"
-msgstr "Вставити в Pastebin"
+msgid "Share Online"
+msgstr ""
 
 #: extension.js:882
 msgid "Show QR Code"
@@ -218,6 +217,13 @@ msgstr "Не вдалося запустити URI \"%s\""
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Неправильна URL-адреса для пошуку \"%s\""
+
+#~ msgctxt "The number of days the paste will expire"
+#~ msgid "Days the paste will expire"
+#~ msgstr "Скільки днів зберігати вставку"
+
+#~ msgid "Paste to Pastebin"
+#~ msgstr "Вставити в Pastebin"
 
 #~ msgctxt "Change current shortcut"
 #~ msgid "Change"
