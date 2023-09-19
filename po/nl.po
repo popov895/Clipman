@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-18 11:28+0300\n"
+"POT-Creation-Date: 2023-09-19 11:58+0300\n"
 "PO-Revision-Date: 2023-08-16 10:34+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -16,6 +16,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
+
+#: libs/utils.js:232
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#: libs/utils.js:233
+msgctxt "Brave search engine"
+msgid "Brave"
+msgstr "Brave"
+
+#: libs/utils.js:234
+msgid "Google"
+msgstr "Google"
+
+#: libs/utils.js:235
+msgid "Bing"
+msgstr "Bing"
+
+#: libs/utils.js:236
+msgctxt "Baidu search engine"
+msgid "Baidu"
+msgstr "Baidu"
+
+#: libs/utils.js:237
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: libs/utils.js:238
+msgctxt "Ecosia search engine"
+msgid "Ecosia"
+msgstr "Ecosia"
+
+#: libs/utils.js:239
+msgctxt "Ask.com search engine"
+msgid "Ask"
+msgstr "Ask"
+
+#: libs/utils.js:240
+msgctxt "AOL search engine"
+msgid "AOL"
+msgstr "AOL"
+
+#: libs/utils.js:241
+msgctxt "Naver search engine"
+msgid "Naver"
+msgstr "Naver"
+
+#: libs/utils.js:249
+msgctxt "Other search engine"
+msgid "Other"
+msgstr "Andere"
+
+#: prefs.js:15
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr "Druk op backspace om de sneltoets te wissen of esc om te annuleren"
+
+#: prefs.js:16
+msgid "Enter a new shortcut"
+msgstr "Druk op een nieuwe sneltoets"
+
+#: prefs.js:71
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: prefs.js:123
+msgid "History size"
+msgstr "Geschiedenisomvang"
+
+#: prefs.js:139
+msgid "Show leading and trailing whitespace"
+msgstr "Witruimte aan begin en einde tonen"
+
+#: prefs.js:155
+msgid "Show color preview"
+msgstr "Kleuren voorvertonen"
+
+#: prefs.js:160
+msgctxt "General options"
+msgid "General"
+msgstr "Algemeen"
+
+#: prefs.js:167
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "De url, met %s op de plaats van de zoekopdracht"
+
+#: prefs.js:180
+msgid "Search URL"
+msgstr "Zoekurl"
+
+#: prefs.js:222
+msgid "Search Engine"
+msgstr "Zoekmachine"
+
+#: prefs.js:227
+msgid "Web Search"
+msgstr "Zoeken op internet"
+
+#: prefs.js:249
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr ""
+
+#: prefs.js:254
+msgid "Sharing Online"
+msgstr ""
+
+#: prefs.js:259
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#: prefs.js:262
+msgid "Toggle menu"
+msgstr "Menu tonen/verbergen"
+
+#: prefs.js:267
+msgid "Toggle private mode"
+msgstr "Incognitomodus aan/uit"
+
+#: prefs.js:272
+msgid "Clear history"
+msgstr "Geschiedenis wissen"
 
 #: extension.js:108
 msgid "Failed to generate QR code"
@@ -77,7 +200,7 @@ msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
 #: extension.js:866
-msgid "Paste to Pastebin"
+msgid "Share Online"
 msgstr ""
 
 #: extension.js:871
@@ -93,130 +216,6 @@ msgstr "‘%s’ kan niet worden geopend"
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Ongeldige zoekurl: ‘%s’"
-
-#: prefs.js:15
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr "Druk op backspace om de sneltoets te wissen of esc om te annuleren"
-
-#: prefs.js:16
-msgid "Enter a new shortcut"
-msgstr "Druk op een nieuwe sneltoets"
-
-#: prefs.js:71
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
-#: prefs.js:123
-msgid "History size"
-msgstr "Geschiedenisomvang"
-
-#: prefs.js:139
-msgid "Show leading and trailing whitespace"
-msgstr "Witruimte aan begin en einde tonen"
-
-#: prefs.js:155
-msgid "Show color preview"
-msgstr "Kleuren voorvertonen"
-
-#: prefs.js:160
-msgctxt "General options"
-msgid "General"
-msgstr "Algemeen"
-
-#: prefs.js:167
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "De url, met %s op de plaats van de zoekopdracht"
-
-#: prefs.js:180
-msgid "Search URL"
-msgstr "Zoekurl"
-
-#: prefs.js:222
-msgid "Search Engine"
-msgstr "Zoekmachine"
-
-#: prefs.js:227
-msgid "Web Search"
-msgstr "Zoeken op internet"
-
-#: prefs.js:249
-msgctxt "The number of days the paste will expire"
-msgid "Days the paste will expire"
-msgstr ""
-
-#: prefs.js:254
-msgctxt "Pastebin options"
-msgid "Pastebin"
-msgstr ""
-
-#: prefs.js:259
-msgid "Keyboard Shortcuts"
-msgstr "Sneltoetsen"
-
-#: prefs.js:262
-msgid "Toggle menu"
-msgstr "Menu tonen/verbergen"
-
-#: prefs.js:267
-msgid "Toggle private mode"
-msgstr "Incognitomodus aan/uit"
-
-#: prefs.js:272
-msgid "Clear history"
-msgstr "Geschiedenis wissen"
-
-#: libs/utils.js:238
-msgid "DuckDuckGo"
-msgstr "DuckDuckGo"
-
-#: libs/utils.js:239
-msgctxt "Brave search engine"
-msgid "Brave"
-msgstr "Brave"
-
-#: libs/utils.js:240
-msgid "Google"
-msgstr "Google"
-
-#: libs/utils.js:241
-msgid "Bing"
-msgstr "Bing"
-
-#: libs/utils.js:242
-msgctxt "Baidu search engine"
-msgid "Baidu"
-msgstr "Baidu"
-
-#: libs/utils.js:243
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: libs/utils.js:244
-msgctxt "Ecosia search engine"
-msgid "Ecosia"
-msgstr "Ecosia"
-
-#: libs/utils.js:245
-msgctxt "Ask.com search engine"
-msgid "Ask"
-msgstr "Ask"
-
-#: libs/utils.js:246
-msgctxt "AOL search engine"
-msgid "AOL"
-msgstr "AOL"
-
-#: libs/utils.js:247
-msgctxt "Naver search engine"
-msgid "Naver"
-msgstr "Naver"
-
-#: libs/utils.js:255
-msgctxt "Other search engine"
-msgid "Other"
-msgstr "Andere"
 
 #~ msgctxt "Change current shortcut"
 #~ msgid "Change"
