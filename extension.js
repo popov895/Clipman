@@ -24,7 +24,7 @@ import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import { default as QrCode } from './libs/qrcodegen.js';
 import { default as Validator } from './libs/validator.js';
 import { Preferences } from './libs/preferences.js';
-import { _, log, textFromBytes, ColorParser, SearchEngines } from './libs/utils.js';
+import { _, log, ColorParser, SearchEngines } from './libs/utils.js';
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -874,9 +874,9 @@ class PanelIndicator extends PanelMenu.Button {
             this._launchUri(`mailto:?body=${encodeURIComponent(menuItem.text)}`);
         });
 
-        menuItem.menu.addAction(_(`Paste to Pastebin`), () => {
+        menuItem.menu.addAction(_(`Share Online`), () => {
             this.menu.close();
-            this._pasteToPastebin(menuItem.text);
+            this._shareOnline(menuItem.text);
         });
 
         menuItem.menu.addAction(_(`Show QR Code`), () => {
@@ -927,7 +927,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
     }
 
-    _pasteToPastebin(text) {
+    _shareOnline(text) {
         const formData = {
             content: text,
             expiry_days: this._preferences.expiryDays.toString(),
@@ -939,11 +939,13 @@ class PanelIndicator extends PanelMenu.Button {
             new GLib.Bytes(Soup.form_encode_hash(formData))
         );
 
-        if (!this._pastebinSession) {
-            this._pastebinSession = new Soup.Session();
+        if (!this._soupSession) {
+            this._soupSession = new Soup.Session({
+                user_agent : this._extension.uuid,
+            });
         }
 
-        this._pastebinSession.send_and_read_async(
+        this._soupSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
             null,
@@ -955,8 +957,7 @@ class PanelIndicator extends PanelMenu.Button {
                     this._notifyError(message.reason_phrase);
                 } else {
                     try {
-                        const bytes = session.send_and_read_finish(result);
-                        const uri = textFromBytes(bytes.get_data());
+                        const uri = new TextDecoder().decode(session.send_and_read_finish(result).get_data()).trim();
                         this._clipboard.setText(uri);
                         this._notify(uri);
                     } catch (error) {

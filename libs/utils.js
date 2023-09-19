@@ -12,12 +12,6 @@ export const log = function(text) {
     console.log(`${uuid}: ${text}`);
 };
 
-const decoder = new TextDecoder();
-
-export const textFromBytes = function(bytes) {
-    return decoder.decode(bytes);
-};
-
 const knownColors = new Map();
 
 export const ColorParser = {

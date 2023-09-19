@@ -248,14 +248,14 @@ export default class ClipmanExtensionPreferences extends ExtensionPreferences
 
         const expiryDaysRow = new Adw.ActionRow({
             activatable_widget: expiryDaysSpinBox,
-            title: _(`Days the paste will expire`, `The number of days the paste will expire`),
+            title: _(`Days to keep the shared text`, `The number of days to keep the shared text`),
         });
         expiryDaysRow.add_suffix(expiryDaysSpinBox);
 
-        const pastebinGroup = new Adw.PreferencesGroup({
-            title: _(`Pastebin`, `Pastebin options`),
+        const sharingOnlineGroup = new Adw.PreferencesGroup({
+            title: _(`Sharing Online`),
         });
-        pastebinGroup.add(expiryDaysRow);
+        sharingOnlineGroup.add(expiryDaysRow);
 
         const keybindingGroup = new Adw.PreferencesGroup({
             title: _(`Keyboard Shortcuts`),
@@ -279,7 +279,7 @@ export default class ClipmanExtensionPreferences extends ExtensionPreferences
         const page = new Adw.PreferencesPage();
         page.add(generalGroup);
         page.add(webSearchGroup);
-        page.add(pastebinGroup);
+        page.add(sharingOnlineGroup);
         page.add(keybindingGroup);
 
         window.add(page);
