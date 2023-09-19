@@ -14,7 +14,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
 const { Preferences } = Me.imports.libs.preferences;
 const Validator = Me.imports.libs.validator.validator;
-const { _, log, textFromBytes, ColorParser, SearchEngines } = Me.imports.libs.utils;
+const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -863,9 +863,9 @@ class PanelIndicator extends PanelMenu.Button {
             this._launchUri(`mailto:?body=${encodeURIComponent(menuItem.text)}`);
         });
 
-        menuItem.menu.addAction(_(`Paste to Pastebin`), () => {
+        menuItem.menu.addAction(_(`Share Online`), () => {
             this.menu.close();
-            this._pasteToPastebin(menuItem.text);
+            this._shareOnline(menuItem.text);
         });
 
         menuItem.menu.addAction(_(`Show QR Code`), () => {
@@ -916,7 +916,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._launchUri(currentEngine.url.replace(`%s`, encodeURIComponent(text)));
     }
 
-    _pasteToPastebin(text) {
+    _shareOnline(text) {
         const formData = {
             content: text,
             expiry_days: this._preferences.expiryDays.toString(),
@@ -928,11 +928,13 @@ class PanelIndicator extends PanelMenu.Button {
             new GLib.Bytes(Soup.form_encode_hash(formData))
         );
 
-        if (!this._pastebinSession) {
-            this._pastebinSession = new Soup.Session();
+        if (!this._soupSession) {
+            this._soupSession = new Soup.Session({
+                user_agent : Me.uuid,
+            });
         }
 
-        this._pastebinSession.send_and_read_async(
+        this._soupSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
             null,
@@ -949,7 +951,7 @@ class PanelIndicator extends PanelMenu.Button {
                         };
                     }
                     try {
-                        const uri = textFromBytes(session.send_and_read_finish(result).get_data());
+                        const uri = new TextDecoder().decode(session.send_and_read_finish(result).get_data()).trim();
                         this._clipboard.setText(uri);
                         notify(uri);
                     } catch (error) {
