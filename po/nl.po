@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-19 11:58+0300\n"
-"PO-Revision-Date: 2023-08-16 10:34+0200\n"
+"PO-Revision-Date: 2023-09-19 17:13+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -118,11 +118,11 @@ msgstr "Zoeken op internet"
 #: prefs.js:249
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
-msgstr ""
+msgstr "Aantal dagen dat gedeelde tekst bewaard moet worden"
 
 #: prefs.js:254
 msgid "Sharing Online"
-msgstr ""
+msgstr "Online-delen"
 
 #: prefs.js:259
 msgid "Keyboard Shortcuts"
@@ -155,7 +155,7 @@ msgstr "Typ om te zoeken…"
 
 #: extension.js:203
 msgid "No Matches"
-msgstr "Er zijn geen overeenkomsten"
+msgstr "Er zĳn geen overeenkomsten"
 
 #: extension.js:571
 msgid "Private Mode is On"
@@ -201,7 +201,7 @@ msgstr "Versturen per e-mail"
 
 #: extension.js:866
 msgid "Share Online"
-msgstr ""
+msgstr "Online delen"
 
 #: extension.js:871
 msgid "Show QR Code"
