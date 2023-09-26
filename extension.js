@@ -957,7 +957,8 @@ class PanelIndicator extends PanelMenu.Button {
                     this._notifyError(message.reason_phrase);
                 } else {
                     try {
-                        const uri = new TextDecoder().decode(session.send_and_read_finish(result).get_data()).trim();
+                        const bytes = session.send_and_read_finish(result);
+                        const uri = new TextDecoder().decode(bytes.get_data()).trim();
                         this._clipboard.setText(uri);
                         this._notify(uri);
                     } catch (error) {
