@@ -289,7 +289,10 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
             }
         }
         menuItem.connectObject(`key-focus-in`, () => {
-            AnimationUtils.ensureActorVisibleInScrollView(this.scrollView, menuItem);
+            const event = Clutter.get_current_event();
+            if (event && event.type() === Clutter.EventType.KEY_PRESS) {
+                AnimationUtils.ensureActorVisibleInScrollView(this.scrollView, menuItem);
+            }
         });
     }
 
