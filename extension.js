@@ -951,7 +951,8 @@ class PanelIndicator extends PanelMenu.Button {
                         };
                     }
                     try {
-                        const uri = new TextDecoder().decode(session.send_and_read_finish(result).get_data()).trim();
+                        const bytes = session.send_and_read_finish(result);
+                        const uri = new TextDecoder().decode(bytes.get_data()).trim();
                         this._clipboard.setText(uri);
                         notify(uri);
                     } catch (error) {

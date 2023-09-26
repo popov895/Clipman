@@ -250,18 +250,18 @@ var SearchEngines = {
                 url: preferences.customWebSearchUrl,
             },
         ];
-        searchEngines.find = function(engineName) {
-            return Object.getPrototypeOf(this).find.call(this, (engine) => {
+        searchEngines.find = (engineName) => {
+            return Object.getPrototypeOf(searchEngines).find.call(searchEngines, (engine) => {
                 return engine.name === engineName;
             });
-        }.bind(searchEngines);
-        searchEngines.findIndex = function(engineName) {
-            return Object.getPrototypeOf(this).findIndex.call(this, (engine) => {
+        };
+        searchEngines.findIndex = (engineName) => {
+            return Object.getPrototypeOf(searchEngines).findIndex.call(searchEngines, (engine) => {
                 return engine.name === engineName;
             });
-        }.bind(searchEngines);
-        searchEngines.sort = function() {
-            Object.getPrototypeOf(this).sort.call(this, (engine1, engine2) => {
+        };
+        searchEngines.sort = () => {
+            Object.getPrototypeOf(searchEngines).sort.call(searchEngines, (engine1, engine2) => {
                 if (engine1.name === `custom`) {
                     return 1;
                 }
@@ -270,7 +270,7 @@ var SearchEngines = {
                 }
                 return engine1.title.localeCompare(engine2.title);
             });
-        }.bind(searchEngines);
+        };
 
         return searchEngines;
     },
