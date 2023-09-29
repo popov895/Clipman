@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 11:47+0300\n"
+"POT-Creation-Date: 2023-09-29 21:27+0300\n"
 "PO-Revision-Date: 2023-09-19 17:13+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -16,6 +16,174 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
+
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr "De QR-code kan niet worden aangemaakt"
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Sluiten"
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr "Typ om te zoeken…"
+
+#: extension.js:213
+msgid "No Matches"
+msgstr "Er zĳn geen overeenkomsten"
+
+#: extension.js:582
+msgid "Private Mode is On"
+msgstr "De incognitomodus is ingeschakeld"
+
+#: extension.js:588
+msgid "History is Empty"
+msgstr "De geschiedenis is blanco"
+
+#: extension.js:610
+msgid "Clear History"
+msgstr "Geschiedenis wissen"
+
+#: extension.js:619
+msgid "Private Mode"
+msgstr "Incognitomodus"
+
+#: extension.js:644
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Voorkeuren"
+
+#: extension.js:790 extension.js:815
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Openen"
+
+#: extension.js:823
+msgid "Compose an Email"
+msgstr "E-mail opstellen"
+
+#: extension.js:831 extension.js:837
+msgid "Make a Call"
+msgstr "Gesprek starten"
+
+#: extension.js:857
+msgid "Search the Web"
+msgstr "Zoeken op internet"
+
+#: extension.js:862
+msgid "Send via Email"
+msgstr "Versturen per e-mail"
+
+#: extension.js:867
+msgid "Share Online"
+msgstr "Online delen"
+
+#: extension.js:872
+msgid "Show QR Code"
+msgstr "QR-code tonen"
+
+#: extension.js:890
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr "‘%s’ kan niet worden geopend"
+
+#: extension.js:912
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr "Ongeldige zoekurl: ‘%s’"
+
+#: prefs.js:19
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr "Druk op backspace om de sneltoets te wissen of esc om te annuleren"
+
+#: prefs.js:20
+msgid "Enter a new shortcut"
+msgstr "Druk op een nieuwe sneltoets"
+
+#: prefs.js:75
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: prefs.js:125
+msgid "History size"
+msgstr "Geschiedenisomvang"
+
+#: prefs.js:141
+msgid "Show leading and trailing whitespace"
+msgstr "Witruimte aan begin en einde tonen"
+
+#: prefs.js:157
+msgid "Show color preview"
+msgstr "Kleuren voorvertonen"
+
+#: prefs.js:163
+msgctxt "Small menu size"
+msgid "Small"
+msgstr ""
+
+#: prefs.js:164
+msgctxt "Medium menu size"
+msgid "Medium"
+msgstr ""
+
+#: prefs.js:165
+msgctxt "Large menu size"
+msgid "Large"
+msgstr ""
+
+#: prefs.js:180
+msgid "Maximum menu size"
+msgstr ""
+
+#: prefs.js:185
+msgctxt "General options"
+msgid "General"
+msgstr "Algemeen"
+
+#: prefs.js:193
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "De url, met %s op de plaats van de zoekopdracht"
+
+#: prefs.js:206
+msgid "Search URL"
+msgstr "Zoekurl"
+
+#: prefs.js:248
+msgid "Search Engine"
+msgstr "Zoekmachine"
+
+#: prefs.js:253
+msgid "Web Search"
+msgstr "Zoeken op internet"
+
+#: prefs.js:275
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr "Aantal dagen dat gedeelde tekst bewaard moet worden"
+
+#: prefs.js:280
+msgid "Sharing Online"
+msgstr "Online-delen"
+
+#: prefs.js:285
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#: prefs.js:288
+msgid "Toggle menu"
+msgstr "Menu tonen/verbergen"
+
+#: prefs.js:293
+msgid "Toggle private mode"
+msgstr "Incognitomodus aan/uit"
+
+#: prefs.js:298
+msgid "Clear history"
+msgstr "Geschiedenis wissen"
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"
@@ -67,155 +235,6 @@ msgstr "Naver"
 msgctxt "Other search engine"
 msgid "Other"
 msgstr "Andere"
-
-#: prefs.js:19
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr "Druk op backspace om de sneltoets te wissen of esc om te annuleren"
-
-#: prefs.js:20
-msgid "Enter a new shortcut"
-msgstr "Druk op een nieuwe sneltoets"
-
-#: prefs.js:75
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
-#: prefs.js:125
-msgid "History size"
-msgstr "Geschiedenisomvang"
-
-#: prefs.js:141
-msgid "Show leading and trailing whitespace"
-msgstr "Witruimte aan begin en einde tonen"
-
-#: prefs.js:157
-msgid "Show color preview"
-msgstr "Kleuren voorvertonen"
-
-#: prefs.js:162
-msgctxt "General options"
-msgid "General"
-msgstr "Algemeen"
-
-#: prefs.js:169
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "De url, met %s op de plaats van de zoekopdracht"
-
-#: prefs.js:182
-msgid "Search URL"
-msgstr "Zoekurl"
-
-#: prefs.js:224
-msgid "Search Engine"
-msgstr "Zoekmachine"
-
-#: prefs.js:229
-msgid "Web Search"
-msgstr "Zoeken op internet"
-
-#: prefs.js:251
-msgctxt "The number of days to keep the shared text"
-msgid "Days to keep the shared text"
-msgstr "Aantal dagen dat gedeelde tekst bewaard moet worden"
-
-#: prefs.js:256
-msgid "Sharing Online"
-msgstr "Online-delen"
-
-#: prefs.js:261
-msgid "Keyboard Shortcuts"
-msgstr "Sneltoetsen"
-
-#: prefs.js:264
-msgid "Toggle menu"
-msgstr "Menu tonen/verbergen"
-
-#: prefs.js:269
-msgid "Toggle private mode"
-msgstr "Incognitomodus aan/uit"
-
-#: prefs.js:274
-msgid "Clear history"
-msgstr "Geschiedenis wissen"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr "De QR-code kan niet worden aangemaakt"
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Sluiten"
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr "Typ om te zoeken…"
-
-#: extension.js:213
-msgid "No Matches"
-msgstr "Er zĳn geen overeenkomsten"
-
-#: extension.js:582
-msgid "Private Mode is On"
-msgstr "De incognitomodus is ingeschakeld"
-
-#: extension.js:588
-msgid "History is Empty"
-msgstr "De geschiedenis is blanco"
-
-#: extension.js:610
-msgid "Clear History"
-msgstr "Geschiedenis wissen"
-
-#: extension.js:619
-msgid "Private Mode"
-msgstr "Incognitomodus"
-
-#: extension.js:644
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Voorkeuren"
-
-#: extension.js:800 extension.js:825
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Openen"
-
-#: extension.js:833
-msgid "Compose an Email"
-msgstr "E-mail opstellen"
-
-#: extension.js:841 extension.js:847
-msgid "Make a Call"
-msgstr "Gesprek starten"
-
-#: extension.js:867
-msgid "Search the Web"
-msgstr "Zoeken op internet"
-
-#: extension.js:872
-msgid "Send via Email"
-msgstr "Versturen per e-mail"
-
-#: extension.js:877
-msgid "Share Online"
-msgstr "Online delen"
-
-#: extension.js:882
-msgid "Show QR Code"
-msgstr "QR-code tonen"
-
-#: extension.js:900
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr "‘%s’ kan niet worden geopend"
-
-#: extension.js:922
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr "Ongeldige zoekurl: ‘%s’"
 
 #~ msgctxt "Change current shortcut"
 #~ msgid "Change"
