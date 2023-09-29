@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 11:58+0300\n"
+"POT-Creation-Date: 2023-09-29 21:25+0300\n"
 "PO-Revision-Date: 2023-07-02 16:52+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -17,6 +17,178 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.3.1\n"
+
+#: extension.js:108
+msgid "Failed to generate QR code"
+msgstr "Vygenerování QR kódu se nezdařilo"
+
+#: extension.js:115
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zavřít"
+
+#: extension.js:184
+msgid "Type to search..."
+msgstr "Pište pro vyhledávání ..."
+
+#: extension.js:203
+msgid "No Matches"
+msgstr "Žádné shody"
+
+#: extension.js:571
+msgid "Private Mode is On"
+msgstr "Soukromý režim je zapnutý"
+
+#: extension.js:577
+msgid "History is Empty"
+msgstr "Historie je prázdná"
+
+#: extension.js:599
+msgid "Clear History"
+msgstr "Vymazat historii"
+
+#: extension.js:608
+msgid "Private Mode"
+msgstr "Soukromý režim"
+
+#: extension.js:633
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Nastavení"
+
+#: extension.js:779 extension.js:804
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Otevřít"
+
+#: extension.js:812
+msgid "Compose an Email"
+msgstr "Napsat e-mail"
+
+#: extension.js:820 extension.js:826
+msgid "Make a Call"
+msgstr "Zavolat"
+
+#: extension.js:846
+msgid "Search the Web"
+msgstr "Prohledat internet"
+
+#: extension.js:851
+msgid "Send via Email"
+msgstr "Odeslat e-mailem"
+
+#: extension.js:856
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:861
+msgid "Show QR Code"
+msgstr "Zobrazit QR kód"
+
+#: extension.js:879
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:901
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
+
+#: prefs.js:15
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:16
+msgid "Enter a new shortcut"
+msgstr "Zadejte novou zkratku"
+
+#: prefs.js:71
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Vypnuto"
+
+#: prefs.js:123
+msgid "History size"
+msgstr "Velikost historie"
+
+#: prefs.js:139
+msgid "Show leading and trailing whitespace"
+msgstr ""
+
+#: prefs.js:155
+msgid "Show color preview"
+msgstr ""
+
+#: prefs.js:161
+msgctxt "Small menu size"
+msgid "Small"
+msgstr ""
+
+#: prefs.js:162
+msgctxt "Medium menu size"
+msgid "Medium"
+msgstr ""
+
+#: prefs.js:163
+msgctxt "Large menu size"
+msgid "Large"
+msgstr ""
+
+#: prefs.js:178
+msgid "Maximum menu size"
+msgstr ""
+
+#: prefs.js:183
+#, fuzzy
+msgctxt "General options"
+msgid "General"
+msgstr "Obecné"
+
+#: prefs.js:191
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "Adresa URL s %s na místě dotazu"
+
+#: prefs.js:204
+#, fuzzy
+msgid "Search URL"
+msgstr "Vyhledávání na webu"
+
+#: prefs.js:246
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:251
+msgid "Web Search"
+msgstr "Vyhledávání na webu"
+
+#: prefs.js:273
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr ""
+
+#: prefs.js:278
+msgid "Sharing Online"
+msgstr ""
+
+#: prefs.js:283
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové zkratky"
+
+#: prefs.js:286
+msgid "Toggle menu"
+msgstr "Skrýt/Zobrazit nabídku"
+
+#: prefs.js:291
+#, fuzzy
+msgid "Toggle private mode"
+msgstr "Soukromý režim"
+
+#: prefs.js:296
+#, fuzzy
+msgid "Clear history"
+msgstr "Vymazat historii"
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"
@@ -67,159 +239,6 @@ msgstr ""
 #: libs/utils.js:249
 msgctxt "Other search engine"
 msgid "Other"
-msgstr ""
-
-#: prefs.js:15
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
-
-#: prefs.js:16
-msgid "Enter a new shortcut"
-msgstr "Zadejte novou zkratku"
-
-#: prefs.js:71
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Vypnuto"
-
-#: prefs.js:123
-msgid "History size"
-msgstr "Velikost historie"
-
-#: prefs.js:139
-msgid "Show leading and trailing whitespace"
-msgstr ""
-
-#: prefs.js:155
-msgid "Show color preview"
-msgstr ""
-
-#: prefs.js:160
-#, fuzzy
-msgctxt "General options"
-msgid "General"
-msgstr "Obecné"
-
-#: prefs.js:167
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "Adresa URL s %s na místě dotazu"
-
-#: prefs.js:180
-#, fuzzy
-msgid "Search URL"
-msgstr "Vyhledávání na webu"
-
-#: prefs.js:222
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:227
-msgid "Web Search"
-msgstr "Vyhledávání na webu"
-
-#: prefs.js:249
-msgctxt "The number of days to keep the shared text"
-msgid "Days to keep the shared text"
-msgstr ""
-
-#: prefs.js:254
-msgid "Sharing Online"
-msgstr ""
-
-#: prefs.js:259
-msgid "Keyboard Shortcuts"
-msgstr "Klávesové zkratky"
-
-#: prefs.js:262
-msgid "Toggle menu"
-msgstr "Skrýt/Zobrazit nabídku"
-
-#: prefs.js:267
-#, fuzzy
-msgid "Toggle private mode"
-msgstr "Soukromý režim"
-
-#: prefs.js:272
-#, fuzzy
-msgid "Clear history"
-msgstr "Vymazat historii"
-
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr "Vygenerování QR kódu se nezdařilo"
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zavřít"
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr "Pište pro vyhledávání ..."
-
-#: extension.js:203
-msgid "No Matches"
-msgstr "Žádné shody"
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr "Soukromý režim je zapnutý"
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr "Historie je prázdná"
-
-#: extension.js:599
-msgid "Clear History"
-msgstr "Vymazat historii"
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr "Soukromý režim"
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Nastavení"
-
-#: extension.js:789 extension.js:814
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Otevřít"
-
-#: extension.js:822
-msgid "Compose an Email"
-msgstr "Napsat e-mail"
-
-#: extension.js:830 extension.js:836
-msgid "Make a Call"
-msgstr "Zavolat"
-
-#: extension.js:856
-msgid "Search the Web"
-msgstr "Prohledat internet"
-
-#: extension.js:861
-msgid "Send via Email"
-msgstr "Odeslat e-mailem"
-
-#: extension.js:866
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:871
-msgid "Show QR Code"
-msgstr "Zobrazit QR kód"
-
-#: extension.js:889
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:911
-#, javascript-format
-msgid "Invalid search URL \"%s\""
 msgstr ""
 
 #~ msgctxt "Change current shortcut"

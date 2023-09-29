@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 11:58+0300\n"
+"POT-Creation-Date: 2023-09-29 21:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,174 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: extension.js:108
+msgid "Failed to generate QR code"
+msgstr ""
+
+#: extension.js:115
+msgctxt "Close dialog"
+msgid "Close"
+msgstr ""
+
+#: extension.js:184
+msgid "Type to search..."
+msgstr ""
+
+#: extension.js:203
+msgid "No Matches"
+msgstr ""
+
+#: extension.js:571
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:577
+msgid "History is Empty"
+msgstr ""
+
+#: extension.js:599
+msgid "Clear History"
+msgstr ""
+
+#: extension.js:608
+msgid "Private Mode"
+msgstr ""
+
+#: extension.js:633
+msgctxt "Open settings"
+msgid "Settings"
+msgstr ""
+
+#: extension.js:779 extension.js:804
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:812
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:820 extension.js:826
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:846
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:851
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:856
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:861
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:879
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:901
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
+
+#: prefs.js:15
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:16
+msgid "Enter a new shortcut"
+msgstr ""
+
+#: prefs.js:71
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr ""
+
+#: prefs.js:123
+msgid "History size"
+msgstr ""
+
+#: prefs.js:139
+msgid "Show leading and trailing whitespace"
+msgstr ""
+
+#: prefs.js:155
+msgid "Show color preview"
+msgstr ""
+
+#: prefs.js:161
+msgctxt "Small menu size"
+msgid "Small"
+msgstr ""
+
+#: prefs.js:162
+msgctxt "Medium menu size"
+msgid "Medium"
+msgstr ""
+
+#: prefs.js:163
+msgctxt "Large menu size"
+msgid "Large"
+msgstr ""
+
+#: prefs.js:178
+msgid "Maximum menu size"
+msgstr ""
+
+#: prefs.js:183
+msgctxt "General options"
+msgid "General"
+msgstr ""
+
+#: prefs.js:191
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:204
+msgid "Search URL"
+msgstr ""
+
+#: prefs.js:246
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:251
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:273
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr ""
+
+#: prefs.js:278
+msgid "Sharing Online"
+msgstr ""
+
+#: prefs.js:283
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: prefs.js:286
+msgid "Toggle menu"
+msgstr ""
+
+#: prefs.js:291
+msgid "Toggle private mode"
+msgstr ""
+
+#: prefs.js:296
+msgid "Clear history"
+msgstr ""
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"
@@ -66,153 +234,4 @@ msgstr ""
 #: libs/utils.js:249
 msgctxt "Other search engine"
 msgid "Other"
-msgstr ""
-
-#: prefs.js:15
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
-
-#: prefs.js:16
-msgid "Enter a new shortcut"
-msgstr ""
-
-#: prefs.js:71
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr ""
-
-#: prefs.js:123
-msgid "History size"
-msgstr ""
-
-#: prefs.js:139
-msgid "Show leading and trailing whitespace"
-msgstr ""
-
-#: prefs.js:155
-msgid "Show color preview"
-msgstr ""
-
-#: prefs.js:160
-msgctxt "General options"
-msgid "General"
-msgstr ""
-
-#: prefs.js:167
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr ""
-
-#: prefs.js:180
-msgid "Search URL"
-msgstr ""
-
-#: prefs.js:222
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:227
-msgid "Web Search"
-msgstr ""
-
-#: prefs.js:249
-msgctxt "The number of days to keep the shared text"
-msgid "Days to keep the shared text"
-msgstr ""
-
-#: prefs.js:254
-msgid "Sharing Online"
-msgstr ""
-
-#: prefs.js:259
-msgid "Keyboard Shortcuts"
-msgstr ""
-
-#: prefs.js:262
-msgid "Toggle menu"
-msgstr ""
-
-#: prefs.js:267
-msgid "Toggle private mode"
-msgstr ""
-
-#: prefs.js:272
-msgid "Clear history"
-msgstr ""
-
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr ""
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr ""
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr ""
-
-#: extension.js:203
-msgid "No Matches"
-msgstr ""
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr ""
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr ""
-
-#: extension.js:599
-msgid "Clear History"
-msgstr ""
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr ""
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr ""
-
-#: extension.js:789 extension.js:814
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:822
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:830 extension.js:836
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:856
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:861
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:866
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:871
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:889
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:911
-#, javascript-format
-msgid "Invalid search URL \"%s\""
 msgstr ""
