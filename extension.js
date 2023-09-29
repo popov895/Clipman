@@ -232,7 +232,6 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
         );
         this.scrollView = new St.ScrollView({
             hscrollbar_policy: St.PolicyType.NEVER,
-            style_class: `clipman-historyscrollview`,
             vscrollbar_policy: St.PolicyType.EXTERNAL,
         });
         this.scrollView.add_actor(this.section.actor);
@@ -527,8 +526,6 @@ class PanelIndicator extends PanelMenu.Button {
     constructor() {
         super(0);
 
-        this.menu.actor.add_style_class_name(`clipman-panelmenu-button`);
-
         this._buildIcon();
         this._buildMenu();
 
@@ -635,16 +632,6 @@ class PanelIndicator extends PanelMenu.Button {
 
         this.menu.addAction(_(`Settings`, `Open settings`), () => {
             ExtensionUtils.openPrefs();
-        });
-
-        this.menu.connectObject(`open-state-changed`, (...[, open]) => {
-            if (open) {
-                this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
-                this._historyMenuSection.entry.text = ``;
-                Promise.resolve().then(() => {
-                    global.stage.set_key_focus(this._historyMenuSection.entry);
-                });
-            }
         });
     }
 
@@ -1048,6 +1035,41 @@ class PanelIndicator extends PanelMenu.Button {
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
+    }
+
+    _onOpenStateChanged(...[, open]) {
+        if (open) {
+            this.add_style_pseudo_class(`active`);
+
+            this._historyMenuSection.scrollView.vscroll.adjustment.value = 0;
+            this._historyMenuSection.entry.text = ``;
+            Promise.resolve().then(() => {
+                global.stage.set_key_focus(this._historyMenuSection.entry);
+            });
+
+            const workArea = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryIndex);
+            const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+            const margin = this.menu.actor.get_margin();
+            const minAvailableSize = Math.min(
+                (workArea.width - margin.left - margin.right) / scaleFactor,
+                (workArea.height - margin.top - margin.bottom) / scaleFactor,
+            );
+
+            const [menuMaxWidthRatio, menuMaxHeightRatio] = [
+                [0.47, 0.6, 0.72],
+                [0.55, 0.7, 0.85],
+            ];
+            const [menuMaxWidth, menuMaxHeight] = [
+                Math.round(minAvailableSize * menuMaxWidthRatio[this._preferences.menuMaxSize]),
+                Math.round(minAvailableSize * menuMaxHeightRatio[this._preferences.menuMaxSize]),
+            ];
+            this.menu.actor.style = `max-width: ${menuMaxWidth}px; max-height: ${menuMaxHeight}px;`;
+
+            const entryMinWidth = Math.min(300, Math.round(menuMaxWidth * 0.75));
+            this._historyMenuSection.entry.style = `min-width: ${entryMinWidth}px;`;
+        } else {
+            this.remove_style_pseudo_class(`active`);
+        }
     }
 });
 

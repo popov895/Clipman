@@ -7,6 +7,7 @@ var Preferences = GObject.registerClass({
     Signals: {
         'destroy': {},
         'historySizeChanged': {},
+        'menuMaxSizeChanged': {},
         'webSearchEngineChanged': {},
         'shortcutChanged': {
             param_types: [GObject.TYPE_STRING],
@@ -19,6 +20,7 @@ var Preferences = GObject.registerClass({
         this._keyHistorySize = `history-size`;
         this._keyShowSurroundingWhitespace = `show-surrounding-whitespace`;
         this._keyShowColorPreview = `show-color-preview`;
+        this._keyMenuMaxSize = `menu-max-size`;
         this._keyWebSearchEngine = `web-search-engine`;
         this._keyCustomWebSearchUrl = `custom-web-search-url`;
         this._keyExpiryDays = `expiry-days`;
@@ -31,6 +33,10 @@ var Preferences = GObject.registerClass({
             switch (key) {
                 case this._keyHistorySize: {
                     this.emit(`historySizeChanged`);
+                    break;
+                }
+                case this._keyMenuMaxSize: {
+                    this.emit(`menuMaxSizeChanged`);
                     break;
                 }
                 case this._keyWebSearchEngine: {
@@ -57,6 +63,14 @@ var Preferences = GObject.registerClass({
 
     get historySize() {
         return this._settings.get_int(this._keyHistorySize);
+    }
+
+    get menuMaxSize() {
+        return this._settings.get_enum(this._keyMenuMaxSize);
+    }
+
+    set menuMaxSize(menuMaxSize) {
+        this._settings.set_enum(this._keyMenuMaxSize, menuMaxSize);
     }
 
     get webSearchEngine() {
