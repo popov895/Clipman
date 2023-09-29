@@ -1,19 +1,10 @@
-.clipman-panelmenu-button {
-    max-width: 600px;
-}
-
 .clipman-popupsearchmenuitem {
     border-radius: 18px;
-    min-width: 300px;
     padding: 7px 12px;
 }
 
 .clipman-searchmenuitem {
     padding: 9px 12px;
-}
-
-.clipman-historyscrollview {
-    max-height: 500px;
 }
 
 .clipman-placeholderpanel {

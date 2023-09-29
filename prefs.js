@@ -158,12 +158,36 @@ export default class ClipmanExtensionPreferences extends ExtensionPreferences
         });
         colorPreviewRow.add_suffix(colorPreviewSwitch);
 
+        const menuMaxSizeDropDown = new Gtk.DropDown({
+            model: Gtk.StringList.new([
+                _(`Small`, `Small menu size`),
+                _(`Medium`, `Medium menu size`),
+                _(`Large`, `Large menu size`),
+            ]),
+            selected: -1,
+            valign: Gtk.Align.CENTER,
+        });
+        menuMaxSizeDropDown.connect(`notify::selected`, () => {
+            window._preferences.menuMaxSize = menuMaxSizeDropDown.selected;
+        });
+        menuMaxSizeDropDown.selected = window._preferences.menuMaxSize;
+        window._preferences.connect(`menuMaxSizeChanged`, () => {
+            menuMaxSizeDropDown.selected = window._preferences.menuMaxSize;
+        });
+
+        const menuMaxSizeRow = new Adw.ActionRow({
+            activatable_widget: menuMaxSizeDropDown,
+            title: _(`Maximum menu size`),
+        });
+        menuMaxSizeRow.add_suffix(menuMaxSizeDropDown);
+
         const generalGroup = new Adw.PreferencesGroup({
             title: _(`General`, `General options`),
         });
         generalGroup.add(historySizeRow);
         generalGroup.add(surroundingWhitespaceRow);
         generalGroup.add(colorPreviewRow);
+        generalGroup.add(menuMaxSizeRow);
 
         const customSearchUrlEntry = new Gtk.Entry({
             placeholder_text: _(`URL with %s in place of query`),
