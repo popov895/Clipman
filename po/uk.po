@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 21:25+0300\n"
-"PO-Revision-Date: 2023-09-18 11:31+0300\n"
+"PO-Revision-Date: 2023-09-29 17:38-0400\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: extension.js:108
 msgid "Failed to generate QR code"
@@ -123,21 +123,21 @@ msgstr "Показати попередній перегляд кольорів"
 #: prefs.js:161
 msgctxt "Small menu size"
 msgid "Small"
-msgstr ""
+msgstr "Маленький"
 
 #: prefs.js:162
 msgctxt "Medium menu size"
 msgid "Medium"
-msgstr ""
+msgstr "Середній"
 
 #: prefs.js:163
 msgctxt "Large menu size"
 msgid "Large"
-msgstr ""
+msgstr "Великий"
 
 #: prefs.js:178
 msgid "Maximum menu size"
-msgstr ""
+msgstr "Максимальний розмір меню"
 
 #: prefs.js:183
 msgctxt "General options"
