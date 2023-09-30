@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 21:27+0300\n"
-"PO-Revision-Date: 2023-09-19 17:13+0200\n"
+"PO-Revision-Date: 2023-09-30 14:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -122,21 +122,21 @@ msgstr "Kleuren voorvertonen"
 #: prefs.js:163
 msgctxt "Small menu size"
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 #: prefs.js:164
 msgctxt "Medium menu size"
 msgid "Medium"
-msgstr ""
+msgstr "Gemiddeld"
 
 #: prefs.js:165
 msgctxt "Large menu size"
 msgid "Large"
-msgstr ""
+msgstr "Groot"
 
 #: prefs.js:180
 msgid "Maximum menu size"
-msgstr ""
+msgstr "Maximale menu-omvang"
 
 #: prefs.js:185
 msgctxt "General options"
