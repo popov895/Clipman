@@ -20,12 +20,12 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-let global;
+const fakeThis = {};
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global.validator = factory());
-}(this ?? (global = {}), (function () { 'use strict';
+}(fakeThis, (function () { 'use strict';
 
 function _typeof(obj) {
   "@babel/helpers - typeof";
@@ -5866,4 +5866,4 @@ var validator = {
 return validator;
 
 })));
-export default global.validator;
+export default fakeThis.validator;

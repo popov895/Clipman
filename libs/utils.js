@@ -180,15 +180,15 @@ export const ColorParser = {
         }
 
         const rgbColorRegExp = /^rgba?\((\d{1,3})(?:,\s*|\s+)(\d{1,3})(?:,\s*|\s+)(\d{1,3})(?:(?:,\s*|\s+)(\d{1,3}))?\)$/;
-        const rgbColorMatches = rgbColorRegExp.exec(color);
-        if (rgbColorMatches) {
-            return rgbColorMatches.slice(1, 5); // RGBA
+        const rgbColorMatch = color.match(rgbColorRegExp);
+        if (rgbColorMatch) {
+            return rgbColorMatch.slice(1, 5); // RGBA
         }
 
         const hexColorRegExp = /^#((?:[\da-f]{3}){1,2}|(?:[\da-f]{4}){1,2})$/;
-        const hexColorMatches = hexColorRegExp.exec(color);
-        if (hexColorMatches) {
-            const hexColor = hexColorMatches[1];
+        const hexColorMatch = color.match(hexColorRegExp);
+        if (hexColorMatch) {
+            const hexColor = hexColorMatch[1];
             switch (hexColor.length) {
                 case 3:
                 case 4: {
