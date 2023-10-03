@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 21:27+0300\n"
-"PO-Revision-Date: 2023-07-02 16:52+0200\n"
+"PO-Revision-Date: 2023-10-03 17:01+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: extension.js:118
 msgid "Failed to generate QR code"
@@ -79,7 +79,7 @@ msgstr "Odeslat e-mailem"
 
 #: extension.js:867
 msgid "Share Online"
-msgstr ""
+msgstr "Sdílet online"
 
 #: extension.js:872
 msgid "Show QR Code"
@@ -88,16 +88,16 @@ msgstr "Zobrazit QR kód"
 #: extension.js:890
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
-msgstr ""
+msgstr "Nepodařilo se spustit URI \"%s\""
 
 #: extension.js:912
 #, javascript-format
 msgid "Invalid search URL \"%s\""
-msgstr ""
+msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
 #: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
+msgstr "Stiskněte Backspace pro vymazání zástupce nebo Esc pro zrušení"
 
 #: prefs.js:20
 msgid "Enter a new shortcut"
@@ -114,33 +114,32 @@ msgstr "Velikost historie"
 
 #: prefs.js:141
 msgid "Show leading and trailing whitespace"
-msgstr ""
+msgstr "Zobrazit mezery na začátku a na konci"
 
 #: prefs.js:157
 msgid "Show color preview"
-msgstr ""
+msgstr "Zobrazit náhled barev"
 
 #: prefs.js:163
 msgctxt "Small menu size"
 msgid "Small"
-msgstr ""
+msgstr "Malá"
 
 #: prefs.js:164
 msgctxt "Medium menu size"
 msgid "Medium"
-msgstr ""
+msgstr "Střední"
 
 #: prefs.js:165
 msgctxt "Large menu size"
 msgid "Large"
-msgstr ""
+msgstr "Velká"
 
 #: prefs.js:180
 msgid "Maximum menu size"
-msgstr ""
+msgstr "Maximální velikost nabídky"
 
 #: prefs.js:185
-#, fuzzy
 msgctxt "General options"
 msgid "General"
 msgstr "Obecné"
@@ -151,13 +150,12 @@ msgid "URL with %s in place of query"
 msgstr "Adresa URL s %s na místě dotazu"
 
 #: prefs.js:206
-#, fuzzy
 msgid "Search URL"
-msgstr "Vyhledávání na webu"
+msgstr "Vyhledat adresu URL"
 
 #: prefs.js:248
 msgid "Search Engine"
-msgstr ""
+msgstr "Vyhledávač"
 
 #: prefs.js:253
 msgid "Web Search"
@@ -166,11 +164,11 @@ msgstr "Vyhledávání na webu"
 #: prefs.js:275
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
-msgstr ""
+msgstr "Počet dnů, do kterých bude sdílený text zachován"
 
 #: prefs.js:280
 msgid "Sharing Online"
-msgstr ""
+msgstr "Sdílení online"
 
 #: prefs.js:285
 msgid "Keyboard Shortcuts"
@@ -181,65 +179,63 @@ msgid "Toggle menu"
 msgstr "Skrýt/Zobrazit nabídku"
 
 #: prefs.js:293
-#, fuzzy
 msgid "Toggle private mode"
 msgstr "Soukromý režim"
 
 #: prefs.js:298
-#, fuzzy
 msgid "Clear history"
 msgstr "Vymazat historii"
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"
-msgstr ""
+msgstr "DuckDuckGo"
 
 #: libs/utils.js:234
 msgctxt "Brave search engine"
 msgid "Brave"
-msgstr ""
+msgstr "Brave"
 
 #: libs/utils.js:235
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: libs/utils.js:236
 msgid "Bing"
-msgstr ""
+msgstr "Bing"
 
 #: libs/utils.js:237
 msgctxt "Baidu search engine"
 msgid "Baidu"
-msgstr ""
+msgstr "Baidu"
 
 #: libs/utils.js:238
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: libs/utils.js:239
 msgctxt "Ecosia search engine"
 msgid "Ecosia"
-msgstr ""
+msgstr "Ecosia"
 
 #: libs/utils.js:240
 msgctxt "Ask.com search engine"
 msgid "Ask"
-msgstr ""
+msgstr "Ask"
 
 #: libs/utils.js:241
 msgctxt "AOL search engine"
 msgid "AOL"
-msgstr ""
+msgstr "AOL"
 
 #: libs/utils.js:242
 msgctxt "Naver search engine"
 msgid "Naver"
-msgstr ""
+msgstr "Naver"
 
 #: libs/utils.js:250
 msgctxt "Other search engine"
 msgid "Other"
-msgstr ""
+msgstr "Jiný"
 
 #~ msgctxt "Change current shortcut"
 #~ msgid "Change"
