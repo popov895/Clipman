@@ -560,10 +560,19 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _buildIcon() {
-        this.add_child(new St.Icon({
+        const mainIcon = new St.Icon({
             icon_name: `edit-paste-symbolic`,
             style_class: `system-status-icon`,
-        }));
+        });
+        this._privateModeIcon = new St.Icon({
+            icon_name: `view-conceal-symbolic`,
+            style_class: `system-status-icon`,
+            visible: false,
+        });
+        const boxLayout = new St.BoxLayout();
+        boxLayout.add_child(mainIcon);
+        boxLayout.add_child(this._privateModeIcon);
+        this.add_child(boxLayout);
     }
 
     _buildMenu() {
@@ -608,6 +617,12 @@ class PanelIndicator extends PanelMenu.Button {
         this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_(`Private Mode`), false, {
             reactive: true,
         });
+        this._privateModeMenuItem._switch.bind_property(
+            `state`,
+            this._privateModeIcon,
+            `visible`,
+            GObject.BindingFlags.Default
+        );
         this._privateModeMenuItem.connectObject(`toggled`, (...[, state]) => {
             this.menu.close();
             if (!state) {
