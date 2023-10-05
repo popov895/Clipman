@@ -561,7 +561,7 @@ class PanelIndicator extends PanelMenu.Button {
 
     _buildIcon() {
         this.add_child(new St.Icon({
-            icon_name: `edit-copy-symbolic`,
+            icon_name: `edit-paste-symbolic`,
             style_class: `system-status-icon`,
         }));
     }
