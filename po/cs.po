@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 21:25+0300\n"
+"POT-Creation-Date: 2023-10-06 11:41+0300\n"
 "PO-Revision-Date: 2023-10-03 17:01+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -17,83 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.4\n"
-
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr "Vygenerování QR kódu se nezdařilo"
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zavřít"
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr "Pište pro vyhledávání ..."
-
-#: extension.js:203
-msgid "No Matches"
-msgstr "Žádné shody"
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr "Soukromý režim je zapnutý"
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr "Historie je prázdná"
-
-#: extension.js:599
-msgid "Clear History"
-msgstr "Vymazat historii"
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr "Soukromý režim"
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Nastavení"
-
-#: extension.js:779 extension.js:804
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Otevřít"
-
-#: extension.js:812
-msgid "Compose an Email"
-msgstr "Napsat e-mail"
-
-#: extension.js:820 extension.js:826
-msgid "Make a Call"
-msgstr "Zavolat"
-
-#: extension.js:846
-msgid "Search the Web"
-msgstr "Prohledat internet"
-
-#: extension.js:851
-msgid "Send via Email"
-msgstr "Odeslat e-mailem"
-
-#: extension.js:856
-msgid "Share Online"
-msgstr "Sdílet online"
-
-#: extension.js:861
-msgid "Show QR Code"
-msgstr "Zobrazit QR kód"
-
-#: extension.js:879
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr "Nepodařilo se spustit URI \"%s\""
-
-#: extension.js:901
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -185,6 +108,83 @@ msgstr "Soukromý režim"
 #: prefs.js:296
 msgid "Clear history"
 msgstr "Vymazat historii"
+
+#: extension.js:108
+msgid "Failed to generate QR code"
+msgstr "Vygenerování QR kódu se nezdařilo"
+
+#: extension.js:115
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zavřít"
+
+#: extension.js:184
+msgid "Type to search..."
+msgstr "Pište pro vyhledávání ..."
+
+#: extension.js:203
+msgid "No Matches"
+msgstr "Žádné shody"
+
+#: extension.js:580
+msgid "Private Mode is On"
+msgstr "Soukromý režim je zapnutý"
+
+#: extension.js:586
+msgid "History is Empty"
+msgstr "Historie je prázdná"
+
+#: extension.js:608
+msgid "Clear History"
+msgstr "Vymazat historii"
+
+#: extension.js:617
+msgid "Private Mode"
+msgstr "Soukromý režim"
+
+#: extension.js:648
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Nastavení"
+
+#: extension.js:794 extension.js:819
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Otevřít"
+
+#: extension.js:827
+msgid "Compose an Email"
+msgstr "Napsat e-mail"
+
+#: extension.js:835 extension.js:841
+msgid "Make a Call"
+msgstr "Zavolat"
+
+#: extension.js:861
+msgid "Search the Web"
+msgstr "Prohledat internet"
+
+#: extension.js:866
+msgid "Send via Email"
+msgstr "Odeslat e-mailem"
+
+#: extension.js:871
+msgid "Share Online"
+msgstr "Sdílet online"
+
+#: extension.js:876
+msgid "Show QR Code"
+msgstr "Zobrazit QR kód"
+
+#: extension.js:894
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr "Nepodařilo se spustit URI \"%s\""
+
+#: extension.js:916
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 21:25+0300\n"
+"POT-Creation-Date: 2023-10-06 11:41+0300\n"
 "PO-Revision-Date: 2023-07-03 13:42+0300\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: \n"
@@ -17,83 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-#: extension.js:108
-msgid "Failed to generate QR code"
-msgstr "QR-Code konnte nicht erzeugt werden"
-
-#: extension.js:115
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Schließen"
-
-#: extension.js:184
-msgid "Type to search..."
-msgstr "Tippen, um zu suchen…"
-
-#: extension.js:203
-msgid "No Matches"
-msgstr "Keine Übereinstimmungen"
-
-#: extension.js:571
-msgid "Private Mode is On"
-msgstr "Privater Modus ist aktiviert"
-
-#: extension.js:577
-msgid "History is Empty"
-msgstr "Chronik ist leer"
-
-#: extension.js:599
-msgid "Clear History"
-msgstr "Chronik löschen"
-
-#: extension.js:608
-msgid "Private Mode"
-msgstr "Privater Modus"
-
-#: extension.js:633
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: extension.js:779 extension.js:804
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:812
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:820 extension.js:826
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:846
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:851
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:856
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:861
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:879
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:901
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -188,6 +111,83 @@ msgstr "Privater Modus"
 #, fuzzy
 msgid "Clear history"
 msgstr "Chronik löschen"
+
+#: extension.js:108
+msgid "Failed to generate QR code"
+msgstr "QR-Code konnte nicht erzeugt werden"
+
+#: extension.js:115
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Schließen"
+
+#: extension.js:184
+msgid "Type to search..."
+msgstr "Tippen, um zu suchen…"
+
+#: extension.js:203
+msgid "No Matches"
+msgstr "Keine Übereinstimmungen"
+
+#: extension.js:580
+msgid "Private Mode is On"
+msgstr "Privater Modus ist aktiviert"
+
+#: extension.js:586
+msgid "History is Empty"
+msgstr "Chronik ist leer"
+
+#: extension.js:608
+msgid "Clear History"
+msgstr "Chronik löschen"
+
+#: extension.js:617
+msgid "Private Mode"
+msgstr "Privater Modus"
+
+#: extension.js:648
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: extension.js:794 extension.js:819
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:827
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:835 extension.js:841
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:861
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:866
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:871
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:876
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:894
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:916
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"
