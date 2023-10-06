@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 21:27+0300\n"
+"POT-Creation-Date: 2023-10-06 11:33+0300\n"
 "PO-Revision-Date: 2023-09-30 14:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -16,83 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.3.2\n"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr "De QR-code kan niet worden aangemaakt"
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Sluiten"
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr "Typ om te zoeken…"
-
-#: extension.js:213
-msgid "No Matches"
-msgstr "Er zĳn geen overeenkomsten"
-
-#: extension.js:582
-msgid "Private Mode is On"
-msgstr "De incognitomodus is ingeschakeld"
-
-#: extension.js:588
-msgid "History is Empty"
-msgstr "De geschiedenis is blanco"
-
-#: extension.js:610
-msgid "Clear History"
-msgstr "Geschiedenis wissen"
-
-#: extension.js:619
-msgid "Private Mode"
-msgstr "Incognitomodus"
-
-#: extension.js:644
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Voorkeuren"
-
-#: extension.js:790 extension.js:815
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Openen"
-
-#: extension.js:823
-msgid "Compose an Email"
-msgstr "E-mail opstellen"
-
-#: extension.js:831 extension.js:837
-msgid "Make a Call"
-msgstr "Gesprek starten"
-
-#: extension.js:857
-msgid "Search the Web"
-msgstr "Zoeken op internet"
-
-#: extension.js:862
-msgid "Send via Email"
-msgstr "Versturen per e-mail"
-
-#: extension.js:867
-msgid "Share Online"
-msgstr "Online delen"
-
-#: extension.js:872
-msgid "Show QR Code"
-msgstr "QR-code tonen"
-
-#: extension.js:890
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr "‘%s’ kan niet worden geopend"
-
-#: extension.js:912
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr "Ongeldige zoekurl: ‘%s’"
 
 #: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -184,6 +107,83 @@ msgstr "Incognitomodus aan/uit"
 #: prefs.js:298
 msgid "Clear history"
 msgstr "Geschiedenis wissen"
+
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr "De QR-code kan niet worden aangemaakt"
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Sluiten"
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr "Typ om te zoeken…"
+
+#: extension.js:213
+msgid "No Matches"
+msgstr "Er zĳn geen overeenkomsten"
+
+#: extension.js:591
+msgid "Private Mode is On"
+msgstr "De incognitomodus is ingeschakeld"
+
+#: extension.js:597
+msgid "History is Empty"
+msgstr "De geschiedenis is blanco"
+
+#: extension.js:619
+msgid "Clear History"
+msgstr "Geschiedenis wissen"
+
+#: extension.js:628
+msgid "Private Mode"
+msgstr "Incognitomodus"
+
+#: extension.js:659
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Voorkeuren"
+
+#: extension.js:805 extension.js:830
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Openen"
+
+#: extension.js:838
+msgid "Compose an Email"
+msgstr "E-mail opstellen"
+
+#: extension.js:846 extension.js:852
+msgid "Make a Call"
+msgstr "Gesprek starten"
+
+#: extension.js:872
+msgid "Search the Web"
+msgstr "Zoeken op internet"
+
+#: extension.js:877
+msgid "Send via Email"
+msgstr "Versturen per e-mail"
+
+#: extension.js:882
+msgid "Share Online"
+msgstr "Online delen"
+
+#: extension.js:887
+msgid "Show QR Code"
+msgstr "QR-code tonen"
+
+#: extension.js:905
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr "‘%s’ kan niet worden geopend"
+
+#: extension.js:927
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr "Ongeldige zoekurl: ‘%s’"
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"

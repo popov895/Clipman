@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 21:27+0300\n"
+"POT-Creation-Date: 2023-10-06 11:33+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -17,83 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr ""
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr ""
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr "Digita per cercare..."
-
-#: extension.js:213
-msgid "No Matches"
-msgstr "Nessuna Corrispondenza"
-
-#: extension.js:582
-msgid "Private Mode is On"
-msgstr ""
-
-#: extension.js:588
-msgid "History is Empty"
-msgstr "Cronologia vuota"
-
-#: extension.js:610
-msgid "Clear History"
-msgstr "Cancella Cronologia"
-
-#: extension.js:619
-msgid "Private Mode"
-msgstr ""
-
-#: extension.js:644
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Impostazioni"
-
-#: extension.js:790 extension.js:815
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:823
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:831 extension.js:837
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:857
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:862
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:867
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:872
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:890
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:912
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
 
 #: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -186,6 +109,83 @@ msgstr ""
 #, fuzzy
 msgid "Clear history"
 msgstr "Cancella Cronologia"
+
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr ""
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr ""
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr "Digita per cercare..."
+
+#: extension.js:213
+msgid "No Matches"
+msgstr "Nessuna Corrispondenza"
+
+#: extension.js:591
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:597
+msgid "History is Empty"
+msgstr "Cronologia vuota"
+
+#: extension.js:619
+msgid "Clear History"
+msgstr "Cancella Cronologia"
+
+#: extension.js:628
+msgid "Private Mode"
+msgstr ""
+
+#: extension.js:659
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: extension.js:805 extension.js:830
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:838
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:846 extension.js:852
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:872
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:877
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:882
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:887
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:905
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:927
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"

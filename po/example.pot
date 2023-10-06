@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 21:27+0300\n"
+"POT-Creation-Date: 2023-10-06 11:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,83 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr ""
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr ""
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr ""
-
-#: extension.js:213
-msgid "No Matches"
-msgstr ""
-
-#: extension.js:582
-msgid "Private Mode is On"
-msgstr ""
-
-#: extension.js:588
-msgid "History is Empty"
-msgstr ""
-
-#: extension.js:610
-msgid "Clear History"
-msgstr ""
-
-#: extension.js:619
-msgid "Private Mode"
-msgstr ""
-
-#: extension.js:644
-msgctxt "Open settings"
-msgid "Settings"
-msgstr ""
-
-#: extension.js:790 extension.js:815
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:823
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:831 extension.js:837
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:857
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:862
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:867
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:872
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:890
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:912
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
 
 #: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -183,6 +106,83 @@ msgstr ""
 
 #: prefs.js:298
 msgid "Clear history"
+msgstr ""
+
+#: extension.js:118
+msgid "Failed to generate QR code"
+msgstr ""
+
+#: extension.js:125
+msgctxt "Close dialog"
+msgid "Close"
+msgstr ""
+
+#: extension.js:194
+msgid "Type to search..."
+msgstr ""
+
+#: extension.js:213
+msgid "No Matches"
+msgstr ""
+
+#: extension.js:591
+msgid "Private Mode is On"
+msgstr ""
+
+#: extension.js:597
+msgid "History is Empty"
+msgstr ""
+
+#: extension.js:619
+msgid "Clear History"
+msgstr ""
+
+#: extension.js:628
+msgid "Private Mode"
+msgstr ""
+
+#: extension.js:659
+msgctxt "Open settings"
+msgid "Settings"
+msgstr ""
+
+#: extension.js:805 extension.js:830
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:838
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:846 extension.js:852
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:872
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:877
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:882
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:887
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:905
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:927
+#, javascript-format
+msgid "Invalid search URL \"%s\""
 msgstr ""
 
 #: libs/utils.js:233
