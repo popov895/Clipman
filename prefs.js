@@ -84,7 +84,7 @@ class ShortcutRow extends Adw.ActionRow {
         const window = new KeybindingWindow(this.get_root());
         window.connect(`close-request`, () => {
             const shortcut = window.keybinding;
-            if (shortcut !== undefined) {
+            if (typeof shortcut === `string`) {
                 this._preferences.setShortcut(this._preferencesKey, shortcut);
             }
             window.destroy();
@@ -162,7 +162,6 @@ function fillPreferencesWindow(window) {
             _(`Medium`, `Medium menu size`),
             _(`Large`, `Large menu size`),
         ]),
-        selected: -1,
         valign: Gtk.Align.CENTER,
     });
     menuMaxSizeDropDown.connect(`notify::selected`, () => {
@@ -217,14 +216,13 @@ function fillPreferencesWindow(window) {
         model: Gtk.StringList.new(searchEngines.map((engine) => {
             return engine.title;
         })),
-        selected: -1,
         valign: Gtk.Align.CENTER,
     });
     searchEngineDropDown.bind_property_full(
         `selected`,
         customSearchUrlRow,
         `visible`,
-        GObject.BindingFlags.DEFAULT,
+        GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE,
         () => {
             return [
                 true,
