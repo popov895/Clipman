@@ -833,6 +833,12 @@ class PanelIndicator extends PanelMenu.Button {
                     },
                 },
                 {
+                    title: _(`Open`, `Open URL`),
+                    validator: (text) => {
+                        return /^tg:\/\/\S+$/i.test(text);
+                    },
+                },
+                {
                     prefix: `mailto:`,
                     regExp: /^mailto:/i,
                     title: _(`Compose an Email`),
