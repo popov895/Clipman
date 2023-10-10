@@ -62,12 +62,14 @@ const ClipboardManager = GObject.registerClass({
             return mimeTypes.includes(sensitiveMimeType);
         });
         if (hasSensitiveMimeTypes) {
-            callback(null);
-        } else {
-            this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
-                callback(text);
-            });
+            return Promise.resolve(null);
         }
+
+        return new Promise((resolve) => {
+            this._clipboard.get_text(St.ClipboardType.CLIPBOARD, (...[, text]) => {
+                resolve(text);
+            });
+        });
     }
 
     setText(text) {
@@ -322,15 +324,14 @@ const HistoryMenuItem = GObject.registerClass({
     },
     Signals: {
         'delete': {},
+        'pinned': {},
         'submenuAboutToOpen': {},
-        'togglePin': {},
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
-    constructor(text, pinned, timestamp, topMenu) {
+    constructor(text, pinned = false, timestamp = Date.now(), topMenu) {
         super(``);
 
         this.text = text;
-        this.pinned = pinned;
         this.timestamp = timestamp;
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this.menu.actor.enable_mouse_scrolling = false;
@@ -354,17 +355,31 @@ const HistoryMenuItem = GObject.registerClass({
             x_expand: true,
         }));
 
-        this.pinIcon = new St.Icon({
-            icon_name: this.pinned ? `starred-symbolic` : `non-starred-symbolic`,
+        const pinIcon = new St.Icon({
             style_class: `system-status-icon`,
         });
-        const pinButton = new St.Button({
+        this._pinButton = new St.Button({
+            checked: pinned,
             can_focus: true,
-            child: this.pinIcon,
+            child: pinIcon,
             style_class: `clipman-toolbutton`,
+            toggle_mode: true,
         });
-        pinButton.connectObject(`clicked`, () => {
-            this.emit(`togglePin`);
+        this._pinButton.bind_property_full(
+            `checked`,
+            pinIcon,
+            `icon_name`,
+            GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE,
+            () => {
+                return [
+                    true,
+                    this._pinButton.checked ? `starred-symbolic` : `non-starred-symbolic`,
+                ];
+            },
+            null
+        );
+        this._pinButton.connectObject(`notify::checked`, () => {
+            this.emit(`pinned`);
         });
 
         const deleteButton = new St.Button({
@@ -398,7 +413,7 @@ const HistoryMenuItem = GObject.registerClass({
         const boxLayout = new St.BoxLayout({
             style_class: `clipman-toolbuttonnpanel`,
         });
-        boxLayout.add(pinButton);
+        boxLayout.add(this._pinButton);
         boxLayout.add(deleteButton);
         boxLayout.add(toggleSubMenuButton);
         this.add_child(boxLayout);
@@ -417,6 +432,10 @@ const HistoryMenuItem = GObject.registerClass({
             }
         });
         this.add_action(clickAction);
+    }
+
+    get pinned() {
+        return this._pinButton.checked;
     }
 
     set showSurroundingWhitespace(showSurroundingWhitespace) {
@@ -508,7 +527,7 @@ const HistoryMenuItem = GObject.registerClass({
             }
             case Clutter.KEY_asterisk:
             case Clutter.KEY_KP_Multiply: {
-                this.emit(`togglePin`);
+                this._pinButton.checked = !this._pinButton.checked;
                 return Clutter.EVENT_STOP;
             }
             default:
@@ -545,7 +564,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._clipboard = new ClipboardManager();
         this._clipboard.connectObject(`changed`, () => {
             if (!this._privateModeMenuItem.state) {
-                this._clipboard.getText((text) => {
+                this._clipboard.getText().then((text) => {
                     this._onClipboardTextChanged(text);
                 });
             }
@@ -639,7 +658,7 @@ class PanelIndicator extends PanelMenu.Button {
             if (!state) {
                 this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
                 delete this._currentMenuItem;
-                this._clipboard.getText((text) => {
+                this._clipboard.getText().then((text) => {
                     if (text && text.length > 0) {
                         const menuItems = this._historyMenuSection.section._getMenuItems();
                         this._currentMenuItem = menuItems.find((menuItem) => {
@@ -661,7 +680,7 @@ class PanelIndicator extends PanelMenu.Button {
         });
     }
 
-    _createMenuItem(text, pinned = false, timestamp = Date.now()) {
+    _createMenuItem(text, pinned, timestamp) {
         const menuItem = new HistoryMenuItem(text, pinned, timestamp, this.menu);
         this._preferences.bind(
             this._preferences._keyShowSurroundingWhitespace,
@@ -686,8 +705,8 @@ class PanelIndicator extends PanelMenu.Button {
                     this._populateSubMenu(menuItem);
                 }
             },
-            `togglePin`, () => {
-                menuItem.pinned ? this._unpinMenuItem(menuItem) : this._pinMenuItem(menuItem);
+            `pinned`, () => {
+                menuItem.pinned ? this._pinMenuItem(menuItem) : this._unpinMenuItem(menuItem);
             },
             `delete`, () => {
                 if (this._historyMenuSection.section.numMenuItems === 1) {
@@ -729,8 +748,6 @@ class PanelIndicator extends PanelMenu.Button {
     }
 
     _pinMenuItem(menuItem) {
-        menuItem.pinned = true;
-        menuItem.pinIcon.icon_name = `starred-symbolic`;
         this._historyMenuSection.section.moveMenuItem(menuItem, 0);
         ++this._pinnedCount;
 
@@ -747,8 +764,6 @@ class PanelIndicator extends PanelMenu.Button {
             }
             this._destroyMenuItem(lastMenuItem);
         }
-        menuItem.pinned = false;
-        menuItem.pinIcon.icon_name = `non-starred-symbolic`;
         let indexToMove = menuItems.length;
         for (let i = this._pinnedCount; i < menuItems.length; ++i) {
             if (menuItems[i].timestamp < menuItem.timestamp) {
@@ -806,21 +821,21 @@ class PanelIndicator extends PanelMenu.Button {
                     validator: (text) => {
                         return Validator.isURL(text, {
                             protocols: [
+                                `feed`,
+                                `ftp`,
+                                `git`,
+                                `gopher`,
                                 `http`,
                                 `https`,
-                                `ftp`,
-                                `sftp`,
-                                `ssh`,
-                                `smb`,
-                                `telnet`,
-                                `gopher`,
-                                `vnc`,
-                                `irc`,
                                 `irc6`,
+                                `irc`,
                                 `ircs`,
-                                `git`,
                                 `rsync`,
-                                `feed`,
+                                `sftp`,
+                                `smb`,
+                                `ssh`,
+                                `telnet`,
+                                `vnc`,
                             ],
                             require_protocol: true,
                         });
@@ -857,7 +872,7 @@ class PanelIndicator extends PanelMenu.Button {
                 {
                     title: _(`Make a Call`),
                     validator: (text) => {
-                        return /^callto:\S+/i.test(text);
+                        return /^callto:\S+$/i.test(text);
                     },
                 },
             ];
@@ -964,17 +979,16 @@ class PanelIndicator extends PanelMenu.Button {
                 if (!panelIndicator.instance || this._privateModeMenuItem.state) {
                     return;
                 }
-                if (message.status_code !== Soup.Status.CREATED) {
-                    this._notifyError(message.reason_phrase);
-                } else {
-                    try {
-                        const bytes = session.send_and_read_finish(result);
-                        const uri = new TextDecoder().decode(bytes.get_data()).trim();
-                        this._clipboard.setText(uri);
-                        this._notify(uri);
-                    } catch (error) {
-                        this._notifyError(error.message);
+                try {
+                    if (message.status_code !== Soup.Status.CREATED) {
+                        throw new Error(message.reason_phrase);
                     }
+                    const bytes = session.send_and_read_finish(result);
+                    const uri = new TextDecoder().decode(bytes.get_data()).trim();
+                    this._clipboard.setText(uri);
+                    this._notify(uri);
+                } catch (error) {
+                    this._notifyError(error.message);
                 }
             }
         );
@@ -998,7 +1012,7 @@ class PanelIndicator extends PanelMenu.Button {
                 }
             });
             panelIndicator.state.history.length = 0;
-            this._clipboard.getText((text) => {
+            this._clipboard.getText().then((text) => {
                 if (text && text.length > 0) {
                     const menuItems = this._historyMenuSection.section._getMenuItems();
                     this._currentMenuItem = menuItems.find((menuItem) => {
