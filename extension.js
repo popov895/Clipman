@@ -650,13 +650,17 @@ class PanelIndicator extends PanelMenu.Button {
                 this._clipboard.getText().then((text) => {
                     if (text && text.length > 0) {
                         const menuItems = this._historyMenuSection.section._getMenuItems();
-                        this._currentMenuItem = menuItems.find((menuItem) => {
+                        const currentMenuItem = menuItems.find((menuItem) => {
                             return menuItem.text === text;
                         });
-                        if (this._currentMenuItem) {
-                            this._historyMenuSection.section.moveMenuItem(this._currentMenuItem, this._pinnedCount);
+                        if (currentMenuItem) {
+                            currentMenuItem.timestamp = Date.now();
+                            if (!currentMenuItem.pinned) {
+                                this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
+                            }
+                            currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
                         }
-                        this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                        this._currentMenuItem = currentMenuItem;
                     }
                 });
             }
@@ -1001,10 +1005,17 @@ class PanelIndicator extends PanelMenu.Button {
             this._clipboard.getText().then((text) => {
                 if (text && text.length > 0) {
                     const menuItems = this._historyMenuSection.section._getMenuItems();
-                    this._currentMenuItem = menuItems.find((menuItem) => {
+                    const currentMenuItem = menuItems.find((menuItem) => {
                         return menuItem.text === text;
                     });
-                    this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+                    if (currentMenuItem) {
+                        currentMenuItem.timestamp = Date.now();
+                        if (!currentMenuItem.pinned) {
+                            this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
+                        }
+                        currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
+                    }
+                    this._currentMenuItem = currentMenuItem;
                 }
             });
         }
