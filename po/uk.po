@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-15 17:08+0300\n"
-"PO-Revision-Date: 2023-09-29 17:38-0400\n"
+"PO-Revision-Date: 2023-10-15 17:12+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -182,14 +182,12 @@ msgid "Failed to launch URI \"%s\""
 msgstr "Не вдалося запустити URI \"%s\""
 
 #: extension.js:929 extension.js:942
-#, fuzzy
 msgid "Failed to search the web"
-msgstr "Не вдалося створити QR-код"
+msgstr "Не вдалося здійснити пошук в Інтернеті"
 
 #: extension.js:929
-#, fuzzy
 msgid "Unknown search engine"
-msgstr "Пошукова система"
+msgstr "Невідома пошукова система"
 
 #: extension.js:942
 #, javascript-format
@@ -198,11 +196,11 @@ msgstr "Неправильна URL-адреса для пошуку \"%s\""
 
 #: extension.js:988
 msgid "The text was successfully shared online"
-msgstr ""
+msgstr "Текст був успішно поширений в Інтернеті"
 
 #: extension.js:990
 msgid "Failed to share the text online"
-msgstr ""
+msgstr "Не вдалося поширити текст в Інтернеті"
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"
