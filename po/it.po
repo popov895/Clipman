@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-06 11:33+0300\n"
+"POT-Creation-Date: 2023-10-15 16:51+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -58,133 +58,149 @@ msgctxt "Large menu size"
 msgid "Large"
 msgstr ""
 
-#: prefs.js:180
+#: prefs.js:179
 msgid "Maximum menu size"
 msgstr ""
 
-#: prefs.js:185
+#: prefs.js:184
 msgctxt "General options"
 msgid "General"
 msgstr ""
 
-#: prefs.js:193
+#: prefs.js:192
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr ""
 
-#: prefs.js:206
+#: prefs.js:205
 msgid "Search URL"
 msgstr ""
 
-#: prefs.js:248
+#: prefs.js:246
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:253
+#: prefs.js:251
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:275
+#: prefs.js:273
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
 msgstr ""
 
-#: prefs.js:280
+#: prefs.js:278
 msgid "Sharing Online"
 msgstr ""
 
-#: prefs.js:285
+#: prefs.js:283
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: prefs.js:288
+#: prefs.js:286
 msgid "Toggle menu"
 msgstr ""
 
-#: prefs.js:293
+#: prefs.js:291
 msgid "Toggle private mode"
 msgstr ""
 
-#: prefs.js:298
+#: prefs.js:296
 #, fuzzy
 msgid "Clear history"
 msgstr "Cancella Cronologia"
 
-#: extension.js:118
+#: extension.js:121
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:125
+#: extension.js:128
 msgctxt "Close dialog"
 msgid "Close"
 msgstr ""
 
-#: extension.js:194
+#: extension.js:197
 msgid "Type to search..."
 msgstr "Digita per cercare..."
 
-#: extension.js:213
+#: extension.js:216
 msgid "No Matches"
 msgstr "Nessuna Corrispondenza"
 
-#: extension.js:591
+#: extension.js:611
 msgid "Private Mode is On"
 msgstr ""
 
-#: extension.js:597
+#: extension.js:617
 msgid "History is Empty"
 msgstr "Cronologia vuota"
 
-#: extension.js:619
+#: extension.js:639
 msgid "Clear History"
 msgstr "Cancella Cronologia"
 
-#: extension.js:628
+#: extension.js:648
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:659
+#: extension.js:683
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: extension.js:805 extension.js:830
+#: extension.js:825 extension.js:850 extension.js:856
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:838
+#: extension.js:864
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:846 extension.js:852
+#: extension.js:872 extension.js:878
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:872
+#: extension.js:898
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:877
+#: extension.js:903
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:882
+#: extension.js:908
 msgid "Share Online"
 msgstr ""
 
-#: extension.js:887
+#: extension.js:913
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:905
+#: extension.js:931
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:927
+#: extension.js:940 extension.js:953
+msgid "Failed to search the web"
+msgstr ""
+
+#: extension.js:940
+msgid "Unknown search engine"
+msgstr ""
+
+#: extension.js:953
 #, javascript-format
 msgid "Invalid search URL \"%s\""
+msgstr ""
+
+#: extension.js:994
+msgid "The text was successfully shared online"
+msgstr ""
+
+#: extension.js:996
+msgid "Failed to share the text online"
 msgstr ""
 
 #: libs/utils.js:233

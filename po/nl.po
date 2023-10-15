@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-06 11:33+0300\n"
+"POT-Creation-Date: 2023-10-15 16:51+0300\n"
 "PO-Revision-Date: 2023-09-30 14:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -57,133 +57,151 @@ msgctxt "Large menu size"
 msgid "Large"
 msgstr "Groot"
 
-#: prefs.js:180
+#: prefs.js:179
 msgid "Maximum menu size"
 msgstr "Maximale menu-omvang"
 
-#: prefs.js:185
+#: prefs.js:184
 msgctxt "General options"
 msgid "General"
 msgstr "Algemeen"
 
-#: prefs.js:193
+#: prefs.js:192
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr "De url, met %s op de plaats van de zoekopdracht"
 
-#: prefs.js:206
+#: prefs.js:205
 msgid "Search URL"
 msgstr "Zoekurl"
 
-#: prefs.js:248
+#: prefs.js:246
 msgid "Search Engine"
 msgstr "Zoekmachine"
 
-#: prefs.js:253
+#: prefs.js:251
 msgid "Web Search"
 msgstr "Zoeken op internet"
 
-#: prefs.js:275
+#: prefs.js:273
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
 msgstr "Aantal dagen dat gedeelde tekst bewaard moet worden"
 
-#: prefs.js:280
+#: prefs.js:278
 msgid "Sharing Online"
 msgstr "Online-delen"
 
-#: prefs.js:285
+#: prefs.js:283
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
-#: prefs.js:288
+#: prefs.js:286
 msgid "Toggle menu"
 msgstr "Menu tonen/verbergen"
 
-#: prefs.js:293
+#: prefs.js:291
 msgid "Toggle private mode"
 msgstr "Incognitomodus aan/uit"
 
-#: prefs.js:298
+#: prefs.js:296
 msgid "Clear history"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:118
+#: extension.js:121
 msgid "Failed to generate QR code"
 msgstr "De QR-code kan niet worden aangemaakt"
 
-#: extension.js:125
+#: extension.js:128
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Sluiten"
 
-#: extension.js:194
+#: extension.js:197
 msgid "Type to search..."
 msgstr "Typ om te zoeken…"
 
-#: extension.js:213
+#: extension.js:216
 msgid "No Matches"
 msgstr "Er zĳn geen overeenkomsten"
 
-#: extension.js:591
+#: extension.js:611
 msgid "Private Mode is On"
 msgstr "De incognitomodus is ingeschakeld"
 
-#: extension.js:597
+#: extension.js:617
 msgid "History is Empty"
 msgstr "De geschiedenis is blanco"
 
-#: extension.js:619
+#: extension.js:639
 msgid "Clear History"
 msgstr "Geschiedenis wissen"
 
-#: extension.js:628
+#: extension.js:648
 msgid "Private Mode"
 msgstr "Incognitomodus"
 
-#: extension.js:659
+#: extension.js:683
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: extension.js:805 extension.js:830
+#: extension.js:825 extension.js:850 extension.js:856
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Openen"
 
-#: extension.js:838
+#: extension.js:864
 msgid "Compose an Email"
 msgstr "E-mail opstellen"
 
-#: extension.js:846 extension.js:852
+#: extension.js:872 extension.js:878
 msgid "Make a Call"
 msgstr "Gesprek starten"
 
-#: extension.js:872
+#: extension.js:898
 msgid "Search the Web"
 msgstr "Zoeken op internet"
 
-#: extension.js:877
+#: extension.js:903
 msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
-#: extension.js:882
+#: extension.js:908
 msgid "Share Online"
 msgstr "Online delen"
 
-#: extension.js:887
+#: extension.js:913
 msgid "Show QR Code"
 msgstr "QR-code tonen"
 
-#: extension.js:905
+#: extension.js:931
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "‘%s’ kan niet worden geopend"
 
-#: extension.js:927
+#: extension.js:940 extension.js:953
+#, fuzzy
+msgid "Failed to search the web"
+msgstr "De QR-code kan niet worden aangemaakt"
+
+#: extension.js:940
+#, fuzzy
+msgid "Unknown search engine"
+msgstr "Zoekmachine"
+
+#: extension.js:953
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Ongeldige zoekurl: ‘%s’"
+
+#: extension.js:994
+msgid "The text was successfully shared online"
+msgstr ""
+
+#: extension.js:996
+msgid "Failed to share the text online"
+msgstr ""
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"
