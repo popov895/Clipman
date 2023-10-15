@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-06 11:41+0300\n"
+"POT-Creation-Date: 2023-10-15 17:08+0300\n"
 "PO-Revision-Date: 2023-07-03 13:44+0300\n"
 "Last-Translator: MohammadSaleh Kamyab <mskf1383@protonmail.com>\n"
 "Language-Team: \n"
@@ -58,133 +58,149 @@ msgctxt "Large menu size"
 msgid "Large"
 msgstr ""
 
-#: prefs.js:178
+#: prefs.js:177
 msgid "Maximum menu size"
 msgstr ""
 
-#: prefs.js:183
+#: prefs.js:182
 msgctxt "General options"
 msgid "General"
 msgstr ""
 
-#: prefs.js:191
+#: prefs.js:190
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr ""
 
-#: prefs.js:204
+#: prefs.js:203
 msgid "Search URL"
 msgstr ""
 
-#: prefs.js:246
+#: prefs.js:244
 msgid "Search Engine"
 msgstr ""
 
-#: prefs.js:251
+#: prefs.js:249
 msgid "Web Search"
 msgstr ""
 
-#: prefs.js:273
+#: prefs.js:271
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:276
 msgid "Sharing Online"
 msgstr ""
 
-#: prefs.js:283
+#: prefs.js:281
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: prefs.js:286
+#: prefs.js:284
 msgid "Toggle menu"
 msgstr ""
 
-#: prefs.js:291
+#: prefs.js:289
 msgid "Toggle private mode"
 msgstr ""
 
-#: prefs.js:296
+#: prefs.js:294
 #, fuzzy
 msgid "Clear history"
 msgstr "پاک‌سازی تاریخچه"
 
-#: extension.js:108
+#: extension.js:111
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:115
+#: extension.js:118
 msgctxt "Close dialog"
 msgid "Close"
 msgstr ""
 
-#: extension.js:184
+#: extension.js:187
 msgid "Type to search..."
 msgstr "نوشتن برای جست‌وجو…"
 
-#: extension.js:203
+#: extension.js:206
 msgid "No Matches"
 msgstr "بدون نتیجه"
 
-#: extension.js:580
+#: extension.js:600
 msgid "Private Mode is On"
 msgstr ""
 
-#: extension.js:586
+#: extension.js:606
 msgid "History is Empty"
 msgstr "تاریخچه خالی است"
 
-#: extension.js:608
+#: extension.js:628
 msgid "Clear History"
 msgstr "پاک‌سازی تاریخچه"
 
-#: extension.js:617
+#: extension.js:637
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:648
+#: extension.js:672
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: extension.js:794 extension.js:819
+#: extension.js:814 extension.js:839 extension.js:845
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:827
+#: extension.js:853
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:835 extension.js:841
+#: extension.js:861 extension.js:867
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:861
+#: extension.js:887
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:866
+#: extension.js:892
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:871
+#: extension.js:897
 msgid "Share Online"
 msgstr ""
 
-#: extension.js:876
+#: extension.js:902
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:894
+#: extension.js:920
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:916
+#: extension.js:929 extension.js:942
+msgid "Failed to search the web"
+msgstr ""
+
+#: extension.js:929
+msgid "Unknown search engine"
+msgstr ""
+
+#: extension.js:942
 #, javascript-format
 msgid "Invalid search URL \"%s\""
+msgstr ""
+
+#: extension.js:988
+msgid "The text was successfully shared online"
+msgstr ""
+
+#: extension.js:990
+msgid "Failed to share the text online"
 msgstr ""
 
 #: libs/utils.js:232
