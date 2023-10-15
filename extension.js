@@ -5,6 +5,7 @@ const { Clutter, Cogl, Gio, GLib, GObject, Graphene, Meta, Pango, Shell, Soup, S
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
+const MessageTray = imports.ui.messageTray;
 const ModalDialog = imports.ui.modalDialog;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -915,8 +916,8 @@ class PanelIndicator extends PanelMenu.Button {
     _launchUri(uri) {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
-        } catch {
-            notifyError(_(`Failed to launch URI "%s"`).format(uri));
+        } catch (error) {
+            notifyError(_(`Failed to launch URI "%s"`).format(uri), error.message);
         }
     }
 
@@ -925,7 +926,7 @@ class PanelIndicator extends PanelMenu.Button {
         const currentEngine = searchEngines.find(this._preferences.webSearchEngine);
 
         if (!currentEngine) {
-            notifyError(`Unknown search engine`);
+            notifyError(_(`Failed to search the web`), _(`Unknown search engine`));
             return;
         }
 
@@ -938,7 +939,7 @@ class PanelIndicator extends PanelMenu.Button {
                 require_protocol: true,
             };
             if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
-                notifyError(_(`Invalid search URL "%s"`).format(currentEngine.url));
+                notifyError(_(`Failed to search the web`), _(`Invalid search URL "%s"`).format(currentEngine.url));
                 return;
             }
         }
@@ -984,9 +985,9 @@ class PanelIndicator extends PanelMenu.Button {
                     const bytes = session.send_and_read_finish(result);
                     const uri = new TextDecoder().decode(bytes.get_data()).trim();
                     this._clipboard.setText(uri);
-                    notify(uri);
+                    notify(_(`The text was successfully shared online`), uri);
                 } catch (error) {
-                    notifyError(error.message);
+                    notifyError(_(`Failed to share the text online`), error.message);
                 }
             }
         );
@@ -1127,13 +1128,19 @@ const panelIndicator = {
     }
 };
 
-function notify(text) {
-    Main.notify(Me.metadata.name, text);
-}
+function notify(text, details, transient = true) {
+    const source = new MessageTray.SystemNotificationSource();
+    Main.messageTray.add(source);
 
-function notifyError(error) {
-    Main.notifyError(Me.metadata.name, error);
-}
+    const notification = new MessageTray.Notification(source, text, details);
+    notification.setTransient(transient);
+    source.showNotification(notification);
+};
+
+function notifyError(error, details, transient) {
+    log(error);
+    notify(error, details, transient);
+};
 
 function init() {
     SignalTracker.registerDestroyableType(ClipboardManager);
