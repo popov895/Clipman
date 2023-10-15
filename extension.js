@@ -14,6 +14,7 @@ import St from 'gi://St';
 
 import * as AnimationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
@@ -926,8 +927,8 @@ class PanelIndicator extends PanelMenu.Button {
     _launchUri(uri) {
         try {
             Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
-        } catch {
-            this._notifyError(_(`Failed to launch URI "%s"`).format(uri));
+        } catch (error) {
+            notifyError(_(`Failed to launch URI "%s"`).format(uri), error.message);
         }
     }
 
@@ -936,7 +937,7 @@ class PanelIndicator extends PanelMenu.Button {
         const currentEngine = searchEngines.find(this._preferences.webSearchEngine);
 
         if (!currentEngine) {
-            this._notifyError(`Unknown search engine`);
+            notifyError(_(`Failed to search the web`), _(`Unknown search engine`));
             return;
         }
 
@@ -949,7 +950,7 @@ class PanelIndicator extends PanelMenu.Button {
                 require_protocol: true,
             };
             if (!currentEngine.url.includes(`%s`) || !Validator.isURL(currentEngine.url, validatorOptions)) {
-                this._notifyError(_(`Invalid search URL "%s"`).format(currentEngine.url));
+                notifyError(_(`Failed to search the web`), _(`Invalid search URL "%s"`).format(currentEngine.url));
                 return;
             }
         }
@@ -990,20 +991,12 @@ class PanelIndicator extends PanelMenu.Button {
                     const bytes = session.send_and_read_finish(result);
                     const uri = new TextDecoder().decode(bytes.get_data()).trim();
                     this._clipboard.setText(uri);
-                    this._notify(uri);
+                    notify(_(`The text was successfully shared online`), uri);
                 } catch (error) {
-                    this._notifyError(error.message);
+                    notifyError(_(`Failed to share the text online`), error.message);
                 }
             }
         );
-    }
-
-    _notify(text) {
-        Main.notify(this._extension.metadata.name, text);
-    }
-
-    _notifyError(error) {
-        Main.notifyError(this._extension.metadata.name, error);
     }
 
     _loadState() {
@@ -1139,6 +1132,20 @@ const panelIndicator = {
         history: [],
         privateMode: false
     }
+};
+
+function notify(text, details, transient = true) {
+    const source = new MessageTray.SystemNotificationSource();
+    Main.messageTray.add(source);
+
+    const notification = new MessageTray.Notification(source, text, details);
+    notification.setTransient(transient);
+    source.showNotification(notification);
+};
+
+function notifyError(error, details, transient) {
+    log(error);
+    notify(error, details, transient);
 };
 
 export default class ClipmanExtension extends Extension
