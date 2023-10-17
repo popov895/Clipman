@@ -88,7 +88,7 @@ class ShortcutRow extends Adw.ActionRow {
         const window = new KeybindingWindow(this.get_root());
         window.connect(`close-request`, () => {
             const shortcut = window.keybinding;
-            if (typeof shortcut === `string`) {
+            if (shortcut !== undefined) {
                 this._preferences.setShortcut(this._preferencesKey, shortcut);
             }
             window.destroy();
