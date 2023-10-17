@@ -47,7 +47,7 @@ const ClipboardManager = GObject.registerClass({
         this.emit(`destroy`);
     }
 
-    getText(callback) {
+    getText() {
         const mimeTypes = this._clipboard.get_mimetypes(St.ClipboardType.CLIPBOARD);
         const hasSensitiveMimeTypes = this._sensitiveMimeTypes.some((sensitiveMimeType) => {
             return mimeTypes.includes(sensitiveMimeType);
@@ -319,11 +319,10 @@ const HistoryMenuItem = GObject.registerClass({
         'submenuAboutToOpen': {},
     },
 }, class HistoryMenuItem extends PopupMenu.PopupSubMenuMenuItem {
-    constructor(text, pinned = false, timestamp = Date.now(), topMenu) {
+    constructor(text, pinned = false, topMenu) {
         super(``);
 
         this.text = text;
-        this.timestamp = timestamp;
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this.menu.actor.enable_mouse_scrolling = false;
 
@@ -674,8 +673,9 @@ class PanelIndicator extends PanelMenu.Button {
         });
     }
 
-    _createMenuItem(text, pinned, timestamp) {
-        const menuItem = new HistoryMenuItem(text, pinned, timestamp, this.menu);
+    _createMenuItem(text, pinned, timestamp = Date.now()) {
+        const menuItem = new HistoryMenuItem(text, pinned, this.menu);
+        menuItem.timestamp = timestamp;
         this._preferences.bind(
             this._preferences._keyShowSurroundingWhitespace,
             menuItem,
@@ -699,9 +699,7 @@ class PanelIndicator extends PanelMenu.Button {
                     this._populateSubMenu(menuItem);
                 }
             },
-            `pinned`, () => {
-                menuItem.pinned ? this._pinMenuItem(menuItem) : this._unpinMenuItem(menuItem);
-            },
+            `pinned`, this._onMenuItemPinned.bind(this),
             `delete`, () => {
                 if (this._historyMenuSection.section.numMenuItems === 1) {
                     this.menu.close();
@@ -739,36 +737,6 @@ class PanelIndicator extends PanelMenu.Button {
             }
         }
         menuItem.destroy();
-    }
-
-    _pinMenuItem(menuItem) {
-        this._historyMenuSection.section.moveMenuItem(menuItem, 0);
-        ++this._pinnedCount;
-
-        this._updateUi();
-    }
-
-    _unpinMenuItem(menuItem) {
-        const menuItems = this._historyMenuSection.section._getMenuItems();
-        if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
-            const lastMenuItem = menuItems[menuItems.length - 1];
-            if (menuItem.timestamp < lastMenuItem.timestamp) {
-                this._destroyMenuItem(menuItem);
-                return;
-            }
-            this._destroyMenuItem(lastMenuItem);
-        }
-        let indexToMove = menuItems.length;
-        for (let i = this._pinnedCount; i < menuItems.length; ++i) {
-            if (menuItems[i].timestamp < menuItem.timestamp) {
-                indexToMove = i;
-                break;
-            }
-        }
-        this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
-        --this._pinnedCount;
-
-        this._updateUi();
     }
 
     _addKeybindings() {
@@ -1082,6 +1050,41 @@ class PanelIndicator extends PanelMenu.Button {
         menuItemsToRemove.forEach((menuItem) => {
             this._destroyMenuItem(menuItem);
         });
+    }
+
+    _onMenuItemPinned(menuItem) {
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        const currentIndex = menuItems.indexOf(menuItem);
+        if (menuItem.pinned) {
+            if (currentIndex < this._pinnedCount) {
+                return;
+            }
+            this._historyMenuSection.section.moveMenuItem(menuItem, 0);
+            ++this._pinnedCount;
+        } else {
+            if (currentIndex >= this._pinnedCount) {
+                return;
+            }
+            if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
+                const lastMenuItem = menuItems[menuItems.length - 1];
+                if (menuItem.timestamp < lastMenuItem.timestamp) {
+                    this._destroyMenuItem(menuItem);
+                    return;
+                }
+                this._destroyMenuItem(lastMenuItem);
+            }
+            let indexToMove = menuItems.length;
+            for (let i = this._pinnedCount; i < menuItems.length; ++i) {
+                if (menuItems[i].timestamp < menuItem.timestamp) {
+                    indexToMove = i;
+                    break;
+                }
+            }
+            this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
+            --this._pinnedCount;
+        }
+
+        this._updateUi();
     }
 
     _onOpenStateChanged(...[, open]) {
