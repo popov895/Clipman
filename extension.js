@@ -959,7 +959,7 @@ class PanelIndicator extends PanelMenu.Button {
                     const bytes = session.send_and_read_finish(result);
                     const uri = new TextDecoder().decode(bytes.get_data()).trim();
                     this._clipboard.setText(uri);
-                    notify(_(`The text was successfully shared online`), uri);
+                    notify(_(`The text was successfully shared online`), uri, false);
                 } catch (error) {
                     notifyError(_(`Failed to share the text online`), error.message);
                 }
