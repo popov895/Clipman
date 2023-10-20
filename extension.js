@@ -556,6 +556,7 @@ class PanelIndicator extends PanelMenu.Button {
         super(0);
 
         this._extension = extension;
+        this._lastUsedSortKey = -1;
         this._pinnedCount = 0;
 
         this._buildIcon();
@@ -665,7 +666,7 @@ class PanelIndicator extends PanelMenu.Button {
                             return menuItem.text === text;
                         });
                         if (currentMenuItem) {
-                            currentMenuItem.timestamp = Date.now();
+                            currentMenuItem.sortKey = ++this._lastUsedSortKey;
                             if (!currentMenuItem.pinned) {
                                 this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                             }
@@ -684,9 +685,9 @@ class PanelIndicator extends PanelMenu.Button {
         });
     }
 
-    _createMenuItem(text, pinned, timestamp = Date.now()) {
+    _createMenuItem(text, pinned, sortKey = ++this._lastUsedSortKey) {
         const menuItem = new HistoryMenuItem(text, pinned, this.menu);
-        menuItem.timestamp = timestamp;
+        menuItem.sortKey = sortKey;
         this._preferences.bind(
             this._preferences._keyShowSurroundingWhitespace,
             menuItem,
@@ -748,6 +749,9 @@ class PanelIndicator extends PanelMenu.Button {
             }
         }
         menuItem.destroy();
+        if (this._historyMenuSection.section.numMenuItems === 0) {
+            this._lastUsedSortKey = -1;
+        }
     }
 
     _addKeybindings() {
@@ -970,11 +974,12 @@ class PanelIndicator extends PanelMenu.Button {
     _loadState() {
         if (panelIndicator.state.history.length > 0) {
             panelIndicator.state.history.forEach((entry) => {
-                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.timestamp);
+                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.sortKey);
                 this._historyMenuSection.section.addMenuItem(menuItem);
                 if (menuItem.pinned) {
                     ++this._pinnedCount;
                 }
+                this._lastUsedSortKey = Math.max(menuItem.sortKey, this._lastUsedSortKey);
             });
             panelIndicator.state.history.length = 0;
             this._clipboard.getText().then((text) => {
@@ -984,7 +989,7 @@ class PanelIndicator extends PanelMenu.Button {
                         return menuItem.text === text;
                     });
                     if (currentMenuItem) {
-                        currentMenuItem.timestamp = Date.now();
+                        currentMenuItem.sortKey = ++this._lastUsedSortKey;
                         if (!currentMenuItem.pinned) {
                             this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                         }
@@ -1006,7 +1011,7 @@ class PanelIndicator extends PanelMenu.Button {
             return {
                 text: menuItem.text,
                 pinned: menuItem.pinned,
-                timestamp: menuItem.timestamp
+                sortKey: menuItem.sortKey,
             };
         });
 
@@ -1030,7 +1035,7 @@ class PanelIndicator extends PanelMenu.Button {
                 return menuItem.text === text;
             });
             if (currentMenuItem) {
-                currentMenuItem.timestamp = Date.now();
+                currentMenuItem.sortKey = ++this._lastUsedSortKey;
                 if (!currentMenuItem.pinned) {
                     this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                 }
@@ -1073,7 +1078,7 @@ class PanelIndicator extends PanelMenu.Button {
             }
             if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
                 const lastMenuItem = menuItems[menuItems.length - 1];
-                if (menuItem.timestamp < lastMenuItem.timestamp) {
+                if (menuItem.sortKey < lastMenuItem.sortKey) {
                     this._destroyMenuItem(menuItem);
                     return;
                 }
@@ -1081,7 +1086,7 @@ class PanelIndicator extends PanelMenu.Button {
             }
             let indexToMove = menuItems.length;
             for (let i = this._pinnedCount; i < menuItems.length; ++i) {
-                if (menuItems[i].timestamp < menuItem.timestamp) {
+                if (menuItems[i].sortKey < menuItem.sortKey) {
                     indexToMove = i;
                     break;
                 }
