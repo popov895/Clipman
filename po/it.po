@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 16:51+0300\n"
+"POT-Creation-Date: 2023-10-22 15:46+0300\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -148,58 +148,58 @@ msgctxt "Open settings"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: extension.js:825 extension.js:850 extension.js:856
+#: extension.js:797 extension.js:822 extension.js:828
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:864
+#: extension.js:836
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:872 extension.js:878
+#: extension.js:844 extension.js:850
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:898
+#: extension.js:870
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:903
+#: extension.js:875
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:908
+#: extension.js:880
 msgid "Share Online"
 msgstr ""
 
-#: extension.js:913
+#: extension.js:885
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:931
+#: extension.js:903
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:940 extension.js:953
+#: extension.js:912 extension.js:925
 msgid "Failed to search the web"
 msgstr ""
 
-#: extension.js:940
+#: extension.js:912
 msgid "Unknown search engine"
 msgstr ""
 
-#: extension.js:953
+#: extension.js:925
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: extension.js:994
+#: extension.js:966
 msgid "The text was successfully shared online"
 msgstr ""
 
-#: extension.js:996
+#: extension.js:968
 msgid "Failed to share the text online"
 msgstr ""
 
