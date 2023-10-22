@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 17:08+0300\n"
+"POT-Creation-Date: 2023-10-22 15:42+0300\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -151,59 +151,59 @@ msgctxt "Open settings"
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: extension.js:814 extension.js:839 extension.js:845
+#: extension.js:786 extension.js:811 extension.js:817
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:853
+#: extension.js:825
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:861 extension.js:867
+#: extension.js:833 extension.js:839
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:887
+#: extension.js:859
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:892
+#: extension.js:864
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:897
+#: extension.js:869
 msgid "Share Online"
 msgstr ""
 
-#: extension.js:902
+#: extension.js:874
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:920
+#: extension.js:892
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:929 extension.js:942
+#: extension.js:901 extension.js:914
 #, fuzzy
 msgid "Failed to search the web"
 msgstr "Nie udało się wygenerować kodu QR"
 
-#: extension.js:929
+#: extension.js:901
 msgid "Unknown search engine"
 msgstr ""
 
-#: extension.js:942
+#: extension.js:914
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: extension.js:988
+#: extension.js:960
 msgid "The text was successfully shared online"
 msgstr ""
 
-#: extension.js:990
+#: extension.js:962
 msgid "Failed to share the text online"
 msgstr ""
 

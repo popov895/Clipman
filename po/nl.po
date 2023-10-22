@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 17:08+0300\n"
+"POT-Creation-Date: 2023-10-22 15:42+0300\n"
 "PO-Revision-Date: 2023-09-30 14:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -146,60 +146,60 @@ msgctxt "Open settings"
 msgid "Settings"
 msgstr "Voorkeuren"
 
-#: extension.js:814 extension.js:839 extension.js:845
+#: extension.js:786 extension.js:811 extension.js:817
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Openen"
 
-#: extension.js:853
+#: extension.js:825
 msgid "Compose an Email"
 msgstr "E-mail opstellen"
 
-#: extension.js:861 extension.js:867
+#: extension.js:833 extension.js:839
 msgid "Make a Call"
 msgstr "Gesprek starten"
 
-#: extension.js:887
+#: extension.js:859
 msgid "Search the Web"
 msgstr "Zoeken op internet"
 
-#: extension.js:892
+#: extension.js:864
 msgid "Send via Email"
 msgstr "Versturen per e-mail"
 
-#: extension.js:897
+#: extension.js:869
 msgid "Share Online"
 msgstr "Online delen"
 
-#: extension.js:902
+#: extension.js:874
 msgid "Show QR Code"
 msgstr "QR-code tonen"
 
-#: extension.js:920
+#: extension.js:892
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "‘%s’ kan niet worden geopend"
 
-#: extension.js:929 extension.js:942
+#: extension.js:901 extension.js:914
 #, fuzzy
 msgid "Failed to search the web"
 msgstr "De QR-code kan niet worden aangemaakt"
 
-#: extension.js:929
+#: extension.js:901
 #, fuzzy
 msgid "Unknown search engine"
 msgstr "Zoekmachine"
 
-#: extension.js:942
+#: extension.js:914
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Ongeldige zoekurl: ‘%s’"
 
-#: extension.js:988
+#: extension.js:960
 msgid "The text was successfully shared online"
 msgstr ""
 
-#: extension.js:990
+#: extension.js:962
 msgid "Failed to share the text online"
 msgstr ""
 

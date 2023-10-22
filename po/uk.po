@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 17:08+0300\n"
+"POT-Creation-Date: 2023-10-22 15:42+0300\n"
 "PO-Revision-Date: 2023-10-15 17:12+0300\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
@@ -147,58 +147,58 @@ msgctxt "Open settings"
 msgid "Settings"
 msgstr "Налаштування"
 
-#: extension.js:814 extension.js:839 extension.js:845
+#: extension.js:786 extension.js:811 extension.js:817
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Відкрити"
 
-#: extension.js:853
+#: extension.js:825
 msgid "Compose an Email"
 msgstr "Створити електронний лист"
 
-#: extension.js:861 extension.js:867
+#: extension.js:833 extension.js:839
 msgid "Make a Call"
 msgstr "Зателефонувати"
 
-#: extension.js:887
+#: extension.js:859
 msgid "Search the Web"
 msgstr "Шукати в Інтернеті"
 
-#: extension.js:892
+#: extension.js:864
 msgid "Send via Email"
 msgstr "Надіслати електронною поштою"
 
-#: extension.js:897
+#: extension.js:869
 msgid "Share Online"
 msgstr "Поширити в Інтернеті"
 
-#: extension.js:902
+#: extension.js:874
 msgid "Show QR Code"
 msgstr "Показати QR-код"
 
-#: extension.js:920
+#: extension.js:892
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "Не вдалося запустити URI \"%s\""
 
-#: extension.js:929 extension.js:942
+#: extension.js:901 extension.js:914
 msgid "Failed to search the web"
 msgstr "Не вдалося здійснити пошук в Інтернеті"
 
-#: extension.js:929
+#: extension.js:901
 msgid "Unknown search engine"
 msgstr "Невідома пошукова система"
 
-#: extension.js:942
+#: extension.js:914
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Неправильна URL-адреса для пошуку \"%s\""
 
-#: extension.js:988
+#: extension.js:960
 msgid "The text was successfully shared online"
 msgstr "Текст був успішно поширений в Інтернеті"
 
-#: extension.js:990
+#: extension.js:962
 msgid "Failed to share the text online"
 msgstr "Не вдалося поширити текст в Інтернеті"
 
