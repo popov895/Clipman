@@ -6,6 +6,7 @@ export const Preferences = GObject.registerClass({
     Signals: {
         'destroy': {},
         'historySizeChanged': {},
+        'historyKeepingModeChanged': {},
         'menuMaxSizeChanged': {},
         'webSearchEngineChanged': {},
         'shortcutChanged': {
@@ -17,6 +18,7 @@ export const Preferences = GObject.registerClass({
         super();
 
         this._keyHistorySize = `history-size`;
+        this._keyHistoryKeepingMode = `history-keeping-mode`;
         this._keyShowSurroundingWhitespace = `show-surrounding-whitespace`;
         this._keyShowColorPreview = `show-color-preview`;
         this._keyMenuMaxSize = `menu-max-size`;
@@ -32,6 +34,10 @@ export const Preferences = GObject.registerClass({
             switch (key) {
                 case this._keyHistorySize: {
                     this.emit(`historySizeChanged`);
+                    break;
+                }
+                case this._keyHistoryKeepingMode: {
+                    this.emit(`historyKeepingModeChanged`);
                     break;
                 }
                 case this._keyMenuMaxSize: {
@@ -62,6 +68,14 @@ export const Preferences = GObject.registerClass({
 
     get historySize() {
         return this._settings.get_int(this._keyHistorySize);
+    }
+
+    get historyKeepingMode() {
+        return this._settings.get_enum(this._keyHistoryKeepingMode);
+    }
+
+    set historyKeepingMode(historyKeepingMode) {
+        this._settings.set_enum(this._keyHistoryKeepingMode, historyKeepingMode);
     }
 
     get menuMaxSize() {

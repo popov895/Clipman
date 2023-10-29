@@ -126,6 +126,28 @@ export default class ClipmanExtensionPreferences extends ExtensionPreferences
         });
         historySizeRow.add_suffix(historySizeSpinBox);
 
+        const historyKeepingModeDropDown = new Gtk.DropDown({
+            model: Gtk.StringList.new([
+                _(`None`, `Don't keep entries`),
+                _(`Pinned`, `Keep only pinned entries`),
+                _(`All`, `Keep all entries`),
+            ]),
+            valign: Gtk.Align.CENTER,
+        });
+        historyKeepingModeDropDown.connect(`notify::selected`, () => {
+            window._preferences.historyKeepingMode = historyKeepingModeDropDown.selected;
+        });
+        historyKeepingModeDropDown.selected = window._preferences.historyKeepingMode;
+        window._preferences.connect(`historyKeepingModeChanged`, () => {
+            historyKeepingModeDropDown.selected = window._preferences.historyKeepingMode;
+        });
+
+        const historyKeepingModeRow = new Adw.ActionRow({
+            activatable_widget: historyKeepingModeDropDown,
+            title: _(`History entries to keep`),
+        });
+        historyKeepingModeRow.add_suffix(historyKeepingModeDropDown);
+
         const surroundingWhitespaceSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
         });
@@ -184,6 +206,7 @@ export default class ClipmanExtensionPreferences extends ExtensionPreferences
             title: _(`General`, `General options`),
         });
         generalGroup.add(historySizeRow);
+        generalGroup.add(historyKeepingModeRow);
         generalGroup.add(surroundingWhitespaceRow);
         generalGroup.add(colorPreviewRow);
         generalGroup.add(menuMaxSizeRow);
