@@ -14,8 +14,15 @@ const SignalTracker = imports.misc.signalTracker;
 const Me = ExtensionUtils.getCurrentExtension();
 const { QrCode } = Me.imports.libs.qrcodegen.qrcodegen;
 const { Preferences } = Me.imports.libs.preferences;
+const { Storage } = Me.imports.libs.storage;
 const Validator = Me.imports.libs.validator.validator;
 const { _, log, ColorParser, SearchEngines } = Me.imports.libs.utils;
+
+const HistoryKeepingMode = {
+    None: 0,
+    Pinned: 1,
+    All: 2,
+};
 
 const ClipboardManager = GObject.registerClass({
     Signals: {
@@ -35,7 +42,7 @@ const ClipboardManager = GObject.registerClass({
         this._selection.connectObject(
             `owner-changed`,
             (...[, selectionType]) => {
-                if (selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
+                if (!this.blockSignals && selectionType === Meta.SelectionType.SELECTION_CLIPBOARD) {
                     this.emit(`changed`);
                 }
             },
@@ -545,11 +552,19 @@ class PanelIndicator extends PanelMenu.Button {
     constructor() {
         super(0);
 
+        this._lastUsedId = -1;
         this._lastUsedSortKey = -1;
         this._pinnedCount = 0;
 
         this._buildIcon();
         this._buildMenu();
+
+        this._preferences = new Preferences();
+        this._preferences.previousHistoryKeepingMode = this._preferences.historyKeepingMode;
+        this._preferences.connectObject(
+            `historySizeChanged`, this._onHistorySizeChanged.bind(this),
+            `historyKeepingModeChanged`, this._onHistoryKeepingModeChanged.bind(this)
+        );
 
         this._clipboard = new ClipboardManager();
         this._clipboard.connectObject(`changed`, () => {
@@ -560,18 +575,19 @@ class PanelIndicator extends PanelMenu.Button {
             }
         });
 
-        this._preferences = new Preferences();
-        this._preferences.connectObject(`historySizeChanged`, this._onHistorySizeChanged.bind(this));
+        this._storage = new Storage();
 
         this._loadState();
+        this._loadHistory();
         this._addKeybindings();
+        this._updateUi();
     }
 
     destroy() {
         this._qrCodeDialog?.close();
 
-        this._saveState();
         this._removeKeybindings();
+        this._saveState();
 
         this._preferences.destroy();
         this._clipboard.destroy();
@@ -629,9 +645,12 @@ class PanelIndicator extends PanelMenu.Button {
             this.menu.close();
             const menuItems = this._historyMenuSection.section._getMenuItems();
             const menuItemsToRemove = menuItems.slice(this._pinnedCount);
-            menuItemsToRemove.forEach((menuItem) => {
-                this._destroyMenuItem(menuItem);
-            });
+            if (menuItemsToRemove.length > 0) {
+                menuItemsToRemove.forEach((menuItem) => {
+                    this._destroyMenuItem(menuItem);
+                });
+                this._saveHistory();
+            }
         });
 
         this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_(`Private Mode`), false, {
@@ -660,6 +679,7 @@ class PanelIndicator extends PanelMenu.Button {
                                 this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                             }
                             currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
+                            this._saveHistory();
                         }
                         this._currentMenuItem = currentMenuItem;
                     }
@@ -674,8 +694,9 @@ class PanelIndicator extends PanelMenu.Button {
         });
     }
 
-    _createMenuItem(text, pinned, sortKey = ++this._lastUsedSortKey) {
+    _createMenuItem(text, pinned, id = ++this._lastUsedId, sortKey = ++this._lastUsedSortKey) {
         const menuItem = new HistoryMenuItem(text, pinned, this.menu);
+        menuItem.id = id;
         menuItem.sortKey = sortKey;
         this._preferences.bind(
             this._preferences._keyShowSurroundingWhitespace,
@@ -706,6 +727,7 @@ class PanelIndicator extends PanelMenu.Button {
                     this.menu.close();
                 }
                 this._destroyMenuItem(menuItem);
+                this._saveHistory();
             },
             `destroy`, () => {
                 Gio.Settings.unbind(menuItem, `showColorPreview`);
@@ -738,7 +760,13 @@ class PanelIndicator extends PanelMenu.Button {
             }
         }
         menuItem.destroy();
+        if (this._preferences.historyKeepingMode === HistoryKeepingMode.All || (
+            this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned && menuItem.pinned
+        )) {
+            this._storage.deleteEntryContent(menuItem).catch(log);
+        }
         if (this._historyMenuSection.section.numMenuItems === 0) {
+            this._lastUsedId = -1;
             this._lastUsedSortKey = -1;
         }
     }
@@ -965,17 +993,51 @@ class PanelIndicator extends PanelMenu.Button {
         );
     }
 
-    _loadState() {
-        if (panelIndicator.state.history.length > 0) {
-            panelIndicator.state.history.forEach((entry) => {
-                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.sortKey);
-                this._historyMenuSection.section.addMenuItem(menuItem);
-                if (menuItem.pinned) {
-                    ++this._pinnedCount;
-                }
-                this._lastUsedSortKey = Math.max(menuItem.sortKey, this._lastUsedSortKey);
+    _loadHistory() {
+        if (this._preferences.historyKeepingMode === HistoryKeepingMode.None) {
+            return;
+        }
+
+        this._clipboard.blockSignals = true;
+
+        this._storage.loadEntries().then(async (entries) => {
+            if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
+                entries = entries.filter((entry) => {
+                    return entry.pinned;
+                });
+            }
+
+            if (entries.length === 0) {
+                return;
+            }
+
+            entries.forEach((entry) => {
+                this._lastUsedId = Math.max(entry.id, this._lastUsedId);
+                this._lastUsedSortKey = Math.max(entry.sortKey, this._lastUsedSortKey);
             });
-            panelIndicator.state.history.length = 0;
+
+            this._clipboard.blockSignals = false;
+
+            for (const entry of entries) {
+                try {
+                    await this._storage.loadEntryContent(entry);
+                    if (!entry.text) {
+                        continue;
+                    }
+                    const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.id, entry.sortKey);
+                    if (menuItem.pinned) {
+                        this._historyMenuSection.section.addMenuItem(menuItem, this._pinnedCount++);
+                    } else {
+                        this._historyMenuSection.section.addMenuItem(menuItem);
+                        if (this._historyMenuSection.section.numMenuItems - this._pinnedCount === this._preferences.historySize) {
+                            break;
+                        }
+                    }
+                } catch (error) {
+                    log(error);
+                }
+            }
+
             this._clipboard.getText().then((text) => {
                 if (text && text.length > 0) {
                     const menuItems = this._historyMenuSection.section._getMenuItems();
@@ -988,27 +1050,39 @@ class PanelIndicator extends PanelMenu.Button {
                             this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
                         }
                         currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
+                        this._saveHistory();
                     }
                     this._currentMenuItem = currentMenuItem;
                 }
             });
+        }).catch(log).finally(() => {
+            this._clipboard.blockSignals = false;
+        });
+    }
+
+    _saveHistory(force = false) {
+        if (this._preferences.historyKeepingMode === HistoryKeepingMode.None) {
+            if (force) {
+                this._storage.saveEntries([]).catch(log);
+            }
+            return;
         }
 
-        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
+        let menuItems = this._historyMenuSection.section._getMenuItems();
+        if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
+            menuItems = menuItems.filter((menuItem) => {
+                return menuItem.pinned;
+            });
+        }
 
-        this._updateUi();
+        this._storage.saveEntries(menuItems).catch(log);
+    }
+
+    _loadState() {
+        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
     }
 
     _saveState() {
-        const menuItems = this._historyMenuSection.section._getMenuItems();
-        panelIndicator.state.history = menuItems.map((menuItem) => {
-            return {
-                text: menuItem.text,
-                pinned: menuItem.pinned,
-                sortKey: menuItem.sortKey,
-            };
-        });
-
         panelIndicator.state.privateMode = this._privateModeMenuItem.state;
     }
 
@@ -1039,7 +1113,11 @@ class PanelIndicator extends PanelMenu.Button {
                 }
                 currentMenuItem = this._createMenuItem(text);
                 this._historyMenuSection.section.addMenuItem(currentMenuItem, this._pinnedCount);
+                if (this._preferences.historyKeepingMode === HistoryKeepingMode.All) {
+                    this._storage.saveEntryContent(currentMenuItem).catch(log);
+                }
             }
+            this._saveHistory();
         }
 
         if (this._currentMenuItem !== currentMenuItem) {
@@ -1052,9 +1130,54 @@ class PanelIndicator extends PanelMenu.Button {
     _onHistorySizeChanged() {
         const menuItems = this._historyMenuSection.section._getMenuItems();
         const menuItemsToRemove = menuItems.slice(this._preferences.historySize + this._pinnedCount);
-        menuItemsToRemove.forEach((menuItem) => {
-            this._destroyMenuItem(menuItem);
+        if (menuItemsToRemove.length > 0) {
+            menuItemsToRemove.forEach((menuItem) => {
+                this._destroyMenuItem(menuItem);
+            });
+            this._saveHistory();
+        }
+    }
+
+    _onHistoryKeepingModeChanged() {
+        this._saveHistory(true);
+
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        menuItems.forEach((menuItem) => {
+            switch (this._preferences.historyKeepingMode) {
+                case HistoryKeepingMode.None: {
+                    if (this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.All || (
+                        this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.Pinned && menuItem.pinned
+                    )) {
+                        this._storage.deleteEntryContent(menuItem).catch(log);
+                    }
+                    break;
+                }
+                case HistoryKeepingMode.Pinned: {
+                    if (menuItem.pinned) {
+                        if (this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.None) {
+                            this._storage.saveEntryContent(menuItem).catch(log);
+                        }
+                    } else {
+                        if (this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.All) {
+                            this._storage.deleteEntryContent(menuItem).catch(log);
+                        }
+                    }
+                    break;
+                }
+                case HistoryKeepingMode.All: {
+                    if (this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.None || (
+                        this._preferences.previousHistoryKeepingMode === HistoryKeepingMode.Pinned && !menuItem.pinned
+                    )) {
+                        this._storage.saveEntryContent(menuItem).catch(log);
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
         });
+
+        this._preferences.previousHistoryKeepingMode = this._preferences.historyKeepingMode;
     }
 
     _onMenuItemPinned(menuItem) {
@@ -1074,6 +1197,7 @@ class PanelIndicator extends PanelMenu.Button {
                 const lastMenuItem = menuItems[menuItems.length - 1];
                 if (menuItem.sortKey < lastMenuItem.sortKey) {
                     this._destroyMenuItem(menuItem);
+                    this._saveHistory();
                     return;
                 }
                 this._destroyMenuItem(lastMenuItem);
@@ -1087,6 +1211,16 @@ class PanelIndicator extends PanelMenu.Button {
             }
             this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
             --this._pinnedCount;
+        }
+
+        this._saveHistory();
+
+        if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
+            if (menuItem.pinned) {
+                this._storage.saveEntryContent(menuItem).catch(log);
+            } else {
+                this._storage.deleteEntryContent(menuItem).catch(log);
+            }
         }
 
         this._updateUi();
@@ -1131,7 +1265,6 @@ class PanelIndicator extends PanelMenu.Button {
 const panelIndicator = {
     instance: null,
     state: {
-        history: [],
         privateMode: false
     }
 };
