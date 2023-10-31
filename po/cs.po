@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-22 15:46+0300\n"
+"POT-Creation-Date: 2023-10-31 11:30+0200\n"
 "PO-Revision-Date: 2023-10-03 17:01+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -35,172 +35,192 @@ msgstr "Vypnuto"
 msgid "History size"
 msgstr "Velikost historie"
 
-#: prefs.js:141
+#: prefs.js:131
+msgctxt "Don't keep entries"
+msgid "None"
+msgstr ""
+
+#: prefs.js:132
+msgctxt "Keep only pinned entries"
+msgid "Pinned"
+msgstr ""
+
+#: prefs.js:133
+msgctxt "Keep all entries"
+msgid "All"
+msgstr ""
+
+#: prefs.js:147
+#, fuzzy
+msgid "History entries to keep"
+msgstr "Historie je prázdná"
+
+#: prefs.js:163
 msgid "Show leading and trailing whitespace"
 msgstr "Zobrazit mezery na začátku a na konci"
 
-#: prefs.js:157
+#: prefs.js:179
 msgid "Show color preview"
 msgstr "Zobrazit náhled barev"
 
-#: prefs.js:163
+#: prefs.js:185
 msgctxt "Small menu size"
 msgid "Small"
 msgstr "Malá"
 
-#: prefs.js:164
+#: prefs.js:186
 msgctxt "Medium menu size"
 msgid "Medium"
 msgstr "Střední"
 
-#: prefs.js:165
+#: prefs.js:187
 msgctxt "Large menu size"
 msgid "Large"
 msgstr "Velká"
 
-#: prefs.js:179
+#: prefs.js:201
 msgid "Maximum menu size"
 msgstr "Maximální velikost nabídky"
 
-#: prefs.js:184
+#: prefs.js:206
 msgctxt "General options"
 msgid "General"
 msgstr "Obecné"
 
-#: prefs.js:192
+#: prefs.js:215
 #, javascript-format
 msgid "URL with %s in place of query"
 msgstr "Adresa URL s %s na místě dotazu"
 
-#: prefs.js:205
+#: prefs.js:228
 msgid "Search URL"
 msgstr "Vyhledat adresu URL"
 
-#: prefs.js:246
+#: prefs.js:269
 msgid "Search Engine"
 msgstr "Vyhledávač"
 
-#: prefs.js:251
+#: prefs.js:274
 msgid "Web Search"
 msgstr "Vyhledávání na webu"
 
-#: prefs.js:273
+#: prefs.js:296
 msgctxt "The number of days to keep the shared text"
 msgid "Days to keep the shared text"
 msgstr "Počet dnů, do kterých bude sdílený text zachován"
 
-#: prefs.js:278
+#: prefs.js:301
 msgid "Sharing Online"
 msgstr "Sdílení online"
 
-#: prefs.js:283
+#: prefs.js:306
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
 
-#: prefs.js:286
+#: prefs.js:309
 msgid "Toggle menu"
 msgstr "Skrýt/Zobrazit nabídku"
 
-#: prefs.js:291
+#: prefs.js:314
 msgid "Toggle private mode"
 msgstr "Soukromý režim"
 
-#: prefs.js:296
+#: prefs.js:319
 msgid "Clear history"
 msgstr "Vymazat historii"
 
-#: extension.js:121
+#: extension.js:128
 msgid "Failed to generate QR code"
 msgstr "Vygenerování QR kódu se nezdařilo"
 
-#: extension.js:128
+#: extension.js:135
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Zavřít"
 
-#: extension.js:197
+#: extension.js:204
 msgid "Type to search..."
 msgstr "Pište pro vyhledávání ..."
 
-#: extension.js:216
+#: extension.js:223
 msgid "No Matches"
 msgstr "Žádné shody"
 
-#: extension.js:611
+#: extension.js:627
 msgid "Private Mode is On"
 msgstr "Soukromý režim je zapnutý"
 
-#: extension.js:617
+#: extension.js:633
 msgid "History is Empty"
 msgstr "Historie je prázdná"
 
-#: extension.js:639
+#: extension.js:655
 msgid "Clear History"
 msgstr "Vymazat historii"
 
-#: extension.js:648
+#: extension.js:667
 msgid "Private Mode"
 msgstr "Soukromý režim"
 
-#: extension.js:683
+#: extension.js:703
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Nastavení"
 
-#: extension.js:797 extension.js:822 extension.js:828
+#: extension.js:825 extension.js:850 extension.js:856
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Otevřít"
 
-#: extension.js:836
+#: extension.js:864
 msgid "Compose an Email"
 msgstr "Napsat e-mail"
 
-#: extension.js:844 extension.js:850
+#: extension.js:872 extension.js:878
 msgid "Make a Call"
 msgstr "Zavolat"
 
-#: extension.js:870
+#: extension.js:898
 msgid "Search the Web"
 msgstr "Prohledat internet"
 
-#: extension.js:875
+#: extension.js:903
 msgid "Send via Email"
 msgstr "Odeslat e-mailem"
 
-#: extension.js:880
+#: extension.js:908
 msgid "Share Online"
 msgstr "Sdílet online"
 
-#: extension.js:885
+#: extension.js:913
 msgid "Show QR Code"
 msgstr "Zobrazit QR kód"
 
-#: extension.js:903
+#: extension.js:931
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "Nepodařilo se spustit URI \"%s\""
 
-#: extension.js:912 extension.js:925
+#: extension.js:940 extension.js:953
 #, fuzzy
 msgid "Failed to search the web"
 msgstr "Vygenerování QR kódu se nezdařilo"
 
-#: extension.js:912
+#: extension.js:940
 #, fuzzy
 msgid "Unknown search engine"
 msgstr "Vyhledávač"
 
-#: extension.js:925
+#: extension.js:953
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
-#: extension.js:966
+#: extension.js:994
 msgid "The text was successfully shared online"
 msgstr ""
 
-#: extension.js:968
+#: extension.js:996
 msgid "Failed to share the text online"
 msgstr ""
 
