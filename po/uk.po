@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-31 11:30+0200\n"
-"PO-Revision-Date: 2023-10-15 16:57+0300\n"
+"PO-Revision-Date: 2023-10-31 11:43+0200\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: prefs.js:19
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -38,22 +38,21 @@ msgstr "Розмір історії"
 #: prefs.js:131
 msgctxt "Don't keep entries"
 msgid "None"
-msgstr ""
+msgstr "Жодного"
 
 #: prefs.js:132
 msgctxt "Keep only pinned entries"
 msgid "Pinned"
-msgstr ""
+msgstr "Закріплені"
 
 #: prefs.js:133
 msgctxt "Keep all entries"
 msgid "All"
-msgstr ""
+msgstr "Всі"
 
 #: prefs.js:147
-#, fuzzy
 msgid "History entries to keep"
-msgstr "Історія порожня"
+msgstr "Записи історії, що слід зберігати"
 
 #: prefs.js:163
 msgid "Show leading and trailing whitespace"
