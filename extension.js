@@ -333,6 +333,8 @@ const HistoryMenuItem = GObject.registerClass({
         this.label.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this.menu.actor.enable_mouse_scrolling = false;
 
+        this.setOrnament(PopupMenu.Ornament.NONE);
+
         this.menu.open = (animate) => {
             if (!this.menu.isOpen) {
                 this.emit(`submenuAboutToOpen`);
