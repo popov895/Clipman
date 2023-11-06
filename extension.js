@@ -798,7 +798,9 @@ class PanelIndicator extends PanelMenu.Button {
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
             Shell.ActionMode.ALL,
             () => {
-                this._clearMenuItem.activate(Clutter.get_current_event());
+                if (!this._privateModeMenuItem.state) {
+                    this._clearMenuItem.activate(Clutter.get_current_event());
+                }
             }
         );
     }
