@@ -28,12 +28,6 @@ import { Preferences } from './libs/preferences.js';
 import { Storage } from './libs/storage.js';
 import { _, log, ColorParser, SearchEngines } from './libs/utils.js';
 
-const HistoryKeepingMode = {
-    None: 0,
-    Pinned: 1,
-    All: 2,
-};
-
 const ClipboardManager = GObject.registerClass({
     Signals: {
         'changed': {},
@@ -559,6 +553,12 @@ const HistoryMenuItem = GObject.registerClass({
     }
 });
 
+const HistoryKeepingMode = {
+    None: 0,
+    Pinned: 1,
+    All: 2,
+};
+
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
     constructor(extension) {
@@ -590,17 +590,15 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._storage = new Storage();
 
-        this._loadState();
-        this._loadHistory();
         this._addKeybindings();
-        this._updateUi();
+        this._loadHistory();
+        this._updateMenuLayout();
     }
 
     destroy() {
         this._qrCodeDialog?.close();
 
         this._removeKeybindings();
-        this._saveState();
 
         this._preferences.destroy();
         this._clipboard.destroy();
@@ -641,12 +639,12 @@ class PanelIndicator extends PanelMenu.Button {
         this._historyMenuSection.section.box.connectObject(
             `actor-added`, (...[, actor]) => {
                 if (actor instanceof HistoryMenuItem) {
-                    this._updateUi();
+                    this._updateMenuLayout();
                 }
             },
             `actor-removed`, (...[, actor]) => {
                 if (actor instanceof HistoryMenuItem) {
-                    this._updateUi();
+                    this._updateMenuLayout();
                 }
             }
         );
@@ -669,12 +667,6 @@ class PanelIndicator extends PanelMenu.Button {
         this._privateModeMenuItem = new PopupMenu.PopupSwitchMenuItem(_(`Private Mode`), false, {
             reactive: true,
         });
-        this._privateModeMenuItem._switch.bind_property(
-            `state`,
-            this._privateModeIcon,
-            `visible`,
-            GObject.BindingFlags.Default
-        );
         this._privateModeMenuItem.connectObject(`toggled`, (...[, state]) => {
             this.menu.close();
             if (!state) {
@@ -698,7 +690,7 @@ class PanelIndicator extends PanelMenu.Button {
                     }
                 });
             }
-            this._updateUi();
+            this._updateMenuLayout();
         });
         this.menu.addMenuItem(this._privateModeMenuItem);
 
@@ -789,7 +781,7 @@ class PanelIndicator extends PanelMenu.Button {
             this._preferences._keyToggleMenuShortcut,
             this._preferences._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-            Shell.ActionMode.ALL,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
             () => {
                 this.menu.toggle();
             }
@@ -798,7 +790,7 @@ class PanelIndicator extends PanelMenu.Button {
             this._preferences._keyTogglePrivateModeShortcut,
             this._preferences._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-            Shell.ActionMode.ALL,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
             () => {
                 this._privateModeMenuItem.toggle();
             }
@@ -807,7 +799,7 @@ class PanelIndicator extends PanelMenu.Button {
             this._preferences._keyClearHistoryShortcut,
             this._preferences._settings,
             Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-            Shell.ActionMode.ALL,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
             () => {
                 if (!this._privateModeMenuItem.state) {
                     this._clearMenuItem.activate(Clutter.get_current_event());
@@ -985,16 +977,15 @@ class PanelIndicator extends PanelMenu.Button {
             GLib.PRIORITY_DEFAULT,
             null,
             (session, result) => {
-                if (!panelIndicator.instance || this._privateModeMenuItem.state) {
-                    return;
-                }
                 try {
                     if (message.status_code !== Soup.Status.CREATED) {
                         throw new Error(message.reason_phrase);
                     }
                     const bytes = session.send_and_read_finish(result);
                     const uri = new TextDecoder().decode(bytes.get_data()).trim();
-                    this._clipboard.setText(uri);
+                    if (panelIndicator && !this._privateModeMenuItem.state) {
+                        this._clipboard.setText(uri);
+                    }
                     notify(_(`The text was successfully shared online`), uri, false);
                 } catch (error) {
                     notifyError(_(`Failed to share the text online`), error.message);
@@ -1088,18 +1079,12 @@ class PanelIndicator extends PanelMenu.Button {
         this._storage.saveEntries(menuItems).catch(log);
     }
 
-    _loadState() {
-        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
-    }
-
-    _saveState() {
-        panelIndicator.state.privateMode = this._privateModeMenuItem.state;
-    }
-
-    _updateUi() {
+    _updateMenuLayout() {
         const privateMode = this._privateModeMenuItem.state;
-        const menuItemsCount = this._historyMenuSection.section.numMenuItems;
         this._privateModePlaceholder.actor.visible = privateMode;
+        this._privateModeIcon.visible = privateMode;
+
+        const menuItemsCount = this._historyMenuSection.section.numMenuItems;
         this._emptyPlaceholder.actor.visible = !privateMode && menuItemsCount === 0;
         this._historyMenuSection.actor.visible = !privateMode && menuItemsCount > 0;
         this._clearMenuItem.actor.visible = !privateMode && menuItemsCount > this._pinnedCount;
@@ -1234,7 +1219,7 @@ class PanelIndicator extends PanelMenu.Button {
         }
 
         this._saveHistory();
-        this._updateUi();
+        this._updateMenuLayout();
     }
 
     _onOpenStateChanged(...[, open]) {
@@ -1273,13 +1258,6 @@ class PanelIndicator extends PanelMenu.Button {
     }
 });
 
-const panelIndicator = {
-    instance: null,
-    state: {
-        privateMode: false
-    }
-};
-
 function notify(text, details, transient = true) {
     const source = new MessageTray.SystemNotificationSource();
     Main.messageTray.add(source);
@@ -1294,6 +1272,8 @@ function notifyError(error, details, transient) {
     notify(error, details, transient);
 };
 
+let panelIndicator;
+
 export default class ClipmanExtension extends Extension
 {
     static {
@@ -1302,12 +1282,12 @@ export default class ClipmanExtension extends Extension
     }
 
     enable() {
-        panelIndicator.instance = new PanelIndicator(this);
-        Main.panel.addToStatusArea(`${this.metadata.name}`, panelIndicator.instance);
+        panelIndicator = new PanelIndicator(this);
+        Main.panel.addToStatusArea(`${this.metadata.name}`, panelIndicator);
     }
 
     disable() {
-        panelIndicator.instance.destroy();
-        delete panelIndicator.instance;
+        panelIndicator.destroy();
+        panelIndicator = null;
     }
 }

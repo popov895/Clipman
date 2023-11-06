@@ -97,8 +97,7 @@ class ShortcutRow extends Adw.ActionRow {
     }
 });
 
-export default class ClipmanExtensionPreferences extends ExtensionPreferences
-{
+export default class ClipmanExtensionPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         window._preferences = new Preferences(this.getSettings());
         window.connect(`close-request`, () => {
