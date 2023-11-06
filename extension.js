@@ -562,7 +562,7 @@ const HistoryMenuItem = GObject.registerClass({
 const PanelIndicator = GObject.registerClass(
 class PanelIndicator extends PanelMenu.Button {
     constructor(extension) {
-        super(0);
+        super(0.5);
 
         this._extension = extension;
         this._lastUsedId = -1;
