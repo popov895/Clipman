@@ -772,12 +772,12 @@ class PanelIndicator extends PanelMenu.Button {
                 );
             }
         }
-        menuItem.destroy();
         if (this._preferences.historyKeepingMode === HistoryKeepingMode.All || (
             this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned && menuItem.pinned
         )) {
             this._storage.deleteEntryContent(menuItem).catch(log);
         }
+        menuItem.destroy();
         if (this._historyMenuSection.section.numMenuItems === 0) {
             this._lastUsedId = -1;
             this._lastUsedSortKey = -1;
