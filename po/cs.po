@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-31 11:44+0200\n"
+"POT-Creation-Date: 2023-11-08 22:01+0200\n"
 "PO-Revision-Date: 2023-10-03 17:01+0200\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
@@ -17,6 +17,101 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.4\n"
+
+#: extension.js:112
+msgid "Failed to generate QR code"
+msgstr "Vygenerování QR kódu se nezdařilo"
+
+#: extension.js:119
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zavřít"
+
+#: extension.js:188
+msgid "Type to search..."
+msgstr "Pište pro vyhledávání ..."
+
+#: extension.js:207
+msgid "No Matches"
+msgstr "Žádné shody"
+
+#: extension.js:616
+msgid "Private Mode is On"
+msgstr "Soukromý režim je zapnutý"
+
+#: extension.js:622
+msgid "History is Empty"
+msgstr "Historie je prázdná"
+
+#: extension.js:644
+msgid "Clear History"
+msgstr "Vymazat historii"
+
+#: extension.js:656
+msgid "Private Mode"
+msgstr "Soukromý režim"
+
+#: extension.js:686
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Nastavení"
+
+#: extension.js:810 extension.js:835 extension.js:841
+msgctxt "Open URL"
+msgid "Open"
+msgstr "Otevřít"
+
+#: extension.js:849
+msgid "Compose an Email"
+msgstr "Napsat e-mail"
+
+#: extension.js:857 extension.js:863
+msgid "Make a Call"
+msgstr "Zavolat"
+
+#: extension.js:883
+msgid "Search the Web"
+msgstr "Prohledat internet"
+
+#: extension.js:888
+msgid "Send via Email"
+msgstr "Odeslat e-mailem"
+
+#: extension.js:893
+msgid "Share Online"
+msgstr "Sdílet online"
+
+#: extension.js:898
+msgid "Show QR Code"
+msgstr "Zobrazit QR kód"
+
+#: extension.js:916
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr "Nepodařilo se spustit URI \"%s\""
+
+#: extension.js:925 extension.js:938
+#, fuzzy
+msgid "Failed to search the web"
+msgstr "Vygenerování QR kódu se nezdařilo"
+
+#: extension.js:925
+#, fuzzy
+msgid "Unknown search engine"
+msgstr "Vyhledávač"
+
+#: extension.js:938
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr "Neplatná adresa URL pro vyhledávání „%s“"
+
+#: extension.js:983
+msgid "The text was successfully shared online"
+msgstr ""
+
+#: extension.js:985
+msgid "Failed to share the text online"
+msgstr ""
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -128,101 +223,6 @@ msgstr "Soukromý režim"
 #: prefs.js:317
 msgid "Clear history"
 msgstr "Vymazat historii"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr "Vygenerování QR kódu se nezdařilo"
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zavřít"
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr "Pište pro vyhledávání ..."
-
-#: extension.js:213
-msgid "No Matches"
-msgstr "Žádné shody"
-
-#: extension.js:616
-msgid "Private Mode is On"
-msgstr "Soukromý režim je zapnutý"
-
-#: extension.js:622
-msgid "History is Empty"
-msgstr "Historie je prázdná"
-
-#: extension.js:644
-msgid "Clear History"
-msgstr "Vymazat historii"
-
-#: extension.js:656
-msgid "Private Mode"
-msgstr "Soukromý režim"
-
-#: extension.js:692
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Nastavení"
-
-#: extension.js:814 extension.js:839 extension.js:845
-msgctxt "Open URL"
-msgid "Open"
-msgstr "Otevřít"
-
-#: extension.js:853
-msgid "Compose an Email"
-msgstr "Napsat e-mail"
-
-#: extension.js:861 extension.js:867
-msgid "Make a Call"
-msgstr "Zavolat"
-
-#: extension.js:887
-msgid "Search the Web"
-msgstr "Prohledat internet"
-
-#: extension.js:892
-msgid "Send via Email"
-msgstr "Odeslat e-mailem"
-
-#: extension.js:897
-msgid "Share Online"
-msgstr "Sdílet online"
-
-#: extension.js:902
-msgid "Show QR Code"
-msgstr "Zobrazit QR kód"
-
-#: extension.js:920
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr "Nepodařilo se spustit URI \"%s\""
-
-#: extension.js:929 extension.js:942
-#, fuzzy
-msgid "Failed to search the web"
-msgstr "Vygenerování QR kódu se nezdařilo"
-
-#: extension.js:929
-#, fuzzy
-msgid "Unknown search engine"
-msgstr "Vyhledávač"
-
-#: extension.js:942
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr "Neplatná adresa URL pro vyhledávání „%s“"
-
-#: extension.js:988
-msgid "The text was successfully shared online"
-msgstr ""
-
-#: extension.js:990
-msgid "Failed to share the text online"
-msgstr ""
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"

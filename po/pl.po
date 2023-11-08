@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-31 11:44+0200\n"
+"POT-Creation-Date: 2023-11-08 22:01+0200\n"
 "PO-Revision-Date: 2023-07-03 13:46+0300\n"
 "Last-Translator: Kamil Stępień <kamilst96@gmail.com>\n"
 "Language-Team: \n"
@@ -18,6 +18,100 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
+
+#: extension.js:112
+msgid "Failed to generate QR code"
+msgstr "Nie udało się wygenerować kodu QR"
+
+#: extension.js:119
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "Zamknij"
+
+#: extension.js:188
+msgid "Type to search..."
+msgstr "Szukaj..."
+
+#: extension.js:207
+msgid "No Matches"
+msgstr "Brak wyników"
+
+#: extension.js:616
+msgid "Private Mode is On"
+msgstr "Tryb prywatny jest włączony"
+
+#: extension.js:622
+msgid "History is Empty"
+msgstr "Historia jest pusta"
+
+#: extension.js:644
+msgid "Clear History"
+msgstr "Wyczyść historię"
+
+#: extension.js:656
+msgid "Private Mode"
+msgstr "Tryb prywatny"
+
+#: extension.js:686
+msgctxt "Open settings"
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: extension.js:810 extension.js:835 extension.js:841
+msgctxt "Open URL"
+msgid "Open"
+msgstr ""
+
+#: extension.js:849
+msgid "Compose an Email"
+msgstr ""
+
+#: extension.js:857 extension.js:863
+msgid "Make a Call"
+msgstr ""
+
+#: extension.js:883
+msgid "Search the Web"
+msgstr ""
+
+#: extension.js:888
+msgid "Send via Email"
+msgstr ""
+
+#: extension.js:893
+msgid "Share Online"
+msgstr ""
+
+#: extension.js:898
+msgid "Show QR Code"
+msgstr ""
+
+#: extension.js:916
+#, javascript-format
+msgid "Failed to launch URI \"%s\""
+msgstr ""
+
+#: extension.js:925 extension.js:938
+#, fuzzy
+msgid "Failed to search the web"
+msgstr "Nie udało się wygenerować kodu QR"
+
+#: extension.js:925
+msgid "Unknown search engine"
+msgstr ""
+
+#: extension.js:938
+#, javascript-format
+msgid "Invalid search URL \"%s\""
+msgstr ""
+
+#: extension.js:983
+msgid "The text was successfully shared online"
+msgstr ""
+
+#: extension.js:985
+msgid "Failed to share the text online"
+msgstr ""
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -132,100 +226,6 @@ msgstr "Tryb prywatny"
 #, fuzzy
 msgid "Clear history"
 msgstr "Wyczyść historię"
-
-#: extension.js:118
-msgid "Failed to generate QR code"
-msgstr "Nie udało się wygenerować kodu QR"
-
-#: extension.js:125
-msgctxt "Close dialog"
-msgid "Close"
-msgstr "Zamknij"
-
-#: extension.js:194
-msgid "Type to search..."
-msgstr "Szukaj..."
-
-#: extension.js:213
-msgid "No Matches"
-msgstr "Brak wyników"
-
-#: extension.js:616
-msgid "Private Mode is On"
-msgstr "Tryb prywatny jest włączony"
-
-#: extension.js:622
-msgid "History is Empty"
-msgstr "Historia jest pusta"
-
-#: extension.js:644
-msgid "Clear History"
-msgstr "Wyczyść historię"
-
-#: extension.js:656
-msgid "Private Mode"
-msgstr "Tryb prywatny"
-
-#: extension.js:692
-msgctxt "Open settings"
-msgid "Settings"
-msgstr "Ustawienia"
-
-#: extension.js:814 extension.js:839 extension.js:845
-msgctxt "Open URL"
-msgid "Open"
-msgstr ""
-
-#: extension.js:853
-msgid "Compose an Email"
-msgstr ""
-
-#: extension.js:861 extension.js:867
-msgid "Make a Call"
-msgstr ""
-
-#: extension.js:887
-msgid "Search the Web"
-msgstr ""
-
-#: extension.js:892
-msgid "Send via Email"
-msgstr ""
-
-#: extension.js:897
-msgid "Share Online"
-msgstr ""
-
-#: extension.js:902
-msgid "Show QR Code"
-msgstr ""
-
-#: extension.js:920
-#, javascript-format
-msgid "Failed to launch URI \"%s\""
-msgstr ""
-
-#: extension.js:929 extension.js:942
-#, fuzzy
-msgid "Failed to search the web"
-msgstr "Nie udało się wygenerować kodu QR"
-
-#: extension.js:929
-msgid "Unknown search engine"
-msgstr ""
-
-#: extension.js:942
-#, javascript-format
-msgid "Invalid search URL \"%s\""
-msgstr ""
-
-#: extension.js:988
-msgid "The text was successfully shared online"
-msgstr ""
-
-#: extension.js:990
-msgid "Failed to share the text online"
-msgstr ""
 
 #: libs/utils.js:232
 msgid "DuckDuckGo"
