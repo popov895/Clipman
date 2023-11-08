@@ -1199,40 +1199,41 @@ class PanelIndicator extends PanelMenu.Button {
             }
             this._historyMenuSection.section.moveMenuItem(menuItem, 0);
             ++this._pinnedCount;
+            if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
+                this._storage.saveEntryContent(menuItem).catch(log);
+            }
         } else {
             if (currentIndex >= this._pinnedCount) {
                 return;
             }
+            let menuItemToDelete;
             if (menuItems.length - this._pinnedCount === this._preferences.historySize) {
-                const lastMenuItem = menuItems[menuItems.length - 1];
-                if (menuItem.sortKey < lastMenuItem.sortKey) {
-                    this._destroyMenuItem(menuItem);
-                    this._saveHistory();
-                    return;
-                }
-                this._destroyMenuItem(lastMenuItem);
-            }
-            let indexToMove = menuItems.length;
-            for (let i = this._pinnedCount; i < menuItems.length; ++i) {
-                if (menuItems[i].sortKey < menuItem.sortKey) {
-                    indexToMove = i;
-                    break;
+                if (menuItem.sortKey < menuItems[menuItems.length - 1].sortKey) {
+                    menuItemToDelete = menuItem;
+                } else {
+                    menuItemToDelete = menuItems.pop();
                 }
             }
-            this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
+            if (menuItemToDelete) {
+                this._destroyMenuItem(menuItemToDelete);
+            }
+            if (menuItemToDelete !== menuItem) {
+                let indexToMove = menuItems.length;
+                for (let i = this._pinnedCount; i < menuItems.length; ++i) {
+                    if (menuItems[i].sortKey < menuItem.sortKey) {
+                        indexToMove = i;
+                        break;
+                    }
+                }
+                this._historyMenuSection.section.moveMenuItem(menuItem, indexToMove - 1);
+            }
             --this._pinnedCount;
-        }
-
-        this._saveHistory();
-
-        if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
-            if (menuItem.pinned) {
-                this._storage.saveEntryContent(menuItem).catch(log);
-            } else {
+            if (this._preferences.historyKeepingMode === HistoryKeepingMode.Pinned) {
                 this._storage.deleteEntryContent(menuItem).catch(log);
             }
         }
 
+        this._saveHistory();
         this._updateUi();
     }
 
