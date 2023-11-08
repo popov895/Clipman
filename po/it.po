@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-31 11:30+0200\n"
+"POT-Creation-Date: 2023-11-08 21:59+0200\n"
 "PO-Revision-Date: 2023-07-03 13:45+0300\n"
 "Last-Translator: Federico Pierantoni <federico.pieranton@gmail.com>\n"
 "Language-Team: \n"
@@ -18,132 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: prefs.js:19
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr ""
-
-#: prefs.js:20
-msgid "Enter a new shortcut"
-msgstr "Inserisci la nuova scorciatoia"
-
-#: prefs.js:75
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Disabilitato"
-
-#: prefs.js:125
-msgid "History size"
-msgstr "Dimensione della Cronologia"
-
-#: prefs.js:131
-msgctxt "Don't keep entries"
-msgid "None"
-msgstr ""
-
-#: prefs.js:132
-msgctxt "Keep only pinned entries"
-msgid "Pinned"
-msgstr ""
-
-#: prefs.js:133
-msgctxt "Keep all entries"
-msgid "All"
-msgstr ""
-
-#: prefs.js:147
-#, fuzzy
-msgid "History entries to keep"
-msgstr "Cronologia vuota"
-
-#: prefs.js:163
-msgid "Show leading and trailing whitespace"
-msgstr ""
-
-#: prefs.js:179
-msgid "Show color preview"
-msgstr ""
-
-#: prefs.js:185
-msgctxt "Small menu size"
-msgid "Small"
-msgstr ""
-
-#: prefs.js:186
-msgctxt "Medium menu size"
-msgid "Medium"
-msgstr ""
-
-#: prefs.js:187
-msgctxt "Large menu size"
-msgid "Large"
-msgstr ""
-
-#: prefs.js:201
-msgid "Maximum menu size"
-msgstr ""
-
-#: prefs.js:206
-msgctxt "General options"
-msgid "General"
-msgstr ""
-
-#: prefs.js:215
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr ""
-
-#: prefs.js:228
-msgid "Search URL"
-msgstr ""
-
-#: prefs.js:269
-msgid "Search Engine"
-msgstr ""
-
-#: prefs.js:274
-msgid "Web Search"
-msgstr ""
-
-#: prefs.js:296
-msgctxt "The number of days to keep the shared text"
-msgid "Days to keep the shared text"
-msgstr ""
-
-#: prefs.js:301
-msgid "Sharing Online"
-msgstr ""
-
-#: prefs.js:306
-msgid "Keyboard Shortcuts"
-msgstr ""
-
-#: prefs.js:309
-msgid "Toggle menu"
-msgstr ""
-
-#: prefs.js:314
-msgid "Toggle private mode"
-msgstr ""
-
-#: prefs.js:319
-#, fuzzy
-msgid "Clear history"
-msgstr "Cancella Cronologia"
-
-#: extension.js:128
+#: extension.js:122
 msgid "Failed to generate QR code"
 msgstr ""
 
-#: extension.js:135
+#: extension.js:129
 msgctxt "Close dialog"
 msgid "Close"
 msgstr ""
 
-#: extension.js:204
+#: extension.js:198
 msgid "Type to search..."
 msgstr "Digita per cercare..."
 
-#: extension.js:223
+#: extension.js:217
 msgid "No Matches"
 msgstr "Nessuna Corrispondenza"
 
@@ -163,65 +51,177 @@ msgstr "Cancella Cronologia"
 msgid "Private Mode"
 msgstr ""
 
-#: extension.js:703
+#: extension.js:697
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: extension.js:825 extension.js:850 extension.js:856
+#: extension.js:821 extension.js:846 extension.js:852
 msgctxt "Open URL"
 msgid "Open"
 msgstr ""
 
-#: extension.js:864
+#: extension.js:860
 msgid "Compose an Email"
 msgstr ""
 
-#: extension.js:872 extension.js:878
+#: extension.js:868 extension.js:874
 msgid "Make a Call"
 msgstr ""
 
-#: extension.js:898
+#: extension.js:894
 msgid "Search the Web"
 msgstr ""
 
-#: extension.js:903
+#: extension.js:899
 msgid "Send via Email"
 msgstr ""
 
-#: extension.js:908
+#: extension.js:904
 msgid "Share Online"
 msgstr ""
 
-#: extension.js:913
+#: extension.js:909
 msgid "Show QR Code"
 msgstr ""
 
-#: extension.js:931
+#: extension.js:927
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr ""
 
-#: extension.js:940 extension.js:953
+#: extension.js:936 extension.js:949
 msgid "Failed to search the web"
 msgstr ""
 
-#: extension.js:940
+#: extension.js:936
 msgid "Unknown search engine"
 msgstr ""
 
-#: extension.js:953
+#: extension.js:949
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr ""
 
-#: extension.js:994
+#: extension.js:989
 msgid "The text was successfully shared online"
 msgstr ""
 
-#: extension.js:996
+#: extension.js:991
 msgid "Failed to share the text online"
 msgstr ""
+
+#: prefs.js:19
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr ""
+
+#: prefs.js:20
+msgid "Enter a new shortcut"
+msgstr "Inserisci la nuova scorciatoia"
+
+#: prefs.js:75
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Disabilitato"
+
+#: prefs.js:124
+msgid "History size"
+msgstr "Dimensione della Cronologia"
+
+#: prefs.js:130
+msgctxt "Don't keep entries"
+msgid "None"
+msgstr ""
+
+#: prefs.js:131
+msgctxt "Keep only pinned entries"
+msgid "Pinned"
+msgstr ""
+
+#: prefs.js:132
+msgctxt "Keep all entries"
+msgid "All"
+msgstr ""
+
+#: prefs.js:146
+#, fuzzy
+msgid "History entries to keep"
+msgstr "Cronologia vuota"
+
+#: prefs.js:162
+msgid "Show leading and trailing whitespace"
+msgstr ""
+
+#: prefs.js:178
+msgid "Show color preview"
+msgstr ""
+
+#: prefs.js:184
+msgctxt "Small menu size"
+msgid "Small"
+msgstr ""
+
+#: prefs.js:185
+msgctxt "Medium menu size"
+msgid "Medium"
+msgstr ""
+
+#: prefs.js:186
+msgctxt "Large menu size"
+msgid "Large"
+msgstr ""
+
+#: prefs.js:200
+msgid "Maximum menu size"
+msgstr ""
+
+#: prefs.js:205
+msgctxt "General options"
+msgid "General"
+msgstr ""
+
+#: prefs.js:214
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr ""
+
+#: prefs.js:227
+msgid "Search URL"
+msgstr ""
+
+#: prefs.js:268
+msgid "Search Engine"
+msgstr ""
+
+#: prefs.js:273
+msgid "Web Search"
+msgstr ""
+
+#: prefs.js:295
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr ""
+
+#: prefs.js:300
+msgid "Sharing Online"
+msgstr ""
+
+#: prefs.js:305
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: prefs.js:308
+msgid "Toggle menu"
+msgstr ""
+
+#: prefs.js:313
+msgid "Toggle private mode"
+msgstr ""
+
+#: prefs.js:318
+#, fuzzy
+msgid "Clear history"
+msgstr "Cancella Cronologia"
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"

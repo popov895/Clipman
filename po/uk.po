@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-31 11:30+0200\n"
+"POT-Creation-Date: 2023-11-08 21:59+0200\n"
 "PO-Revision-Date: 2023-10-31 11:43+0200\n"
 "Last-Translator: Eugene Popov <popov895@ukr.net>\n"
 "Language-Team: \n"
@@ -18,130 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.1\n"
 
-#: prefs.js:19
-msgid "Press Backspace to clear shortcut or Esc to cancel"
-msgstr "Натисніть Backspace, щоб очистити поєднання клавіш, або Esc, щоб скасувати"
-
-#: prefs.js:20
-msgid "Enter a new shortcut"
-msgstr "Введіть нове поєднання клавіш"
-
-#: prefs.js:75
-msgctxt "Keyboard shortcut is disabled"
-msgid "Disabled"
-msgstr "Вимкнено"
-
-#: prefs.js:125
-msgid "History size"
-msgstr "Розмір історії"
-
-#: prefs.js:131
-msgctxt "Don't keep entries"
-msgid "None"
-msgstr "Жодного"
-
-#: prefs.js:132
-msgctxt "Keep only pinned entries"
-msgid "Pinned"
-msgstr "Закріплені"
-
-#: prefs.js:133
-msgctxt "Keep all entries"
-msgid "All"
-msgstr "Всі"
-
-#: prefs.js:147
-msgid "History entries to keep"
-msgstr "Записи історії, що слід зберігати"
-
-#: prefs.js:163
-msgid "Show leading and trailing whitespace"
-msgstr "Показувати початкові та кінцеві пробіли"
-
-#: prefs.js:179
-msgid "Show color preview"
-msgstr "Показати попередній перегляд кольорів"
-
-#: prefs.js:185
-msgctxt "Small menu size"
-msgid "Small"
-msgstr "Маленький"
-
-#: prefs.js:186
-msgctxt "Medium menu size"
-msgid "Medium"
-msgstr "Середній"
-
-#: prefs.js:187
-msgctxt "Large menu size"
-msgid "Large"
-msgstr "Великий"
-
-#: prefs.js:201
-msgid "Maximum menu size"
-msgstr "Максимальний розмір меню"
-
-#: prefs.js:206
-msgctxt "General options"
-msgid "General"
-msgstr "Загальне"
-
-#: prefs.js:215
-#, javascript-format
-msgid "URL with %s in place of query"
-msgstr "URL-адреса з %s замість запиту"
-
-#: prefs.js:228
-msgid "Search URL"
-msgstr "URL-адреса для пошуку"
-
-#: prefs.js:269
-msgid "Search Engine"
-msgstr "Пошукова система"
-
-#: prefs.js:274
-msgid "Web Search"
-msgstr "Пошук в Інтернеті"
-
-#: prefs.js:296
-msgctxt "The number of days to keep the shared text"
-msgid "Days to keep the shared text"
-msgstr "Скільки днів зберігати поширений текст"
-
-#: prefs.js:301
-msgid "Sharing Online"
-msgstr "Поширення в Інтернеті"
-
-#: prefs.js:306
-msgid "Keyboard Shortcuts"
-msgstr "Поєднання клавіш"
-
-#: prefs.js:309
-msgid "Toggle menu"
-msgstr "Переключити меню"
-
-#: prefs.js:314
-msgid "Toggle private mode"
-msgstr "Переключити приватний режим"
-
-#: prefs.js:319
-msgid "Clear history"
-msgstr "Очистити історію"
-
-#: extension.js:128
+#: extension.js:122
 msgid "Failed to generate QR code"
 msgstr "Не вдалося створити QR-код"
 
-#: extension.js:135
+#: extension.js:129
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Закрити"
 
-#: extension.js:204
+#: extension.js:198
 msgid "Type to search..."
 msgstr "Введіть для пошуку..."
 
-#: extension.js:223
+#: extension.js:217
 msgid "No Matches"
 msgstr "Немає збігів"
 
@@ -161,65 +51,175 @@ msgstr "Очистити історію"
 msgid "Private Mode"
 msgstr "Приватний режим"
 
-#: extension.js:703
+#: extension.js:697
 msgctxt "Open settings"
 msgid "Settings"
 msgstr "Налаштування"
 
-#: extension.js:825 extension.js:850 extension.js:856
+#: extension.js:821 extension.js:846 extension.js:852
 msgctxt "Open URL"
 msgid "Open"
 msgstr "Відкрити"
 
-#: extension.js:864
+#: extension.js:860
 msgid "Compose an Email"
 msgstr "Створити електронний лист"
 
-#: extension.js:872 extension.js:878
+#: extension.js:868 extension.js:874
 msgid "Make a Call"
 msgstr "Зателефонувати"
 
-#: extension.js:898
+#: extension.js:894
 msgid "Search the Web"
 msgstr "Шукати в Інтернеті"
 
-#: extension.js:903
+#: extension.js:899
 msgid "Send via Email"
 msgstr "Надіслати електронною поштою"
 
-#: extension.js:908
+#: extension.js:904
 msgid "Share Online"
 msgstr "Поширити в Інтернеті"
 
-#: extension.js:913
+#: extension.js:909
 msgid "Show QR Code"
 msgstr "Показати QR-код"
 
-#: extension.js:931
+#: extension.js:927
 #, javascript-format
 msgid "Failed to launch URI \"%s\""
 msgstr "Не вдалося запустити URI \"%s\""
 
-#: extension.js:940 extension.js:953
+#: extension.js:936 extension.js:949
 msgid "Failed to search the web"
 msgstr "Не вдалося здійснити пошук в Інтернеті"
 
-#: extension.js:940
+#: extension.js:936
 msgid "Unknown search engine"
 msgstr "Невідома пошукова система"
 
-#: extension.js:953
+#: extension.js:949
 #, javascript-format
 msgid "Invalid search URL \"%s\""
 msgstr "Неправильна URL-адреса для пошуку \"%s\""
 
-#: extension.js:994
+#: extension.js:989
 msgid "The text was successfully shared online"
 msgstr "Текст був успішно поширений в Інтернеті"
 
-#: extension.js:996
+#: extension.js:991
 msgid "Failed to share the text online"
 msgstr "Не вдалося поширити текст в Інтернеті"
+
+#: prefs.js:19
+msgid "Press Backspace to clear shortcut or Esc to cancel"
+msgstr "Натисніть Backspace, щоб очистити поєднання клавіш, або Esc, щоб скасувати"
+
+#: prefs.js:20
+msgid "Enter a new shortcut"
+msgstr "Введіть нове поєднання клавіш"
+
+#: prefs.js:75
+msgctxt "Keyboard shortcut is disabled"
+msgid "Disabled"
+msgstr "Вимкнено"
+
+#: prefs.js:124
+msgid "History size"
+msgstr "Розмір історії"
+
+#: prefs.js:130
+msgctxt "Don't keep entries"
+msgid "None"
+msgstr "Жодного"
+
+#: prefs.js:131
+msgctxt "Keep only pinned entries"
+msgid "Pinned"
+msgstr "Закріплені"
+
+#: prefs.js:132
+msgctxt "Keep all entries"
+msgid "All"
+msgstr "Всі"
+
+#: prefs.js:146
+msgid "History entries to keep"
+msgstr "Записи історії, що слід зберігати"
+
+#: prefs.js:162
+msgid "Show leading and trailing whitespace"
+msgstr "Показувати початкові та кінцеві пробіли"
+
+#: prefs.js:178
+msgid "Show color preview"
+msgstr "Показати попередній перегляд кольорів"
+
+#: prefs.js:184
+msgctxt "Small menu size"
+msgid "Small"
+msgstr "Маленький"
+
+#: prefs.js:185
+msgctxt "Medium menu size"
+msgid "Medium"
+msgstr "Середній"
+
+#: prefs.js:186
+msgctxt "Large menu size"
+msgid "Large"
+msgstr "Великий"
+
+#: prefs.js:200
+msgid "Maximum menu size"
+msgstr "Максимальний розмір меню"
+
+#: prefs.js:205
+msgctxt "General options"
+msgid "General"
+msgstr "Загальне"
+
+#: prefs.js:214
+#, javascript-format
+msgid "URL with %s in place of query"
+msgstr "URL-адреса з %s замість запиту"
+
+#: prefs.js:227
+msgid "Search URL"
+msgstr "URL-адреса для пошуку"
+
+#: prefs.js:268
+msgid "Search Engine"
+msgstr "Пошукова система"
+
+#: prefs.js:273
+msgid "Web Search"
+msgstr "Пошук в Інтернеті"
+
+#: prefs.js:295
+msgctxt "The number of days to keep the shared text"
+msgid "Days to keep the shared text"
+msgstr "Скільки днів зберігати поширений текст"
+
+#: prefs.js:300
+msgid "Sharing Online"
+msgstr "Поширення в Інтернеті"
+
+#: prefs.js:305
+msgid "Keyboard Shortcuts"
+msgstr "Поєднання клавіш"
+
+#: prefs.js:308
+msgid "Toggle menu"
+msgstr "Переключити меню"
+
+#: prefs.js:313
+msgid "Toggle private mode"
+msgstr "Переключити приватний режим"
+
+#: prefs.js:318
+msgid "Clear history"
+msgstr "Очистити історію"
 
 #: libs/utils.js:233
 msgid "DuckDuckGo"
