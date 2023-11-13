@@ -465,18 +465,27 @@ const HistoryMenuItem = GObject.registerClass({
     }
 
     set showSurroundingWhitespace(showSurroundingWhitespace) {
+        let text = this.text;
+        if (!showSurroundingWhitespace) {
+            text = text.trim();
+        }
+        text = text.substring(0, 2000); // TODO : Use max width of the top menu
         if (showSurroundingWhitespace) {
-            const text = GLib.markup_escape_text(this.text, -1).replaceAll(/^\s+|\s+$/g, (match1) => {
+            text = GLib.markup_escape_text(text, -1);
+            text = text.replaceAll(/^\s+|\s+$/g, (match1) => {
                 [[/ +/g, `␣`], [/\t+/g, `⇥`], [/\n+/g, `↵`]].forEach(([regExp, str]) => {
                     match1 = match1.replaceAll(regExp, (match2) => {
                         return `<span alpha='35%'>${str.repeat(match2.length)}</span>`;
                     });
                 });
                 return match1;
-            }).replaceAll(/\s+/g, ` `);
+            });
+        }
+        text = text.replaceAll(/\s+/g, ` `);
+        if (showSurroundingWhitespace) {
             this.label.clutter_text.set_markup(text);
         } else {
-            this.label.text = this.text.trim().replaceAll(/\s+/g, ` `);
+            this.label.text = text;
         }
     }
 
@@ -583,9 +592,9 @@ const HistoryMenuItem = GObject.registerClass({
 });
 
 const HistoryKeepingMode = {
-    None: 0,
+      None: 0,
     Pinned: 1,
-    All: 2,
+       All: 2,
 };
 
 const PanelIndicator = GObject.registerClass(
@@ -728,25 +737,7 @@ class PanelIndicator extends PanelMenu.Button {
         this._privateModeMenuItem.connectObject(`toggled`, (...[, state]) => {
             this.menu.close();
             if (!state) {
-                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
-                delete this._currentMenuItem;
-                this._clipboard.getText().then((text) => {
-                    if (text && text.length > 0) {
-                        const menuItems = this._historyMenuSection.section._getMenuItems();
-                        const currentMenuItem = menuItems.find((menuItem) => {
-                            return menuItem.text === text;
-                        });
-                        if (currentMenuItem) {
-                            currentMenuItem.sortKey = ++this._lastUsedSortKey;
-                            if (!currentMenuItem.pinned) {
-                                this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
-                            }
-                            currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
-                            this._saveHistory();
-                        }
-                        this._currentMenuItem = currentMenuItem;
-                    }
-                });
+                this._updateCurrentItem();
             }
             this._updateMenuLayout();
         });
@@ -779,10 +770,7 @@ class PanelIndicator extends PanelMenu.Button {
                 this._clipboard.setText(menuItem.text);
             },
             `submenuAboutToOpen`, () => {
-                // use lazy loadiing for submenu
-                if (menuItem.menu.isEmpty()) {
-                    this._populateSubMenu(menuItem);
-                }
+                this._ensureSubMenuPopulated(menuItem);
             },
             `pinned`, this._onMenuItemPinned.bind(this),
             `delete`, () => {
@@ -811,7 +799,7 @@ class PanelIndicator extends PanelMenu.Button {
         if (menuItem.pinned) {
             --this._pinnedCount;
         }
-        if (global.stage.key_focus === menuItem) {
+        if (menuItem.has_key_focus()) {
             const menuItems = this._historyMenuSection.section._getMenuItems();
             if (menuItems.length > 1) {
                 const isLast = menuItems.indexOf(menuItem) === menuItems.length - 1;
@@ -872,7 +860,11 @@ class PanelIndicator extends PanelMenu.Button {
         Main.wm.removeKeybinding(this._preferences._keyToggleMenuShortcut);
     }
 
-    _populateSubMenu(menuItem) {
+    _ensureSubMenuPopulated(menuItem) {
+        if (!menuItem.menu.isEmpty()) {
+            return;
+        }
+
         if (!menuItem.colorPreviewIcon) {
             const actions = [
                 {
@@ -1097,23 +1089,9 @@ class PanelIndicator extends PanelMenu.Button {
                 }
             }
 
-            this._clipboard.getText().then((text) => {
-                if (text && text.length > 0) {
-                    const menuItems = this._historyMenuSection.section._getMenuItems();
-                    const currentMenuItem = menuItems.find((menuItem) => {
-                        return menuItem.text === text;
-                    });
-                    if (currentMenuItem) {
-                        currentMenuItem.sortKey = ++this._lastUsedSortKey;
-                        if (!currentMenuItem.pinned) {
-                            this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
-                        }
-                        currentMenuItem.setOrnament(PopupMenu.Ornament.DOT);
-                        this._saveHistory();
-                    }
-                    this._currentMenuItem = currentMenuItem;
-                }
-            });
+            if (!this._privateModeMenuItem.state) {
+                this._updateCurrentItem();
+            }
         }).catch(log).finally(() => {
             this._clipboard.blockSignals = false;
         });
@@ -1135,6 +1113,31 @@ class PanelIndicator extends PanelMenu.Button {
         }
 
         this._storage.saveEntries(menuItems).catch(log);
+    }
+
+    _updateCurrentItem() {
+        this._clipboard.getText().then((text) => {
+            let currentMenuItem;
+            if (text && text.length > 0) {
+                const menuItems = this._historyMenuSection.section._getMenuItems();
+                currentMenuItem = menuItems.find((menuItem) => {
+                    return menuItem.text === text;
+                });
+                if (currentMenuItem) {
+                    currentMenuItem.sortKey = ++this._lastUsedSortKey;
+                    if (!currentMenuItem.pinned) {
+                        this._historyMenuSection.section.moveMenuItem(currentMenuItem, this._pinnedCount);
+                    }
+                    this._saveHistory();
+                }
+            }
+
+            if (this._currentMenuItem !== currentMenuItem) {
+                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.NONE);
+                this._currentMenuItem = currentMenuItem;
+                this._currentMenuItem?.setOrnament(PopupMenu.Ornament.DOT);
+            }
+        });
     }
 
     _updateMenuLayout() {
