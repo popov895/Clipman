@@ -183,13 +183,36 @@ const HistoryMenuSection = class extends PopupMenu.PopupMenuSection {
     constructor() {
         super();
 
+        const clearIcon = new St.Icon({
+            icon_name: `edit-clear-symbolic`,
+            style_class: `popup-menu-icon`,
+        });
         this.entry = new St.Entry({
             can_focus: true,
             hint_text: _(`Type to search...`),
+            secondary_icon: clearIcon,
             style_class: `clipman-popupsearchmenuitem`,
             x_expand: true,
         });
-        this.entry.clutter_text.connectObject(`text-changed`, this._onEntryTextChanged.bind(this));
+        this.entry.bind_property_full(
+            `text`,
+            clearIcon,
+            `visible`,
+            GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE,
+            () => {
+                return [
+                    true,
+                    this.entry.text.length > 0,
+                ];
+            },
+            null
+        );
+        this.entry.connectObject(
+            `secondary-icon-clicked`, () => {
+                this.entry.text = ``;
+            },
+            `notify::text`, this._onEntryTextChanged.bind(this)
+        );
         const searchMenuItem = new PopupMenu.PopupBaseMenuItem({
             can_focus: false,
             reactive: false,
@@ -560,6 +583,35 @@ class PanelIndicator extends PanelMenu.Button {
 
         this._buildIcon();
         this._buildMenu();
+
+        this.menu.actor.connectObject(`captured-event`, (...[, event]) => {
+            if (event.type() === Clutter.EventType.KEY_PRESS) {
+                switch (event.get_key_symbol()) {
+                    case Clutter.KEY_Escape: {
+                        if (
+                            this._historyMenuSection.entry.clutter_text.has_key_focus() &&
+                            this._historyMenuSection.entry.text.length > 0
+                        ) {
+                            this._historyMenuSection.entry.text = ``;
+                            return Clutter.EVENT_STOP;
+                        }
+                        break;
+                    }
+                    case Clutter.KEY_slash: {
+                        if (this._historyMenuSection.entry.get_paint_visibility()) {
+                            global.stage.set_key_focus(this._historyMenuSection.entry);
+                            this._historyMenuSection.entry.clutter_text.set_selection(-1, 0);
+                            return Clutter.EVENT_STOP;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+
+            return Clutter.EVENT_PROPAGATE;
+        });
 
         this._preferences = new Preferences();
         this._preferences.previousHistoryKeepingMode = this._preferences.historyKeepingMode;
