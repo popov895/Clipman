@@ -546,6 +546,12 @@ const HistoryMenuItem = GObject.registerClass({
 
     vfunc_key_press_event(event) {
         switch (event.get_key_symbol()) {
+            case Clutter.KEY_space:
+            case Clutter.KEY_Return:
+            case Clutter.KEY_KP_Enter: {
+                this.activate(event);
+                return Clutter.EVENT_STOP;
+            }
             case Clutter.KEY_Delete:
             case Clutter.KEY_KP_Delete: {
                 this.emit(`delete`);
