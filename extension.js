@@ -647,13 +647,14 @@ class PanelIndicator extends PanelMenu.Button {
         this._storage = new Storage();
 
         this._addKeybindings();
-        this._loadHistory();
+        this._loadState();
         this._updateMenuLayout();
     }
 
     destroy() {
         this._qrCodeDialog?.close();
 
+        this._saveState();
         this._removeKeybindings();
 
         this._preferences.destroy();
@@ -1027,7 +1028,7 @@ class PanelIndicator extends PanelMenu.Button {
                     }
                     const bytes = session.send_and_read_finish(result);
                     const uri = new TextDecoder().decode(bytes.get_data()).trim();
-                    if (panelIndicator && !this._privateModeMenuItem.state) {
+                    if (panelIndicator.instance && !this._privateModeMenuItem.state) {
                         this._clipboard.setText(uri);
                     }
                     notify(_(`The text was successfully shared online`), uri, false);
@@ -1036,6 +1037,43 @@ class PanelIndicator extends PanelMenu.Button {
                 }
             }
         );
+    }
+
+    _loadState() {
+        this._privateModeMenuItem.setToggleState(panelIndicator.state.privateMode);
+
+        if (!panelIndicator.state.history) {
+            this._loadHistory();
+        } else if (panelIndicator.state.history.length > 0) {
+            panelIndicator.state.history.forEach((entry) => {
+                const menuItem = this._createMenuItem(entry.text, entry.pinned, entry.id, entry.sortKey);
+                this._historyMenuSection.section.addMenuItem(menuItem);
+                if (menuItem.pinned) {
+                    ++this._pinnedCount;
+                }
+                this._lastUsedId = Math.max(menuItem.id, this._lastUsedId);
+                this._lastUsedSortKey = Math.max(menuItem.sortKey, this._lastUsedSortKey);
+            });
+            panelIndicator.state.history.length = 0;
+
+            if (!this._privateModeMenuItem.state) {
+                this._updateCurrentItem();
+            }
+        }
+    }
+
+    _saveState() {
+        const menuItems = this._historyMenuSection.section._getMenuItems();
+        panelIndicator.state.history = menuItems.map((menuItem) => {
+            return {
+                text: menuItem.text,
+                pinned: menuItem.pinned,
+                id: menuItem.id,
+                sortKey: menuItem.sortKey,
+            };
+        });
+
+        panelIndicator.state.privateMode = this._privateModeMenuItem.state;
     }
 
     _loadHistory() {
@@ -1334,14 +1372,20 @@ function init() {
     ExtensionUtils.initTranslations(Me.uuid);
 }
 
-let panelIndicator;
+const panelIndicator = {
+    instance: null,
+    state: {
+        history: null,
+        privateMode: false,
+    }
+};
 
 function enable() {
-    panelIndicator = new PanelIndicator();
-    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator);
+    panelIndicator.instance = new PanelIndicator();
+    Main.panel.addToStatusArea(`${Me.metadata.name}`, panelIndicator.instance);
 }
 
 function disable() {
-    panelIndicator.destroy();
-    panelIndicator = null;
+    panelIndicator.instance.destroy();
+    delete panelIndicator.instance;
 }
