@@ -23,7 +23,7 @@ var Storage = class {
                 const entries = JSON.parse(await this._loadFile(this._storageFile));
                 resolve(entries);
             } catch (error) {
-                reject(`Failed to load storage. ${error.message}`);
+                reject(new Error(`Failed to load storage. ${error.message}`));
             }
         });
     }
