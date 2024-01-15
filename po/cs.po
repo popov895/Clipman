@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-08 22:01+0200\n"
-"PO-Revision-Date: 2023-10-03 17:01+0200\n"
-"Last-Translator: Amerey.eu <info@amerey.eu>\n"
+"PO-Revision-Date: 2024-01-14 20:18+0100\n"
+"Last-Translator: Amerey <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -91,14 +91,12 @@ msgid "Failed to launch URI \"%s\""
 msgstr "Nepodařilo se spustit URI \"%s\""
 
 #: extension.js:925 extension.js:938
-#, fuzzy
 msgid "Failed to search the web"
-msgstr "Vygenerování QR kódu se nezdařilo"
+msgstr "Vyhledávání na webu se nezdařilo"
 
 #: extension.js:925
-#, fuzzy
 msgid "Unknown search engine"
-msgstr "Vyhledávač"
+msgstr "Neznámý vyhledávač"
 
 #: extension.js:938
 #, javascript-format
@@ -107,11 +105,11 @@ msgstr "Neplatná adresa URL pro vyhledávání „%s“"
 
 #: extension.js:983
 msgid "The text was successfully shared online"
-msgstr ""
+msgstr "Text byl úspěšně sdílen online"
 
 #: extension.js:985
 msgid "Failed to share the text online"
-msgstr ""
+msgstr "Sdílení textu online se nezdařilo"
 
 #: prefs.js:15
 msgid "Press Backspace to clear shortcut or Esc to cancel"
@@ -133,22 +131,21 @@ msgstr "Velikost historie"
 #: prefs.js:129
 msgctxt "Don't keep entries"
 msgid "None"
-msgstr ""
+msgstr "Žádné"
 
 #: prefs.js:130
 msgctxt "Keep only pinned entries"
 msgid "Pinned"
-msgstr ""
+msgstr "Připnuté"
 
 #: prefs.js:131
 msgctxt "Keep all entries"
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: prefs.js:145
-#, fuzzy
 msgid "History entries to keep"
-msgstr "Historie je prázdná"
+msgstr "Záznamy historie, které se mají uchovávat"
 
 #: prefs.js:161
 msgid "Show leading and trailing whitespace"
